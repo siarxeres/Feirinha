@@ -47,7 +47,10 @@ function LoginForm() {
               <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="seu@email.com" required />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="senha">Senha</Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="senha">Senha</Label>
+                <Link href="/auth/recuperar-senha" className="text-xs text-[#1D9E75] hover:underline">Esqueci minha senha</Link>
+              </div>
               <Input id="senha" type="password" value={senha} onChange={e => setSenha(e.target.value)} placeholder="••••••••" required />
             </div>
             <Button type="submit" className="w-full bg-[#E8560A] hover:bg-[#C4450A]" disabled={loading}>
