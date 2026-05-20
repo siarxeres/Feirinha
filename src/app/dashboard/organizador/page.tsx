@@ -74,25 +74,25 @@ export default async function OrganizadorPage() {
       label: "Inscrições",
       value: String(totalCount),
       icon: <ClipboardList size={18} className="text-orange-500" />,
-      bg: "bg-orange-50",
+      border: "border-2 border-orange-200",
     },
     {
       label: "Aprovadas",
       value: String(aprovadosCount),
       icon: <CheckCircle2 size={18} className="text-green-500" />,
-      bg: "bg-green-50",
+      border: "border-2 border-green-200",
     },
     {
       label: "Receita (R$)",
       value: "0,00",
       icon: <DollarSign size={18} className="text-blue-500" />,
-      bg: "bg-blue-50",
+      border: "border-2 border-blue-200",
     },
     {
       label: "Pendentes",
       value: String(pendentesCount),
       icon: <Clock size={18} className="text-yellow-500" />,
-      bg: "bg-yellow-50",
+      border: "border-2 border-yellow-200",
     },
   ]
 
@@ -127,7 +127,7 @@ export default async function OrganizadorPage() {
           {/* 2×2 metrics */}
           <section className="grid grid-cols-2 gap-3">
             {metrics.map(m => (
-              <div key={m.label} className={`rounded-2xl p-4 border border-gray-200 shadow-sm bg-white`}>
+              <div key={m.label} className={`rounded-xl p-4 ${m.border} shadow-sm bg-white`}>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-semibold text-gray-600">{m.label}</span>
                   {m.icon}
