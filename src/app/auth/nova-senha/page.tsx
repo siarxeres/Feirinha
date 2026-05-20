@@ -4,27 +4,56 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import Link from "next/link"
+import { useRouter, useSearchParams } from "next/navigation"
+import { Suspense, useEffect, useState } from "react"
 import type { FormEvent } from "react"
 import { toast } from "sonner"
 
-export default function NovaSenhaPage() {
+function NovaSenhaForm() {
   const [pronto, setPronto] = useState(false)
+  const [linkExpirado, setLinkExpirado] = useState(false)
   const [senha, setSenha] = useState("")
   const [confirmar, setConfirmar] = useState("")
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
   const supabase = createClient()
 
   useEffect(() => {
+    // Link expirado ou inválido vem como query params
+    if (
+      searchParams.get("error_code") === "otp_expired" ||
+      searchParams.get("error") === "access_denied"
+    ) {
+      setLinkExpirado(true)
+      return
+    }
+
+    // Token de recovery vem no hash: #access_token=...&refresh_token=...&type=recovery
+    const hash = window.location.hash.slice(1)
+    const params = new URLSearchParams(hash)
+    const accessToken = params.get("access_token")
+    const refreshToken = params.get("refresh_token") ?? ""
+    const type = params.get("type")
+
+    if (accessToken && type === "recovery") {
+      supabase.auth
+        .setSession({ access_token: accessToken, refresh_token: refreshToken })
+        .then(({ error }) => {
+          if (error) setLinkExpirado(true)
+          else setPronto(true)
+        })
+      return
+    }
+
+    // Fallback: Supabase client processa o hash automaticamente em alguns fluxos
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === "PASSWORD_RECOVERY") {
-        setPronto(true)
-      }
+      if (event === "PASSWORD_RECOVERY") setPronto(true)
     })
     return () => subscription.unsubscribe()
-  }, [supabase])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -52,7 +81,16 @@ export default function NovaSenhaPage() {
           <CardDescription>Defina sua nova senha de acesso</CardDescription>
         </CardHeader>
         <CardContent>
-          {!pronto ? (
+          {linkExpirado ? (
+            <div className="space-y-4">
+              <p className="text-center text-sm text-muted-foreground">
+                Link expirado. Solicite um novo link de recuperação.
+              </p>
+              <Button asChild className="w-full bg-[#E8560A] hover:bg-[#C4450A]">
+                <Link href="/auth/recuperar-senha">Solicitar novo link</Link>
+              </Button>
+            </div>
+          ) : !pronto ? (
             <p className="text-center text-sm text-muted-foreground">Validando link de recuperação...</p>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-3">
@@ -88,5 +126,13 @@ export default function NovaSenhaPage() {
         </CardContent>
       </Card>
     </div>
+  )
+}
+
+export default function NovaSenhaPage() {
+  return (
+    <Suspense>
+      <NovaSenhaForm />
+    </Suspense>
   )
 }
