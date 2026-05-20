@@ -138,7 +138,7 @@ export default async function OrganizadorPage() {
           </section>
 
           {/* Inscricoes aguardando */}
-          <section className="rounded-2xl border border-gray-200 shadow-sm overflow-hidden bg-white">
+          <section className="rounded-2xl shadow-sm overflow-hidden" style={{ border: '2px solid #e9d5ff', backgroundColor: '#faf5ff' }}>
             <div className="px-4 pt-4 pb-1">
               <h2 className="text-base font-bold text-gray-800">
                 Aguardando aprovação
