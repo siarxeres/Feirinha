@@ -1,26 +1,38 @@
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { ClipboardList, CheckCircle2, Clock, LogOut, MapPin, CalendarDays, Store } from "lucide-react"
+import { Bell, ClipboardList, CheckCircle2, Clock, Store, MapPin, CalendarDays } from "lucide-react"
+import { BottomNav } from "./_components/BottomNav"
 
 function formatDate(value: string | null | undefined) {
   if (!value) return "—"
   return new Date(value + "T00:00:00").toLocaleDateString("pt-BR", {
     day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
+    month: "short",
   })
 }
 
-const statusInscricao: Record<string, { label: string; variant: "default" | "secondary" | "outline" | "destructive" }> = {
-  pendente:     { label: "Pendente",     variant: "outline" },
-  aprovada:     { label: "Aprovada",     variant: "default" },
-  rejeitada:    { label: "Rejeitada",    variant: "destructive" },
-  lista_espera: { label: "Lista de espera", variant: "secondary" },
-  cancelada:    { label: "Cancelada",    variant: "secondary" },
+const AVATAR_COLORS = [
+  "bg-purple-500", "bg-blue-500", "bg-green-500",
+  "bg-pink-500", "bg-yellow-500", "bg-indigo-500", "bg-teal-500",
+]
+
+function initials(name: string | null | undefined) {
+  if (!name) return "?"
+  return name.split(" ").filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join("")
+}
+
+function avatarBg(name: string | null | undefined, id: string) {
+  const seed = (name?.charCodeAt(0) ?? 0) + (id.charCodeAt(0) ?? 0)
+  return AVATAR_COLORS[seed % AVATAR_COLORS.length]
+}
+
+function statusBadge(status: string) {
+  if (status === "aprovada") return { label: "Aprovada",       cls: "bg-green-100 text-green-700" }
+  if (status === "pendente") return { label: "Pendente",       cls: "bg-yellow-100 text-yellow-700" }
+  if (status === "rejeitada") return { label: "Rejeitada",     cls: "bg-red-100 text-red-700" }
+  if (status === "lista_espera") return { label: "Lista de espera", cls: "bg-gray-100 text-gray-600" }
+  return { label: status, cls: "bg-gray-100 text-gray-600" }
 }
 
 export default async function FeirantePage() {
@@ -49,182 +61,217 @@ export default async function FeirantePage() {
       .order("data_inicio", { ascending: true }),
   ])
 
-  const nome = profile?.nome || user.user_metadata?.nome || user.email || "Feirante"
-  const lista = inscricoes ?? []
-  const feiras = feirasPublicadas ?? []
+  const nome = (profile as any)?.nome || user.user_metadata?.nome || user.email || "Feirante"
+  const lista = (inscricoes ?? []) as any[]
+  const feiras = (feirasPublicadas ?? []) as any[]
 
   const totalInscricoes = lista.length
-  const aprovadas = lista.filter(i => i.status === "aprovada").length
-  const pendentes = lista.filter(i => i.status === "pendente").length
-
-  // IDs de feiras em que o feirante já está inscrito
-  const inscritasIds = new Set(lista.map(i => i.feira_id).filter(Boolean))
+  const aprovadas = lista.filter((i: any) => i.status === "aprovada").length
+  const pendentes = lista.filter((i: any) => i.status === "pendente").length
+  const inscritasIds = new Set(lista.map((i: any) => i.feira_id).filter(Boolean))
 
   const metrics = [
     {
-      label: "Minhas Inscrições",
+      label: "Inscrições",
       value: totalInscricoes,
-      icon: <ClipboardList className="h-5 w-5 text-orange-500" />,
+      icon: <ClipboardList size={18} className="text-orange-500" />,
+      style: { border: "2px solid #fed7aa", backgroundColor: "#fff7ed" },
     },
     {
       label: "Aprovadas",
       value: aprovadas,
-      icon: <CheckCircle2 className="h-5 w-5 text-green-500" />,
+      icon: <CheckCircle2 size={18} className="text-green-500" />,
+      style: { border: "2px solid #bbf7d0", backgroundColor: "#f0fdf4" },
     },
     {
       label: "Pendentes",
       value: pendentes,
-      icon: <Clock className="h-5 w-5 text-yellow-500" />,
+      icon: <Clock size={18} className="text-yellow-500" />,
+      style: { border: "2px solid #fef08a", backgroundColor: "#fefce8" },
+    },
+    {
+      label: "Disponíveis",
+      value: feiras.length,
+      icon: <Store size={18} className="text-blue-500" />,
+      style: { border: "2px solid #bfdbfe", backgroundColor: "#eff6ff" },
     },
   ]
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src="/feirinha-logo.svg" alt="Feirinha" width={36} height={36} />
-            <h1 className="text-xl font-bold text-gray-900">
-              Olá, <span className="text-[#E8560A]">{nome}</span>!
-            </h1>
+      <div className="max-w-md mx-auto min-h-screen bg-gray-50 flex flex-col">
+
+        {/* Header */}
+        <header className="px-5 pt-12 pb-5 bg-gray-50">
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-2">
+              <img src="/feirinha-logo.svg" alt="Feirinha" width={36} height={36} />
+              <span className="text-lg font-bold tracking-tight text-gray-900">Feirinhas</span>
+            </div>
+            <button aria-label="Notificações" className="p-2 rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors">
+              <Bell size={21} className="text-gray-700" />
+            </button>
           </div>
-          <a
-            href="/auth/logout"
-            className="flex items-center gap-2 text-sm text-gray-600 hover:text-red-600 transition-colors px-3 py-2 rounded-lg hover:bg-red-50"
-          >
-            <LogOut size={16} />
-            Sair
-          </a>
-        </div>
-      </header>
+          <h1 className="text-3xl font-bold" style={{ color: "#1A1A1A" }}>
+            Olá, {nome}!
+          </h1>
+        </header>
 
-      <div className="max-w-5xl mx-auto px-6 py-8 space-y-10">
+        {/* Scrollable body */}
+        <div className="flex-1 px-5 pb-28 space-y-5">
 
-        {/* Métricas */}
-        <section>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {/* Metrics 2×2 */}
+          <section className="grid grid-cols-2 gap-3">
             {metrics.map(m => (
-              <Card key={m.label}>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-500 flex items-center justify-between">
-                    {m.label}
-                    {m.icon}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-3xl font-bold text-gray-900">{m.value}</p>
-                </CardContent>
-              </Card>
+              <div key={m.label} className="rounded-xl p-4 shadow-sm" style={m.style}>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-semibold text-gray-600">{m.label}</span>
+                  {m.icon}
+                </div>
+                <p className="text-4xl font-bold text-gray-900">{m.value}</p>
+              </div>
             ))}
-          </div>
-        </section>
+          </section>
 
-        {/* Minhas inscrições */}
-        {lista.length > 0 && (
-          <section>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Minhas Inscrições</h2>
-            <div className="grid gap-3">
-              {lista.map(i => {
-                const feira = Array.isArray(i.feiras) ? i.feiras[0] : i.feiras
-                const s = statusInscricao[i.status] ?? { label: i.status, variant: "secondary" as const }
-                return (
-                  <Card key={i.id}>
-                    <CardContent className="p-4 flex items-center justify-between gap-4">
-                      <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-gray-900 truncate">{feira?.nome ?? "Feira"}</p>
-                        <p className="text-sm text-gray-500">
-                          {feira?.cidade && feira?.estado ? `${feira.cidade}, ${feira.estado}` : "—"}
-                          {feira?.data_inicio ? ` · ${formatDate(feira.data_inicio)}` : ""}
-                        </p>
+          {/* Minhas Inscrições */}
+          <section
+            className="rounded-2xl shadow-sm overflow-hidden"
+            style={{ border: "2px solid #e9d5ff", backgroundColor: "#faf5ff" }}
+          >
+            <div className="px-4 pt-4 pb-1">
+              <h2 className="text-base font-bold text-gray-800">Minhas Inscrições</h2>
+            </div>
+            <div className="px-4 pb-4">
+              {lista.length === 0 ? (
+                <p className="py-6 text-center text-sm text-gray-400">
+                  Você ainda não se inscreveu em nenhuma feira
+                </p>
+              ) : (
+                <div className="divide-y divide-purple-100">
+                  {lista.map((insc: any) => {
+                    const feiraData = Array.isArray(insc.feiras) ? insc.feiras[0] : insc.feiras
+                    const nomeFeira = feiraData?.nome ?? "Feira"
+                    const badge = statusBadge(insc.status)
+                    return (
+                      <div key={insc.id} className="flex items-center gap-3 py-3">
+                        <div
+                          className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0 ${avatarBg(nomeFeira, insc.id)}`}
+                        >
+                          {initials(nomeFeira)}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-gray-900 truncate">{nomeFeira}</p>
+                          <p className="text-xs text-gray-500 truncate">
+                            {feiraData?.cidade ?? "—"}
+                            {feiraData?.data_inicio ? ` · ${formatDate(feiraData.data_inicio)}` : ""}
+                          </p>
+                        </div>
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium shrink-0 ${badge.cls}`}>
+                          {badge.label}
+                        </span>
                       </div>
-                      <Badge variant={s.variant}>{s.label}</Badge>
-                    </CardContent>
-                  </Card>
-                )
-              })}
+                    )
+                  })}
+                </div>
+              )}
             </div>
           </section>
-        )}
 
-        {/* Feiras disponíveis */}
-        <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Feiras Disponíveis</h2>
+          {/* Feiras Disponíveis */}
+          <section>
+            <h2 className="text-base font-bold text-gray-800 mb-3">Feiras Disponíveis</h2>
 
-          {feiras.length === 0 ? (
-            <Card>
-              <CardContent className="p-12 text-center">
-                <p className="text-gray-500">Nenhuma feira publicada no momento.</p>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="grid gap-4">
-              {feiras.map(feira => {
-                const jaInscrito = inscritasIds.has(feira.id)
-                const categorias: string[] = Array.isArray(feira.categorias) ? feira.categorias : []
+            {feiras.length === 0 ? (
+              <div className="rounded-2xl bg-white shadow-sm border border-gray-200 p-8 text-center">
+                <p className="text-sm text-gray-400">Nenhuma feira publicada no momento.</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {feiras.map((feira: any) => {
+                  const jaInscrito = inscritasIds.has(feira.id)
+                  const categorias: string[] = Array.isArray(feira.categorias) ? feira.categorias : []
 
-                return (
-                  <Card key={feira.id} className="hover:shadow-md transition-shadow">
-                    <CardHeader className="pb-2">
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1 min-w-0">
-                          <CardTitle className="text-base font-semibold text-gray-900">
-                            {feira.nome}
-                          </CardTitle>
-                          <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1">
-                            <span className="flex items-center gap-1 text-sm text-gray-500">
-                              <MapPin size={13} />
-                              {feira.cidade}, {feira.estado}
+                  return (
+                    <div
+                      key={feira.id}
+                      className="rounded-2xl bg-white shadow-sm overflow-hidden"
+                      style={{ border: "2px solid #e5e7eb" }}
+                    >
+                      {/* Orange placeholder banner */}
+                      <div
+                        className="h-16 flex items-center justify-center"
+                        style={{ background: "linear-gradient(135deg, #E8560A 0%, #f97316 100%)" }}
+                      >
+                        <Store size={28} className="text-white opacity-80" />
+                      </div>
+
+                      <div className="px-4 pt-3 pb-4">
+                        <div className="flex items-start justify-between gap-3 mb-2">
+                          <p className="text-sm font-bold text-gray-900 leading-snug">{feira.nome}</p>
+                          {jaInscrito ? (
+                            <span className="text-xs px-2 py-1 rounded-full font-medium bg-green-100 text-green-700 shrink-0">
+                              Inscrito
                             </span>
-                            <span className="flex items-center gap-1 text-sm text-gray-500">
-                              <CalendarDays size={13} />
-                              {formatDate(feira.data_inicio)} – {formatDate(feira.data_fim)}
-                            </span>
-                            <span className="flex items-center gap-1 text-sm text-gray-500">
-                              <Store size={13} />
-                              {feira.capacidade_barracas ?? "—"} barracas
-                            </span>
-                          </div>
+                          ) : (
+                            <Link
+                              href={`/feiras/${feira.id}/inscricao`}
+                              className="text-xs px-3 py-1.5 rounded-full font-semibold text-white shrink-0 transition-colors"
+                              style={{ backgroundColor: "#E8560A" }}
+                            >
+                              Me inscrever
+                            </Link>
+                          )}
                         </div>
 
-                        {jaInscrito ? (
-                          <Badge variant="secondary">Inscrito</Badge>
-                        ) : (
-                          <Link href={`/feiras/${feira.id}/inscricao`}>
-                            <Button size="sm" className="bg-[#E8560A] hover:bg-[#C4450A] shrink-0">
-                              Me inscrever
-                            </Button>
-                          </Link>
-                        )}
-                      </div>
-                    </CardHeader>
-
-                    {(categorias.length > 0 || feira.taxa_inscricao || feira.taxa_barraca) && (
-                      <CardContent className="pt-0 pb-4 flex flex-wrap gap-2 items-center">
-                        {categorias.map((cat: string) => (
-                          <span
-                            key={cat}
-                            className="text-xs px-2 py-0.5 bg-orange-50 text-orange-700 rounded-full border border-orange-200 capitalize"
-                          >
-                            {cat}
+                        <div className="flex flex-col gap-1 mb-2">
+                          <span className="flex items-center gap-1.5 text-xs text-gray-500">
+                            <MapPin size={12} />
+                            {feira.cidade}, {feira.estado}
                           </span>
-                        ))}
+                          <span className="flex items-center gap-1.5 text-xs text-gray-500">
+                            <CalendarDays size={12} />
+                            {formatDate(feira.data_inicio)} – {formatDate(feira.data_fim)}
+                          </span>
+                          {feira.capacidade_barracas && (
+                            <span className="flex items-center gap-1.5 text-xs text-gray-500">
+                              <Store size={12} />
+                              {feira.capacidade_barracas} barracas
+                            </span>
+                          )}
+                        </div>
+
+                        {categorias.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5 mt-2">
+                            {categorias.map((cat: string) => (
+                              <span
+                                key={cat}
+                                className="text-xs px-2 py-0.5 rounded-full capitalize"
+                                style={{ backgroundColor: "#fff7ed", color: "#c2410c", border: "1px solid #fed7aa" }}
+                              >
+                                {cat}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+
                         {(feira.taxa_inscricao > 0 || feira.taxa_barraca > 0) && (
-                          <span className="ml-auto text-xs text-gray-500">
+                          <p className="text-xs text-gray-400 mt-2">
                             {feira.taxa_inscricao > 0 && `Inscrição: R$ ${Number(feira.taxa_inscricao).toFixed(2)}`}
                             {feira.taxa_inscricao > 0 && feira.taxa_barraca > 0 && " · "}
                             {feira.taxa_barraca > 0 && `Barraca: R$ ${Number(feira.taxa_barraca).toFixed(2)}`}
-                          </span>
+                          </p>
                         )}
-                      </CardContent>
-                    )}
-                  </Card>
-                )
-              })}
-            </div>
-          )}
-        </section>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </section>
 
+        </div>
+
+        <BottomNav />
       </div>
     </div>
   )
