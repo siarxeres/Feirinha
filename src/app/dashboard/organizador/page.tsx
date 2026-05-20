@@ -97,15 +97,15 @@ export default async function OrganizadorPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="max-w-md mx-auto min-h-screen bg-white shadow-sm flex flex-col">
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-md mx-auto min-h-screen bg-gray-50 shadow-sm flex flex-col">
 
         {/* Header */}
         <header className="px-5 pt-12 pb-5">
           <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-2">
-              <img src="/feirinha-logo.svg" alt="Feirinha" width={30} height={30} />
-              <span className="text-[15px] font-extrabold tracking-tight text-gray-900">
+              <img src="/feirinha-logo.svg" alt="Feirinha" width={36} height={36} />
+              <span className="text-lg font-bold tracking-tight text-gray-900">
                 Feirinhas
               </span>
             </div>
@@ -116,7 +116,7 @@ export default async function OrganizadorPage() {
               <Bell size={21} className="text-gray-700" />
             </button>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold" style={{ color: '#1A1A1A' }}>
             {greeting}, {userName}
           </h1>
         </header>
@@ -127,20 +127,20 @@ export default async function OrganizadorPage() {
           {/* 2×2 metrics */}
           <section className="grid grid-cols-2 gap-3">
             {metrics.map(m => (
-              <div key={m.label} className={`rounded-2xl p-4 ${m.bg}`}>
+              <div key={m.label} className={`rounded-2xl p-4 border border-gray-200 shadow-sm bg-white`}>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-medium text-gray-500">{m.label}</span>
+                  <span className="text-sm font-semibold text-gray-600">{m.label}</span>
                   {m.icon}
                 </div>
-                <p className="text-2xl font-bold text-gray-900">{m.value}</p>
+                <p className="text-4xl font-bold text-gray-900">{m.value}</p>
               </div>
             ))}
           </section>
 
           {/* Inscricoes aguardando */}
-          <section className="rounded-2xl border border-gray-100 shadow-sm overflow-hidden bg-white">
+          <section className="rounded-2xl border border-gray-200 shadow-sm overflow-hidden bg-white">
             <div className="px-4 pt-4 pb-1">
-              <h2 className="text-[15px] font-semibold text-gray-900">
+              <h2 className="text-base font-bold text-gray-800">
                 Aguardando aprovação
               </h2>
             </div>
