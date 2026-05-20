@@ -30,7 +30,19 @@ function NovaSenhaForm() {
       return
     }
 
-    // Token de recovery vem no hash: #access_token=...&refresh_token=...&type=recovery
+    // PKCE flow: Supabase redireciona com ?code=XXXX
+    const code = searchParams.get("code")
+    if (code) {
+      supabase.auth
+        .exchangeCodeForSession(code)
+        .then(({ error }) => {
+          if (error) setLinkExpirado(true)
+          else setPronto(true)
+        })
+      return
+    }
+
+    // Implicit flow: token de recovery no hash #access_token=...&type=recovery
     const hash = window.location.hash.slice(1)
     const params = new URLSearchParams(hash)
     const accessToken = params.get("access_token")
