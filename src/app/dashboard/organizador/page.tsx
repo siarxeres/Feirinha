@@ -74,25 +74,25 @@ export default async function OrganizadorPage() {
       label: "Inscrições",
       value: String(totalCount),
       icon: <ClipboardList size={18} className="text-orange-500" />,
-      border: "border-2 border-orange-200",
+      borderStyle: { border: '2px solid #fed7aa', backgroundColor: '#fff7ed' } as React.CSSProperties,
     },
     {
       label: "Aprovadas",
       value: String(aprovadosCount),
       icon: <CheckCircle2 size={18} className="text-green-500" />,
-      border: "border-2 border-green-200",
+      borderStyle: { border: '2px solid #bbf7d0', backgroundColor: '#f0fdf4' } as React.CSSProperties,
     },
     {
       label: "Receita (R$)",
       value: "0,00",
       icon: <DollarSign size={18} className="text-blue-500" />,
-      border: "border-2 border-blue-200",
+      borderStyle: { border: '2px solid #bfdbfe', backgroundColor: '#eff6ff' } as React.CSSProperties,
     },
     {
       label: "Pendentes",
       value: String(pendentesCount),
       icon: <Clock size={18} className="text-yellow-500" />,
-      border: "border-2 border-yellow-200",
+      borderStyle: { border: '2px solid #fef08a', backgroundColor: '#fefce8' } as React.CSSProperties,
     },
   ]
 
@@ -127,7 +127,7 @@ export default async function OrganizadorPage() {
           {/* 2×2 metrics */}
           <section className="grid grid-cols-2 gap-3">
             {metrics.map(m => (
-              <div key={m.label} className={`rounded-xl p-4 ${m.border} shadow-sm bg-white`}>
+              <div key={m.label} className="rounded-xl p-4 shadow-sm bg-white" style={m.borderStyle}>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-semibold text-gray-600">{m.label}</span>
                   {m.icon}
