@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 const PROTECTED_ROUTES = ['/dashboard', '/feiras', '/perfil', '/inscricoes', '/servicos']
 const AUTH_ROUTES = ['/auth/login', '/auth/cadastro']
+const AUTH_PUBLIC = ['/auth/recuperar-senha', '/auth/nova-senha', '/auth/callback']
 
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
@@ -31,6 +32,9 @@ export async function middleware(request: NextRequest) {
     url.searchParams.set('redirect', pathname)
     return NextResponse.redirect(url)
   }
+  const isPublicAuthRoute = AUTH_PUBLIC.some(r => pathname.startsWith(r))
+  if (isPublicAuthRoute) return supabaseResponse
+
   const isAuthRoute = AUTH_ROUTES.some(r => pathname.startsWith(r))
   if (isAuthRoute && user) {
     const url = request.nextUrl.clone()
