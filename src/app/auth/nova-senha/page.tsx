@@ -18,8 +18,11 @@ export default function NovaSenhaPage() {
   const supabase = createClient()
 
   useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) setPronto(true)
+    })
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === "PASSWORD_RECOVERY") setPronto(true)
+      if (event === "PASSWORD_RECOVERY" || event === "SIGNED_IN") setPronto(true)
     })
     return () => subscription.unsubscribe()
   // eslint-disable-next-line react-hooks/exhaustive-deps
