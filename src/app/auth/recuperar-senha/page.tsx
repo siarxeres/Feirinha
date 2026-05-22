@@ -18,7 +18,7 @@ export default function RecuperarSenhaPage() {
     e.preventDefault()
     setLoading(true)
     await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "https://feirinha-ashy.vercel.app/auth/nova-senha",
+      redirectTo: "https://feirinha-ashy.vercel.app/auth/callback",
     })
     setEnviado(true)
     setLoading(false)
