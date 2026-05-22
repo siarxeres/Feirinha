@@ -17,5 +17,9 @@ export async function GET(request: NextRequest) {
     console.log('[callback] exchangeCodeForSession error:', error.message)
   }
 
+  const supabase = await createClient()
+  const { data: { session } } = await supabase.auth.getSession()
+  if (session) return NextResponse.redirect(`${origin}/auth/nova-senha`)
+
   return NextResponse.redirect(`${origin}/auth/login?error=auth`)
 }
