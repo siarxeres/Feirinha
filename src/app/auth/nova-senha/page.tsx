@@ -20,11 +20,8 @@ export default function NovaSenhaPage() {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) setPronto(true)
+      else router.replace("/auth/recuperar-senha")
     })
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === "PASSWORD_RECOVERY" || event === "SIGNED_IN") setPronto(true)
-    })
-    return () => subscription.unsubscribe()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -55,7 +52,7 @@ export default function NovaSenhaPage() {
         </CardHeader>
         <CardContent>
           {!pronto ? (
-            <p className="text-center text-sm text-muted-foreground">Validando link de recuperação...</p>
+            <p className="text-center text-sm text-muted-foreground">Validando sessão...</p>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-3">
               <div className="space-y-1">
