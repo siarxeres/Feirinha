@@ -4,21 +4,36 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import Link from "next/link"
+import { useRouter, useSearchParams } from "next/navigation"
+import { Suspense, useEffect, useState } from "react"
 import type { FormEvent } from "react"
 import { toast } from "sonner"
 
-export default function NovaSenhaPage() {
+function NovaSenhaForm() {
   const [pronto, setPronto] = useState(false)
+  const [linkExpirado, setLinkExpirado] = useState(false)
   const [senha, setSenha] = useState("")
   const [confirmar, setConfirmar] = useState("")
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
   const supabase = createClient()
 
   useEffect(() => {
-    // Implicit flow: Supabase redireciona com #access_token=...&type=recovery no hash
+    // PKCE flow: Supabase envia ?code=XXXX
+    const code = searchParams.get("code")
+    if (code) {
+      supabase.auth
+        .exchangeCodeForSession(code)
+        .then(({ error }) => {
+          if (error) setLinkExpirado(true)
+          else setPronto(true)
+        })
+      return
+    }
+
+    // Implicit flow: Supabase envia #access_token=...&type=recovery no hash
     const hash = window.location.hash.slice(1)
     const params = new URLSearchParams(hash)
     const accessToken = params.get("access_token")
@@ -29,7 +44,8 @@ export default function NovaSenhaPage() {
       supabase.auth
         .setSession({ access_token: accessToken, refresh_token: refreshToken })
         .then(({ error }) => {
-          if (!error) setPronto(true)
+          if (error) setLinkExpirado(true)
+          else setPronto(true)
         })
       return
     }
@@ -71,7 +87,16 @@ export default function NovaSenhaPage() {
           <CardDescription>Defina sua nova senha de acesso</CardDescription>
         </CardHeader>
         <CardContent>
-          {!pronto ? (
+          {linkExpirado ? (
+            <div className="space-y-4">
+              <p className="text-center text-sm text-muted-foreground">
+                Link expirado. Solicite um novo link de recuperação.
+              </p>
+              <Button asChild className="w-full bg-[#E8560A] hover:bg-[#C4450A]">
+                <Link href="/auth/recuperar-senha">Solicitar novo link</Link>
+              </Button>
+            </div>
+          ) : !pronto ? (
             <p className="text-center text-sm text-muted-foreground">Validando link de recuperação...</p>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-3">
@@ -107,5 +132,13 @@ export default function NovaSenhaPage() {
         </CardContent>
       </Card>
     </div>
+  )
+}
+
+export default function NovaSenhaPage() {
+  return (
+    <Suspense>
+      <NovaSenhaForm />
+    </Suspense>
   )
 }
