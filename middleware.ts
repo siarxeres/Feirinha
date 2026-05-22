@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 const PROTECTED_ROUTES = ['/dashboard', '/feiras', '/perfil', '/inscricoes', '/servicos']
 const AUTH_ROUTES = ['/auth/login', '/auth/cadastro']
-const AUTH_PUBLIC = ['/auth/recuperar-senha', '/auth/nova-senha', '/auth/callback']
+const AUTH_PUBLIC = ['/auth/recuperar-senha', '/auth/nova-senha', '/auth/callback', '/auth/confirmar']
 
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
