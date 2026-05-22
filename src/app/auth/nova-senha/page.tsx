@@ -18,6 +18,23 @@ export default function NovaSenhaPage() {
   const supabase = createClient()
 
   useEffect(() => {
+    // Implicit flow: Supabase redireciona com #access_token=...&type=recovery no hash
+    const hash = window.location.hash.slice(1)
+    const params = new URLSearchParams(hash)
+    const accessToken = params.get("access_token")
+    const refreshToken = params.get("refresh_token") ?? ""
+    const type = params.get("type")
+
+    if (accessToken && type === "recovery") {
+      supabase.auth
+        .setSession({ access_token: accessToken, refresh_token: refreshToken })
+        .then(({ error }) => {
+          if (!error) setPronto(true)
+        })
+      return
+    }
+
+    // Fallback: sessão já estabelecida ou evento disparado por outro caminho
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) setPronto(true)
     })
