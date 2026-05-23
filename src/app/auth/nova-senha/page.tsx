@@ -4,20 +4,34 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { Suspense, useEffect, useState } from "react"
 import type { FormEvent } from "react"
 import { toast } from "sonner"
 
-export default function NovaSenhaPage() {
+function NovaSenhaForm() {
   const [pronto, setPronto] = useState(false)
   const [senha, setSenha] = useState("")
   const [confirmar, setConfirmar] = useState("")
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
   const supabase = createClient()
 
   useEffect(() => {
+    const tokenHash = searchParams.get("token_hash")
+    const type = searchParams.get("type")
+
+    if (tokenHash) {
+      supabase.auth
+        .verifyOtp({ token_hash: tokenHash, type: (type ?? "recovery") as "recovery" })
+        .then(({ error }) => {
+          if (error) router.replace("/auth/recuperar-senha")
+          else setPronto(true)
+        })
+      return
+    }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) setPronto(true)
       else router.replace("/auth/recuperar-senha")
@@ -52,7 +66,7 @@ export default function NovaSenhaPage() {
         </CardHeader>
         <CardContent>
           {!pronto ? (
-            <p className="text-center text-sm text-muted-foreground">Validando sessão...</p>
+            <p className="text-center text-sm text-muted-foreground">Validando link de recuperação...</p>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-3">
               <div className="space-y-1">
@@ -87,5 +101,13 @@ export default function NovaSenhaPage() {
         </CardContent>
       </Card>
     </div>
+  )
+}
+
+export default function NovaSenhaPage() {
+  return (
+    <Suspense>
+      <NovaSenhaForm />
+    </Suspense>
   )
 }
