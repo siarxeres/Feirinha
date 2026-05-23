@@ -1,10 +1,18 @@
-import { createClient } from "@/lib/supabase/server"
+﻿import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
-import { Bell, ClipboardList, CheckCircle2, DollarSign, Clock } from "lucide-react"
+import { Bell, ClipboardList, CheckCircle2, DollarSign, Clock, LogOut } from "lucide-react"
 import { BottomNav } from "./_components/BottomNav"
 import { InscricoesAguardando } from "./_components/InscricoesAguardando"
 
 const PREVIEW_LIMIT = 5
+
+async function logout() {
+  "use server"
+  const { createClient } = await import("@/lib/supabase/server")
+  const supabase = await createClient()
+  await supabase.auth.signOut()
+  redirect("/auth/login")
+}
 
 export default async function OrganizadorPage() {
   const supabase = await createClient()
@@ -109,12 +117,23 @@ export default async function OrganizadorPage() {
                 Feirinhas
               </span>
             </div>
-            <button
-              aria-label="Notificações"
-              className="p-2 rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors"
-            >
-              <Bell size={21} className="text-gray-700" />
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                aria-label="Notificações"
+                className="p-2 rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors"
+              >
+                <Bell size={21} className="text-gray-700" />
+              </button>
+              <form action={logout}>
+                <button
+                  type="submit"
+                  aria-label="Sair"
+                  className="p-2 rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors"
+                >
+                  <LogOut size={21} className="text-gray-700" />
+                </button>
+              </form>
+            </div>
           </div>
           <h1 className="text-3xl font-bold" style={{ color: '#1A1A1A' }}>
             {greeting}, {userName}
