@@ -3,6 +3,7 @@ import { redirect } from "next/navigation"
 import Link from "next/link"
 import { Bell, ClipboardList, CheckCircle2, Clock, Store, MapPin, CalendarDays } from "lucide-react"
 import { BottomNav } from "./_components/BottomNav"
+import { LogoutButton } from "./_components/LogoutButton"
 
 function formatDate(value: string | null | undefined) {
   if (!value) return "—"
@@ -28,9 +29,9 @@ function avatarBg(name: string | null | undefined, id: string) {
 }
 
 function statusBadge(status: string) {
-  if (status === "aprovada") return { label: "Aprovada",       cls: "bg-green-100 text-green-700" }
-  if (status === "pendente") return { label: "Pendente",       cls: "bg-yellow-100 text-yellow-700" }
-  if (status === "rejeitada") return { label: "Rejeitada",     cls: "bg-red-100 text-red-700" }
+  if (status === "aprovada")     return { label: "Aprovada",        cls: "bg-green-100 text-green-700" }
+  if (status === "pendente")     return { label: "Pendente",        cls: "bg-yellow-100 text-yellow-700" }
+  if (status === "rejeitada")    return { label: "Rejeitada",       cls: "bg-red-100 text-red-700" }
   if (status === "lista_espera") return { label: "Lista de espera", cls: "bg-gray-100 text-gray-600" }
   return { label: status, cls: "bg-gray-100 text-gray-600" }
 }
@@ -108,9 +109,12 @@ export default async function FeirantePage() {
               <img src="/feirinha-logo.svg" alt="Feirinha" width={36} height={36} />
               <span className="text-lg font-bold tracking-tight text-gray-900">Feirinhas</span>
             </div>
-            <button aria-label="Notificações" className="p-2 rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors">
-              <Bell size={21} className="text-gray-700" />
-            </button>
+            <div className="flex items-center gap-1">
+              <button aria-label="Notificações" className="p-2 rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors">
+                <Bell size={21} className="text-gray-700" />
+              </button>
+              <LogoutButton />
+            </div>
           </div>
           <h1 className="text-3xl font-bold" style={{ color: "#1A1A1A" }}>
             Olá, {nome}!
@@ -197,7 +201,6 @@ export default async function FeirantePage() {
                       className="rounded-2xl bg-white shadow-sm overflow-hidden"
                       style={{ border: "2px solid #e5e7eb" }}
                     >
-                      {/* Orange placeholder banner */}
                       <div
                         className="h-16 flex items-center justify-center"
                         style={{ background: "linear-gradient(135deg, #E8560A 0%, #f97316 100%)" }}

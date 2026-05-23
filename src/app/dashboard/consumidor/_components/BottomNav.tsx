@@ -1,13 +1,13 @@
-'use client'
+"use client"
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { Compass, Map, User } from 'lucide-react'
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { Compass, Map, User } from "lucide-react"
 
 const items = [
-  { icon: Compass, label: 'Explorar', href: '/dashboard/consumidor' },
-  { icon: Map,     label: 'Mapa',     href: '/dashboard/consumidor/mapa' },
-  { icon: User,    label: 'Perfil',   href: '/dashboard/consumidor/perfil' },
+  { icon: Compass, label: "Explorar", href: "/dashboard/consumidor" },
+  { icon: Map,     label: "Mapa",     href: "/dashboard/consumidor/mapa" },
+  { icon: User,    label: "Perfil",   href: "/dashboard/consumidor/perfil" },
 ]
 
 export function BottomNav() {
@@ -22,7 +22,7 @@ export function BottomNav() {
               key={href}
               href={href}
               className="flex-1 flex flex-col items-center gap-0.5 py-3 text-xs font-medium transition-colors"
-              style={{ color: active ? '#E8560A' : '#6B7280' }}
+              style={{ color: active ? "#E8560A" : "#6B7280" }}
             >
               <Icon size={22} strokeWidth={active ? 2.5 : 1.75} />
               <span>{label}</span>
