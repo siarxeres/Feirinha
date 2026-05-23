@@ -108,28 +108,18 @@ export default async function OrganizadorPage() {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-md mx-auto min-h-screen bg-gray-50 shadow-sm flex flex-col">
 
-        {/* Header */}
         <header className="px-5 pt-12 pb-5">
           <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-2">
               <img src="/feirinha-logo.svg" alt="Feirinha" width={36} height={36} />
-              <span className="text-lg font-bold tracking-tight text-gray-900">
-                Feirinhas
-              </span>
+              <span className="text-lg font-bold tracking-tight text-gray-900">Feirinhas</span>
             </div>
             <div className="flex items-center gap-1">
-              <button
-                aria-label="Notificações"
-                className="p-2 rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors"
-              >
+              <button aria-label="Notificações" className="p-2 rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors">
                 <Bell size={21} className="text-gray-700" />
               </button>
               <form action={logout}>
-                <button
-                  type="submit"
-                  aria-label="Sair"
-                  className="p-2 rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors"
-                >
+                <button type="submit" aria-label="Sair" className="p-2 rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors">
                   <LogOut size={21} className="text-gray-700" />
                 </button>
               </form>
@@ -140,10 +130,7 @@ export default async function OrganizadorPage() {
           </h1>
         </header>
 
-        {/* Scrollable body */}
         <div className="flex-1 px-5 pb-28 space-y-5">
-
-          {/* 2×2 metrics */}
           <section className="grid grid-cols-2 gap-3">
             {metrics.map(m => (
               <div key={m.label} className="rounded-xl p-4 shadow-sm bg-white" style={m.borderStyle}>
@@ -156,12 +143,9 @@ export default async function OrganizadorPage() {
             ))}
           </section>
 
-          {/* Inscricoes aguardando */}
           <section className="rounded-2xl shadow-sm overflow-hidden" style={{ border: '2px solid #c4b5fd', backgroundColor: '#f5f3ff' }}>
             <div className="px-4 pt-4 pb-1">
-              <h2 className="text-base font-bold text-gray-800">
-                Aguardando aprovação
-              </h2>
+              <h2 className="text-base font-bold text-gray-800">Aguardando aprovação</h2>
             </div>
             <div className="px-4 pb-4">
               <InscricoesAguardando
@@ -170,7 +154,6 @@ export default async function OrganizadorPage() {
               />
             </div>
           </section>
-
         </div>
 
         <BottomNav />
