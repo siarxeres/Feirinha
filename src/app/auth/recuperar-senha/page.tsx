@@ -21,10 +21,7 @@ export default function RecuperarSenhaPage() {
   const handleEnviarCodigo = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLoading(true)
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { shouldCreateUser: false },
-    })
+    const { error } = await supabase.auth.resetPasswordForEmail(email)
     setLoading(false)
     if (error) {
       toast.error("Não foi possível enviar o código. Verifique o e-mail informado.")
