@@ -39,7 +39,7 @@ export default function RecuperarSenhaPage() {
     const { error } = await supabase.auth.verifyOtp({
       email,
       token: codigo,
-      type: "magiclink",
+      type: "email",
     })
     setLoading(false)
     if (error) {
