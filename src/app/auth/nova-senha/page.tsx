@@ -8,12 +8,15 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Suspense, useEffect, useState } from "react"
 import type { FormEvent } from "react"
 import { toast } from "sonner"
+import { Eye, EyeOff } from "lucide-react"
 
 function NovaSenhaForm() {
   const [pronto, setPronto] = useState(false)
   const [senha, setSenha] = useState("")
   const [confirmar, setConfirmar] = useState("")
   const [loading, setLoading] = useState(false)
+  const [showSenha, setShowSenha] = useState(false)
+  const [showConfirmar, setShowConfirmar] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
   const supabase = createClient()
@@ -71,27 +74,49 @@ function NovaSenhaForm() {
             <form onSubmit={handleSubmit} className="space-y-3">
               <div className="space-y-1">
                 <Label htmlFor="senha">Nova senha</Label>
-                <Input
-                  id="senha"
-                  type="password"
-                  value={senha}
-                  onChange={e => setSenha(e.target.value)}
-                  placeholder="••••••••"
-                  minLength={6}
-                  required
-                />
+                <div className="relative">
+                  <Input
+                    id="senha"
+                    type={showSenha ? "text" : "password"}
+                    value={senha}
+                    onChange={e => setSenha(e.target.value)}
+                    placeholder="••••••••"
+                    minLength={6}
+                    required
+                    className="pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowSenha(v => !v)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    tabIndex={-1}
+                  >
+                    {showSenha ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
               </div>
               <div className="space-y-1">
                 <Label htmlFor="confirmar">Confirmar senha</Label>
-                <Input
-                  id="confirmar"
-                  type="password"
-                  value={confirmar}
-                  onChange={e => setConfirmar(e.target.value)}
-                  placeholder="••••••••"
-                  minLength={6}
-                  required
-                />
+                <div className="relative">
+                  <Input
+                    id="confirmar"
+                    type={showConfirmar ? "text" : "password"}
+                    value={confirmar}
+                    onChange={e => setConfirmar(e.target.value)}
+                    placeholder="••••••••"
+                    minLength={6}
+                    required
+                    className="pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmar(v => !v)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    tabIndex={-1}
+                  >
+                    {showConfirmar ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
               </div>
               <Button type="submit" className="w-full bg-[#E8560A] hover:bg-[#C4450A]" disabled={loading}>
                 {loading ? "Salvando..." : "Salvar nova senha"}
