@@ -6,6 +6,7 @@ import { Plus, Pencil, Trash2 } from "lucide-react"
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from "@/components/ui/dialog"
+import { criarCategoria, editarCategoria, excluirCategoria } from "./actions"
 
 type Categoria = {
   id: string
@@ -64,18 +65,13 @@ export function CategoriasManager() {
     if (!form.nome.trim()) return
     setSaving(true)
     setError(null)
-    const payload = {
-      nome: form.nome.trim(),
-      icone: form.icone || null,
-      cor: form.cor || null,
-      ativo: form.ativo,
-    }
-    const { error: err } = editando
-      ? await supabase.from("categorias").update(payload).eq("id", editando.id)
-      : await supabase.from("categorias").insert(payload)
+    const payload = { nome: form.nome.trim(), icone: form.icone, cor: form.cor, ativo: form.ativo }
+    const result = editando
+      ? await editarCategoria(editando.id, payload)
+      : await criarCategoria(payload)
     setSaving(false)
-    if (err) {
-      setError(err.message)
+    if ("error" in result) {
+      setError(result.error)
     } else {
       setModalOpen(false)
       carregar()
@@ -84,7 +80,7 @@ export function CategoriasManager() {
 
   async function confirmarExclusao() {
     if (!deletandoId) return
-    await supabase.from("categorias").delete().eq("id", deletandoId)
+    await excluirCategoria(deletandoId)
     setConfirmOpen(false)
     setDeletandoId(null)
     carregar()
