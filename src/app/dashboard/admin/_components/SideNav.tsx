@@ -1,14 +1,15 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutGrid, Users, Store, ClipboardList, Wrench, LogOut } from "lucide-react";
+import { LayoutGrid, Users, Store, ClipboardList, Wrench, Tag, LogOut } from "lucide-react";
 
 const items = [
-  { icon: LayoutGrid,    label: "Painel",     href: "/dashboard/admin" },
-  { icon: Users,         label: "Usuários",   href: "/dashboard/admin/usuarios" },
-  { icon: Store,         label: "Feiras",     href: "/dashboard/admin/feiras" },
-  { icon: ClipboardList, label: "Inscrições", href: "/dashboard/admin/inscricoes" },
-  { icon: Wrench,        label: "Serviços",   href: "/dashboard/admin/servicos" },
+  { icon: LayoutGrid,    label: "Painel",      href: "/dashboard/admin" },
+  { icon: Users,         label: "Usuários",    href: "/dashboard/admin/usuarios" },
+  { icon: Store,         label: "Feiras",      href: "/dashboard/admin/feiras" },
+  { icon: ClipboardList, label: "Inscrições",  href: "/dashboard/admin/inscricoes" },
+  { icon: Tag,           label: "Categorias",  href: "/dashboard/admin/categorias" },
+  { icon: Wrench,        label: "Serviços",    href: "/dashboard/admin/servicos" },
 ];
 
 export function SideNav() {
