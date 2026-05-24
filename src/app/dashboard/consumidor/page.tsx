@@ -5,6 +5,7 @@ import { Bell, Store, CalendarDays, Clock, Tag, MapPin, Flame } from "lucide-rea
 import Link from "next/link"
 import { BuscaFeiras } from "./BuscaFeiras"
 import { BottomNav } from "./_components/BottomNav"
+import { LogoutButton } from "./_components/LogoutButton"
 
 function formatDate(value: string | null | undefined) {
   if (!value) return "—"
@@ -98,9 +99,12 @@ export default async function ConsumidorPage() {
               <img src="/feirinha-logo.svg" alt="Feirinha" width={36} height={36} />
               <span className="text-lg font-bold tracking-tight text-gray-900">Feirinhas</span>
             </div>
-            <button aria-label="Notificações" className="p-2 rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors">
-              <Bell size={21} className="text-gray-700" />
-            </button>
+            <div className="flex items-center gap-1">
+              <button aria-label="Notificações" className="p-2 rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors">
+                <Bell size={21} className="text-gray-700" />
+              </button>
+              <LogoutButton />
+            </div>
           </div>
           <h1 className="text-3xl font-bold" style={{ color: "#1A1A1A" }}>
             Olá, {nome}!

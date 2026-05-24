@@ -20,7 +20,7 @@ export default async function PerfilFeirantePage() {
         <div className="bg-white rounded-2xl p-6 shadow-sm space-y-4">
           <div>
             <label className="text-sm text-gray-500">Nome</label>
-            <p className="font-medium">{profile?.full_name ?? "—"}</p>
+            <p className="font-medium">{(profile as any)?.nome ?? "—"}</p>
           </div>
           <div>
             <label className="text-sm text-gray-500">E-mail</label>
