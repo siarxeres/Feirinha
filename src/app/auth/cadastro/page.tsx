@@ -40,7 +40,10 @@ export default function CadastroPage() {
       return
     }
 
-    toast.success("Cadastro realizado com sucesso! Faça login para continuar.")
+    const msg = papel === "feirante"
+      ? "Conta criada! Faça login para completar seu cadastro."
+      : "Cadastro realizado com sucesso! Faça login para continuar."
+    toast.success(msg)
     router.push("/auth/login")
   }
 

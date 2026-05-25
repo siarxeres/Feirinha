@@ -2,17 +2,21 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { SideNav } from "../_components/SideNav";
 
+type ProfileRoles = { roles: string[] | null }
+type Feira = { id: string; nome: string; status: string; created_at: string }
+
 export default async function AdminFeirasPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/login");
-  const { data: profile } = await supabase.from("profiles").select("roles").eq("id", user.id).single();
+  const { data: profile } = await supabase.from("profiles").select("roles").eq("id", user.id).returns<ProfileRoles[]>().single();
   if (!profile?.roles?.includes("admin")) redirect("/dashboard");
 
   const { data: feiras } = await supabase
     .from("feiras")
     .select("id, nome, status, created_at")
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .returns<Feira[]>();
 
   const statusColor: Record<string, string> = {
     aprovada: "bg-green-50 text-green-600",

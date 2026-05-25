@@ -3,11 +3,13 @@ import { redirect } from "next/navigation";
 import { SideNav } from "./_components/SideNav";
 import { Users, Store, ClipboardList, Wrench } from "lucide-react";
 
+type ProfileAdmin = { roles: string[] | null; nome: string | null }
+
 export default async function AdminPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/login");
-  const { data: profile } = await supabase.from("profiles").select("roles, nome").eq("id", user.id).single();
+  const { data: profile } = await supabase.from("profiles").select("roles, nome").eq("id", user.id).returns<ProfileAdmin[]>().single();
   if (!profile?.roles?.includes("admin")) redirect("/auth/login");
   const [{ count: c1 }, { count: c2 }, { count: c3 }] = await Promise.all([
     supabase.from("profiles").select("*", { count: "exact", head: true }),

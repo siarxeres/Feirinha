@@ -51,16 +51,56 @@ export async function gerarCobrancaPix(params: CobrancaParams) {
     }),
   })
   const charge = await res.json()
-  if (!charge.id) throw new Error(`Asaas: ${JSON.stringify(charge)}`)
+  if (!charge.id) throw new Error(`Asaas PIX: ${JSON.stringify(charge)}`)
   const qrRes = await fetch(`${BASE_URL}/payments/${charge.id}/pixQrCode`, { headers })
   const qrData = await qrRes.json()
   return {
-    chargeId: charge.id,
-    status:   charge.status,
-    valor:    charge.value,
-    pixPayload: qrData.payload,
-    pixQrCode:  qrData.encodedImage,
+    chargeId:   charge.id,
+    status:     charge.status as string,
+    valor:      charge.value as number,
+    dueDate:    charge.dueDate as string,
+    pixPayload: qrData.payload as string,
+    pixQrCode:  qrData.encodedImage as string,
   }
+}
+
+export async function gerarCobrancaBoleto(params: CobrancaParams) {
+  const vencimento = new Date()
+  vencimento.setHours(vencimento.getHours() + (params.vencimentoHoras ?? 72))
+  const dueDate = vencimento.toISOString().split("T")[0]
+  const res = await fetch(`${BASE_URL}/payments`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      customer: params.customerId,
+      billingType: "BOLETO",
+      value: params.valor,
+      dueDate,
+      description: params.descricao,
+      externalReference: params.externalReference,
+    }),
+  })
+  const charge = await res.json()
+  if (!charge.id) throw new Error(`Asaas Boleto: ${JSON.stringify(charge)}`)
+  return {
+    chargeId:     charge.id as string,
+    status:       charge.status as string,
+    valor:        charge.value as number,
+    dueDate:      charge.dueDate as string,
+    boletoUrl:    charge.bankSlipUrl as string,
+    nossoNumero:  charge.nossoNumero as string | undefined,
+  }
+}
+
+export async function consultarPagamento(paymentId: string) {
+  const res = await fetch(`${BASE_URL}/payments/${paymentId}`, { headers })
+  return res.json() as Promise<{
+    id: string
+    status: AsaasStatus
+    value: number
+    dueDate: string
+    externalReference: string
+  }>
 }
 
 export function mapAsaasStatus(asaasStatus: AsaasStatus): string {

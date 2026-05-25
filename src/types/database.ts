@@ -11,6 +11,7 @@ export type Database = {
   public: {
     Tables: {
       profiles:         AnyRow
+      categorias:       AnyRow
       feiras:           AnyRow
       barracas:         AnyRow
       inscricoes:       AnyRow

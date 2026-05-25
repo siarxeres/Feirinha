@@ -20,38 +20,44 @@ function adminDb() {
   )
 }
 
-type CategoriaData = { nome: string; icone: string; cor: string; ativo: boolean }
+type ServicoData = {
+  nome: string
+  descricao: string | null
+  categoria: string
+  ativo: boolean
+}
 
-export async function criarCategoria(data: CategoriaData): Promise<{ success: true } | { error: string }> {
+export async function criarServico(data: ServicoData): Promise<{ success: true } | { error: string }> {
   await checkAdmin()
   const db = adminDb()
-  const { error } = await db.from("categorias").insert({
+  const { error } = await db.from("servicos").insert({
     nome: data.nome.trim(),
-    icone: data.icone || null,
-    cor: data.cor || null,
+    descricao: data.descricao || null,
+    categoria: data.categoria,
     ativo: data.ativo,
+    feira_id: null,
   })
   if (error) return { error: error.message }
   return { success: true }
 }
 
-export async function editarCategoria(id: string, data: CategoriaData): Promise<{ success: true } | { error: string }> {
+export async function editarServico(id: string, data: ServicoData): Promise<{ success: true } | { error: string }> {
   await checkAdmin()
   const db = adminDb()
-  const { error } = await db.from("categorias").update({
+  const { error } = await db.from("servicos").update({
     nome: data.nome.trim(),
-    icone: data.icone || null,
-    cor: data.cor || null,
+    descricao: data.descricao || null,
+    categoria: data.categoria,
     ativo: data.ativo,
   }).eq("id", id)
   if (error) return { error: error.message }
   return { success: true }
 }
 
-export async function excluirCategoria(id: string): Promise<{ success: true } | { error: string }> {
+export async function excluirServico(id: string): Promise<{ success: true } | { error: string }> {
   await checkAdmin()
   const db = adminDb()
-  const { error } = await db.from("categorias").delete().eq("id", id)
+  const { error } = await db.from("servicos").delete().eq("id", id)
   if (error) return { error: error.message }
   return { success: true }
 }

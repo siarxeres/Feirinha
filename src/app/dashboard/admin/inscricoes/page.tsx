@@ -2,17 +2,27 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { SideNav } from "../_components/SideNav";
 
+type ProfileRoles = { roles: string[] | null }
+type Inscricao = {
+  id: string
+  status: string
+  created_at: string
+  feiras: { nome: string } | null
+  profiles: { nome: string | null; email: string } | null
+}
+
 export default async function AdminInscricoesPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/login");
-  const { data: profile } = await supabase.from("profiles").select("roles").eq("id", user.id).single();
+  const { data: profile } = await supabase.from("profiles").select("roles").eq("id", user.id).returns<ProfileRoles[]>().single();
   if (!profile?.roles?.includes("admin")) redirect("/dashboard");
 
   const { data: inscricoes } = await supabase
     .from("inscricoes")
     .select("id, status, created_at, feiras(nome), profiles(nome, email)")
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .returns<Inscricao[]>();
 
   const statusColor: Record<string, string> = {
     aprovada: "bg-green-50 text-green-600",

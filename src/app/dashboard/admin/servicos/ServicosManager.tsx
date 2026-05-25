@@ -6,6 +6,7 @@ import { Plus, Pencil, Trash2, Zap, Droplets, Tent, UtensilsCrossed, Armchair, S
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from "@/components/ui/dialog"
+import { criarServico, editarServico, excluirServico } from "./actions"
 
 type Servico = {
   id: string
@@ -98,12 +99,12 @@ export function ServicosManager() {
       categoria: form.categoria,
       ativo: form.ativo,
     }
-    const { error: err } = editando
-      ? await supabase.from("servicos").update(payload).eq("id", editando.id)
-      : await supabase.from("servicos").insert({ ...payload, feira_id: null })
+    const result = editando
+      ? await editarServico(editando.id, payload)
+      : await criarServico(payload)
     setSaving(false)
-    if (err) {
-      setError(err.message)
+    if ("error" in result) {
+      setError(result.error)
     } else {
       setModalOpen(false)
       carregar()
@@ -112,7 +113,7 @@ export function ServicosManager() {
 
   async function confirmarExclusao() {
     if (!deletandoId) return
-    await supabase.from("servicos").delete().eq("id", deletandoId)
+    await excluirServico(deletandoId)
     setConfirmOpen(false)
     setDeletandoId(null)
     carregar()

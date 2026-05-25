@@ -2,7 +2,25 @@
 
 import { useEffect, useState } from "react"
 import { createClient } from "@/lib/supabase/client"
-import { Plus, Pencil, Trash2 } from "lucide-react"
+import { Plus, Pencil, Trash2, Utensils, Palette, Gem, Music, Leaf, Flower2, Wrench, Shirt, type LucideProps } from "lucide-react"
+import type { ComponentType } from "react"
+
+const ICON_MAP: Record<string, ComponentType<LucideProps>> = {
+  Utensils,
+  Palette,
+  Gem,
+  Music,
+  Leaf,
+  Flower2,
+  Wrench,
+  Shirt,
+}
+
+function CategoriaIcon({ nome, cor }: { nome: string; cor?: string | null }) {
+  const Icon = ICON_MAP[nome]
+  if (Icon) return <Icon size={20} color={cor ?? "#6b7280"} />
+  return <span>{nome}</span>
+}
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from "@/components/ui/dialog"
@@ -117,7 +135,7 @@ export function CategoriasManager() {
                     className="w-10 h-10 rounded-xl flex items-center justify-center text-xl shrink-0"
                     style={{ backgroundColor: cat.cor ? `${cat.cor}22` : "#f3f4f6", color: cat.cor ?? "#6b7280" }}
                   >
-                    {cat.icone}
+                    <CategoriaIcon nome={cat.icone} cor={cat.cor} />
                   </span>
                 )}
                 <span className="font-semibold text-gray-900 leading-tight">{cat.nome}</span>
