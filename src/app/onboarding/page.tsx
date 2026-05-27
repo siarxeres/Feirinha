@@ -34,6 +34,7 @@ export default function OnboardingPage() {
 
   const [step, setStep] = useState<Step>(1)
   const [loading, setLoading] = useState(false)
+  const [confirmError, setConfirmError] = useState<string | null>(null)
   const [plans, setPlans] = useState<Plan[]>([])
   const [suggestedPlan, setSuggestedPlan] = useState<Plan | null>(null)
   const [plansLoading, setPlansLoading] = useState(false)
@@ -71,13 +72,51 @@ export default function OnboardingPage() {
   }, [step])
 
   async function handleConfirm() {
-    if (!userId || !state.selectedPlanId || !state.role) return
+    setConfirmError(null)
+
+    // Re-fetch userId on the spot to handle timing edge cases
+    let uid = userId
+    if (!uid) {
+      const { data } = await supabase.auth.getUser()
+      uid = data.user?.id ?? null
+      if (uid) setUserId(uid)
+    }
+
+    if (!uid) {
+      const msg = 'Sessão expirada — faça login novamente.'
+      console.error('[handleConfirm] userId ausente após re-fetch. Sessão pode ter expirado.')
+      // eslint-disable-next-line no-alert
+      alert(`[DEBUG onboarding] ${msg}`)
+      setConfirmError(msg)
+      return
+    }
+    if (!state.selectedPlanId) {
+      const msg = 'Nenhum plano selecionado.'
+      console.error('[handleConfirm] selectedPlanId é null. Estado atual:', state)
+      // eslint-disable-next-line no-alert
+      alert(`[DEBUG onboarding] ${msg}`)
+      setConfirmError(msg)
+      return
+    }
+    if (!state.role) {
+      const msg = 'Perfil (role) não definido.'
+      console.error('[handleConfirm] role é null. Estado atual:', state)
+      // eslint-disable-next-line no-alert
+      alert(`[DEBUG onboarding] ${msg}`)
+      setConfirmError(msg)
+      return
+    }
+
     setLoading(true)
     try {
-      await completeOnboarding(userId, state.role, state.selectedPlanId, state.ciclo)
+      await completeOnboarding(uid, state.role, state.selectedPlanId, state.ciclo)
       router.replace('/dashboard')
     } catch (e) {
-      console.error(e)
+      const msg = e instanceof Error ? e.message : String(e)
+      console.error('[handleConfirm] completeOnboarding falhou:', e)
+      // eslint-disable-next-line no-alert
+      alert(`[DEBUG onboarding] Erro ao confirmar:\n${msg}`)
+      setConfirmError(`Erro ao processar: ${msg}`)
       setLoading(false)
     }
   }
@@ -286,6 +325,9 @@ export default function OnboardingPage() {
                 >
                   {loading ? 'Processando...' : 'Assinar agora — 30 dias grátis'}
                 </button>
+                {confirmError && (
+                  <p className="text-sm text-red-600 text-center mt-3 leading-snug">{confirmError}</p>
+                )}
                 <p className="text-center text-xs text-gray-400 mt-2">
                   ✦ Sem cobrança nos primeiros 30 dias. Cancele quando quiser.
                 </p>
