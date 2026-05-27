@@ -36,6 +36,8 @@ export default function OnboardingPage() {
   const [loading, setLoading] = useState(false)
   const [plans, setPlans] = useState<Plan[]>([])
   const [suggestedPlan, setSuggestedPlan] = useState<Plan | null>(null)
+  const [plansLoading, setPlansLoading] = useState(false)
+  const [plansError, setPlansError] = useState<string | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
   const [state, setState] = useState<OnboardingState>({
     role: null, q1: null, q2: null, selectedPlanId: null, ciclo: 'mensal',
@@ -50,13 +52,21 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     if (step === 4 && state.role && state.q1 && state.q2) {
-      getPlans(state.role).then((p: Plan[]) => {
-        setPlans(p)
-        const idx = suggestPlanKey(state.role!, state.q1!, state.q2!)
-        const suggested = p[idx] ?? p[0]
-        setSuggestedPlan(suggested)
-        setState(s => ({ ...s, selectedPlanId: suggested.id }))
-      })
+      setPlansLoading(true)
+      setPlansError(null)
+      getPlans(state.role)
+        .then((p: Plan[]) => {
+          setPlans(p)
+          const idx = suggestPlanKey(state.role!, state.q1!, state.q2!)
+          const suggested = p[idx] ?? p[0] ?? null
+          setSuggestedPlan(suggested)
+          setState(s => ({ ...s, selectedPlanId: suggested?.id ?? null }))
+        })
+        .catch((err: Error) => {
+          console.error(err)
+          setPlansError('Não foi possível carregar os planos. Verifique sua conexão e tente novamente.')
+        })
+        .finally(() => setPlansLoading(false))
     }
   }, [step])
 
@@ -202,7 +212,39 @@ export default function OnboardingPage() {
               Seu plano <em className="not-italic text-emerald-600">ideal</em>
             </h2>
 
+            {plansLoading && (
+              <div className="flex flex-col items-center justify-center py-16 gap-3">
+                <div className="w-8 h-8 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+                <p className="text-sm text-gray-400">Buscando planos...</p>
+              </div>
+            )}
+
+            {plansError && !plansLoading && (
+              <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center mb-4">
+                <p className="text-sm text-red-700 mb-4">{plansError}</p>
+                <button
+                  onClick={() => setStep(3)}
+                  className="text-sm font-medium text-red-600 hover:text-red-800 underline"
+                >
+                  ← Voltar e tentar novamente
+                </button>
+              </div>
+            )}
+
+            {!plansLoading && !plansError && plans.length === 0 && (
+              <div className="rounded-2xl border border-amber-100 bg-amber-50 p-6 text-center mb-4">
+                <p className="text-sm text-amber-700 mb-4">Nenhum plano encontrado para o perfil selecionado.</p>
+                <button
+                  onClick={() => setStep(2)}
+                  className="text-sm font-medium text-amber-600 hover:text-amber-800 underline"
+                >
+                  ← Revisar perfil
+                </button>
+              </div>
+            )}
+
             {/* Ciclo */}
+            {!plansLoading && !plansError && plans.length > 0 && (
             <div className="inline-flex border border-gray-200 rounded-full p-1 mb-4">
               {(['mensal', 'anual'] as const).map((c) => (
                 <button
@@ -216,8 +258,9 @@ export default function OnboardingPage() {
                 </button>
               ))}
             </div>
+            )}
 
-            {suggestedPlan && (
+            {!plansLoading && !plansError && suggestedPlan && (
               <div className="border-2 border-emerald-500 rounded-2xl p-5 mb-3 relative">
                 <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-xs font-medium px-4 py-1 rounded-full whitespace-nowrap">
                   Recomendado para você

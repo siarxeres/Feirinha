@@ -33,8 +33,8 @@ export async function getPlans(role: PlanRole): Promise<Plan[]> {
     .eq('role', role)
     .eq('ativo', true)
     .order('preco_mensal', { ascending: true })
-  if (error) throw error
-  return data as Plan[]
+  if (error) throw new Error(`Erro ao buscar planos: ${error.message}`)
+  return (data ?? []) as Plan[]
 }
 
 export async function getUserAssinatura(userId: string): Promise<Assinatura | null> {
