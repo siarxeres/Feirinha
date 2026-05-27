@@ -23,8 +23,15 @@ export async function middleware(request: NextRequest) {
       },
     }
   )
+
   const { data: { user } } = await supabase.auth.getUser()
   const pathname = request.nextUrl.pathname
+
+  // Rotas públicas de auth
+  const isPublicAuthRoute = AUTH_PUBLIC.some(r => pathname.startsWith(r))
+  if (isPublicAuthRoute) return supabaseResponse
+
+  // Redireciona não autenticados nas rotas protegidas
   const isProtected = PROTECTED_ROUTES.some(r => pathname.startsWith(r))
   if (isProtected && !user) {
     const url = request.nextUrl.clone()
@@ -32,15 +39,31 @@ export async function middleware(request: NextRequest) {
     url.searchParams.set('redirect', pathname)
     return NextResponse.redirect(url)
   }
-  const isPublicAuthRoute = AUTH_PUBLIC.some(r => pathname.startsWith(r))
-  if (isPublicAuthRoute) return supabaseResponse
 
+  // Redireciona autenticados para fora das rotas de auth
   const isAuthRoute = AUTH_ROUTES.some(r => pathname.startsWith(r))
   if (isAuthRoute && user) {
     const url = request.nextUrl.clone()
     url.pathname = '/dashboard'
     return NextResponse.redirect(url)
   }
+
+  // Verifica onboarding para usuários autenticados
+  // Ignora a própria rota /onboarding para evitar loop
+  if (user && !pathname.startsWith('/onboarding') && !pathname.startsWith('/auth') && !pathname.startsWith('/api')) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('onboarding_completo')
+      .eq('id', user.id)
+      .single()
+
+    if (profile && profile.onboarding_completo === false) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/onboarding'
+      return NextResponse.redirect(url)
+    }
+  }
+
   return supabaseResponse
 }
 

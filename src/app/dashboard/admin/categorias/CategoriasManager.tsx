@@ -1,9 +1,25 @@
 "use client"
 
+import type { ComponentType } from "react"
 import { useEffect, useState } from "react"
 import { createClient } from "@/lib/supabase/client"
-import { Plus, Pencil, Trash2, Utensils, Palette, Gem, Music, Leaf, Flower2, Wrench, Shirt, type LucideProps } from "lucide-react"
-import type { ComponentType } from "react"
+import {
+  Plus, Pencil, Trash2,
+  Utensils, Palette, Gem, Music, Leaf, Flower2, Wrench, Shirt,
+  type LucideProps,
+} from "lucide-react"
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
+} from "@/components/ui/dialog"
+import { criarCategoria, editarCategoria, excluirCategoria } from "./actions"
+
+type Categoria = {
+  id: string
+  nome: string
+  icone: string | null
+  cor: string | null
+  ativo: boolean
+}
 
 const ICON_MAP: Record<string, ComponentType<LucideProps>> = {
   Utensils,
@@ -20,18 +36,6 @@ function CategoriaIcon({ nome, cor }: { nome: string; cor?: string | null }) {
   const Icon = ICON_MAP[nome]
   if (Icon) return <Icon size={20} color={cor ?? "#6b7280"} />
   return <span>{nome}</span>
-}
-import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
-} from "@/components/ui/dialog"
-import { criarCategoria, editarCategoria, excluirCategoria } from "./actions"
-
-type Categoria = {
-  id: string
-  nome: string
-  icone: string | null
-  cor: string | null
-  ativo: boolean
 }
 
 const EMPTY = { nome: "", icone: "", cor: "#E8560A", ativo: true }
@@ -132,8 +136,8 @@ export function CategoriasManager() {
               <div className="flex items-center gap-3">
                 {cat.icone && (
                   <span
-                    className="w-10 h-10 rounded-xl flex items-center justify-center text-xl shrink-0"
-                    style={{ backgroundColor: cat.cor ? `${cat.cor}22` : "#f3f4f6", color: cat.cor ?? "#6b7280" }}
+                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                    style={{ backgroundColor: cat.cor ? `${cat.cor}22` : "#f3f4f6" }}
                   >
                     <CategoriaIcon nome={cat.icone} cor={cat.cor} />
                   </span>
