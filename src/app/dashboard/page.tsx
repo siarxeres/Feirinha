@@ -13,7 +13,7 @@ export default async function DashboardPage() {
     .eq("id", user.id)
     .maybeSingle();
 
-  const roles = profile?.roles ?? [];
+  const roles: string[] = Array.isArray(profile?.roles) ? (profile.roles as string[]) : [];
 
   if (roles.includes("admin")) redirect("/dashboard/admin");
   if (roles.includes("organizador")) redirect("/dashboard/organizador");
