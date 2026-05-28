@@ -13,7 +13,19 @@ export default async function DashboardPage() {
     .eq("id", user.id)
     .maybeSingle();
 
-  const roles: string[] = Array.isArray(profile?.roles) ? (profile.roles as string[]) : [];
+  const rawRoles = profile?.roles
+  let roles: string[] = []
+
+  if (Array.isArray(rawRoles)) {
+    roles = rawRoles
+  } else if (typeof rawRoles === 'string') {
+    // Parse PostgreSQL array format: "{organizador}" -> ["organizador"]
+    roles = rawRoles
+      .replace(/^\{|\}$/g, '')
+      .split(',')
+      .map(r => r.trim().replace(/^"|"$/g, ''))
+      .filter(Boolean)
+  }
 
   if (roles.includes("admin")) redirect("/dashboard/admin");
   if (roles.includes("organizador")) redirect("/dashboard/organizador");

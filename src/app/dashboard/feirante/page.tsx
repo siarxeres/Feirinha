@@ -66,7 +66,17 @@ export default async function FeirantePage() {
   const nome = p?.nome || user.user_metadata?.nome || user.email || "Feirante"
   const aprovacaoStatus = p?.aprovacao_status ?? null
   // Usa apenas o banco — nunca user_metadata que pode estar estagnado
-  const roles: string[] = p?.roles ?? []
+  const rawRoles = p?.roles
+  let roles: string[] = []
+  if (Array.isArray(rawRoles)) {
+    roles = rawRoles
+  } else if (typeof rawRoles === 'string') {
+    roles = rawRoles
+      .replace(/^\{|\}$/g, '')
+      .split(',')
+      .map(r => r.trim().replace(/^"|"$/g, ''))
+      .filter(Boolean)
+  }
   const assinaturaAtiva = p?.assinatura_status === "ativa"
 
   // Guard: não-feirante não tem acesso a esta área

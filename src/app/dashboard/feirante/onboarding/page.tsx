@@ -36,7 +36,17 @@ export default async function OnboardingPage() {
 
   const p = profile as any
   const aprovacaoStatus = p?.aprovacao_status ?? null
-  const roles: string[] = p?.roles ?? user.user_metadata?.roles ?? []
+  const rawRoles = p?.roles ?? user.user_metadata?.roles
+  let roles: string[] = []
+  if (Array.isArray(rawRoles)) {
+    roles = rawRoles
+  } else if (typeof rawRoles === 'string') {
+    roles = rawRoles
+      .replace(/^\{|\}$/g, '')
+      .split(',')
+      .map(r => r.trim().replace(/^"|"$/g, ''))
+      .filter(Boolean)
+  }
 
   // Não é feirante → vai para o dashboard
   if (!roles.includes("feirante")) redirect("/dashboard")

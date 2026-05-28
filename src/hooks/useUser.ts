@@ -1,6 +1,7 @@
 ﻿"use client"
 
 import { createClient } from "@/lib/supabase/client"
+import { parseRoles } from "@/lib/parse-roles"
 import { useEffect, useState } from "react"
 
 export function useUser() {
@@ -40,8 +41,8 @@ export function useUser() {
     user,
     profile,
     loading,
-    isOrganizador: profile?.roles?.includes("organizador") ?? false,
-    isFeirante: profile?.roles?.includes("feirante") ?? false,
+    isOrganizador: parseRoles(profile?.roles).includes("organizador"),
+    isFeirante: parseRoles(profile?.roles).includes("feirante"),
     refetch,
   }
 }

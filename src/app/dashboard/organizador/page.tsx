@@ -24,10 +24,22 @@ export default async function OrganizadorPage() {
     .from("profiles")
     .select("nome, roles")
     .eq("id", user.id)
-    .single() as unknown as { data: { nome: string | null; roles: string[] | null } | null }
+    .single() as unknown as { data: { nome: string | null; roles: unknown } | null }
+
+  const rawRoles = profile?.roles
+  let profileRoles: string[] = []
+  if (Array.isArray(rawRoles)) {
+    profileRoles = rawRoles
+  } else if (typeof rawRoles === 'string') {
+    profileRoles = rawRoles
+      .replace(/^\{|\}$/g, '')
+      .split(',')
+      .map(r => r.trim().replace(/^"|"$/g, ''))
+      .filter(Boolean)
+  }
 
   // Guard: não-organizador não tem acesso a esta área
-  if (!profile?.roles?.includes("organizador")) redirect("/dashboard")
+  if (!profileRoles.includes("organizador")) redirect("/dashboard")
 
   const { data: feiras } = await supabase
     .from("feiras")
