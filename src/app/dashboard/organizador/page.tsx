@@ -85,25 +85,25 @@ export default async function OrganizadorPage() {
       label: "Inscrições",
       value: String(totalCount),
       icon: <ClipboardList size={18} className="text-orange-500" />,
-      borderStyle: { border: '2px solid #fed7aa', backgroundColor: '#fff7ed' } as React.CSSProperties,
+      borderStyle: { border: '1px solid #fed7aa', backgroundColor: '#ffffff' } as React.CSSProperties,
     },
     {
       label: "Aprovadas",
       value: String(aprovadosCount),
       icon: <CheckCircle2 size={18} className="text-green-500" />,
-      borderStyle: { border: '2px solid #bbf7d0', backgroundColor: '#f0fdf4' } as React.CSSProperties,
+      borderStyle: { border: '1px solid #bbf7d0', backgroundColor: '#ffffff' } as React.CSSProperties,
     },
     {
       label: "Receita (R$)",
       value: "0,00",
       icon: <DollarSign size={18} className="text-blue-500" />,
-      borderStyle: { border: '2px solid #bfdbfe', backgroundColor: '#eff6ff' } as React.CSSProperties,
+      borderStyle: { border: '1px solid #bfdbfe', backgroundColor: '#ffffff' } as React.CSSProperties,
     },
     {
       label: "Pendentes",
       value: String(pendentesCount),
       icon: <Clock size={18} className="text-yellow-500" />,
-      borderStyle: { border: '2px solid #fef08a', backgroundColor: '#fefce8' } as React.CSSProperties,
+      borderStyle: { border: '1px solid #fef08a', backgroundColor: '#ffffff' } as React.CSSProperties,
     },
   ]
 

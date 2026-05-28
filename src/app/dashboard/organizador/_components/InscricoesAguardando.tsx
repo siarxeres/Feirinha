@@ -83,7 +83,7 @@ export function InscricoesAguardando({
                   <p className="text-sm font-semibold text-gray-900 truncate">{nome}</p>
                   {cat && <p className="text-xs text-gray-400 truncate">{cat}</p>}
                 </div>
-                <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700 font-medium shrink-0">
+                <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500 text-white font-medium shrink-0">
                   Pendente
                 </span>
                 <ChevronDown
