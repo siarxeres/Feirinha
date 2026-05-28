@@ -1,5 +1,4 @@
 import { createClient } from "@/lib/supabase/server"
-import { createClient as createSupabaseClient } from "@supabase/supabase-js"
 import { redirect } from "next/navigation"
 import { Bell, Store, CalendarDays, Clock, Tag, MapPin } from "lucide-react"
 import Link from "next/link"
@@ -27,15 +26,9 @@ export default async function ConsumidorPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/auth/login")
 
-  const adminClient = createSupabaseClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    { auth: { autoRefreshToken: false, persistSession: false } }
-  )
-
   const [{ data: profile }, { data: todasFeiras }] = await Promise.all([
     supabase.from("profiles").select("nome").eq("id", user.id).single(),
-    adminClient
+    supabase
       .from("feiras")
       .select("id, nome, cidade, estado, data_inicio, data_fim, capacidade_barracas, foto_capa_url, categorias")
       .eq("status", "publicada")
