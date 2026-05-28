@@ -216,7 +216,7 @@ export function FeiraDetalheClient({
               className="flex-1 py-3 text-xs font-semibold transition-colors border-b-2"
               style={{
                 color: tab === t.key ? '#E8560A' : '#6B7280',
-                borderColor: tab === t.key ? '#E8560A' : '#e5e7eb',
+                borderColor: tab === t.key ? '#E8560A' : 'transparent',
               }}
             >
               {t.label}
