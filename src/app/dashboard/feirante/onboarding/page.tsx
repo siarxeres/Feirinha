@@ -19,11 +19,11 @@ export default async function OnboardingPage() {
   const db = adminDb()
 
   const [{ data: profile }, { data: assinaturas }] = await Promise.all([
-    supabase
+    db
       .from("profiles")
       .select("nome, cpf_cnpj, aprovacao_status, roles")
       .eq("id", user.id)
-      .single(),
+      .maybeSingle(),
 
     db
       .from("assinaturas")
@@ -36,7 +36,7 @@ export default async function OnboardingPage() {
 
   const p = profile as any
   const aprovacaoStatus = p?.aprovacao_status ?? null
-  const rawRoles = p?.roles ?? user.user_metadata?.roles
+  const rawRoles = p?.roles
   let roles: string[] = []
   if (Array.isArray(rawRoles)) {
     roles = rawRoles
