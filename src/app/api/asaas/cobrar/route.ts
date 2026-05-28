@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
   const cobrancaParams = {
     customerId: customer.id,
     valor,
-    descricao: "Assinatura mensal Feirinhas",
+    descricao: "Assinatura mensal Feirinha",
     externalReference: user.id,
   }
 

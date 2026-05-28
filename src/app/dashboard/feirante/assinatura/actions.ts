@@ -106,7 +106,7 @@ export async function iniciarAssinatura(
   const cobrancaParams = {
     customerId:        customer.id,
     valor,
-    descricao:         "Assinatura mensal Feirinhas",
+    descricao:         "Assinatura mensal Feirinha",
     externalReference: user.id,
   }
 

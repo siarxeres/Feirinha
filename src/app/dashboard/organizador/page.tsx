@@ -115,7 +115,7 @@ export default async function OrganizadorPage() {
           <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-2">
               <img src="/feirinha-logo.svg" alt="Feirinha" width={36} height={36} />
-              <span className="text-lg font-bold tracking-tight text-gray-900">Feirinhas</span>
+              <span className="text-lg font-bold tracking-tight text-gray-900">Feirinha</span>
             </div>
             <div className="flex items-center gap-1">
               <button aria-label="Notificações" className="p-2 rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors">

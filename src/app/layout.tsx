@@ -18,25 +18,25 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://feirinhas.vercel.app
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: "Feirinhas — Gestão de Feiras Livres",
-    template: "%s | Feirinhas",
+    default: "Feirinha — Gestão de Feiras Livres",
+    template: "%s | Feirinha",
   },
   description:
     "Plataforma digital para gestão de feiras livres. Conecta organizadores, feirantes e consumidores em uma única solução.",
   keywords: ["feiras livres", "feirante", "organizador", "mercado", "gestão", "Brasil", "APRAMAR"],
-  authors: [{ name: "Feirinhas" }],
+  authors: [{ name: "Feirinha" }],
   openGraph: {
-    title: "Feirinhas — Gestão de Feiras Livres",
+    title: "Feirinha — Gestão de Feiras Livres",
     description:
       "Plataforma digital para gestão de feiras livres. Conecta organizadores, feirantes e consumidores.",
     url: APP_URL,
-    siteName: "Feirinhas",
+    siteName: "Feirinha",
     locale: "pt_BR",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Feirinhas — Gestão de Feiras Livres",
+    title: "Feirinha — Gestão de Feiras Livres",
     description:
       "Plataforma digital para gestão de feiras livres. Conecta organizadores, feirantes e consumidores.",
   },

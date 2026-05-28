@@ -48,7 +48,7 @@ export default async function PerfilConsumidorPage() {
         <header className="px-5 pt-12 pb-5 bg-gray-50">
           <div className="flex items-center gap-2 mb-5">
             <img src="/feirinha-logo.svg" alt="Feirinha" width={36} height={36} />
-            <span className="text-lg font-bold tracking-tight text-gray-900">Feirinhas</span>
+            <span className="text-lg font-bold tracking-tight text-gray-900">Feirinha</span>
           </div>
           <h1 className="text-2xl font-bold text-gray-900">Meu Perfil</h1>
         </header>

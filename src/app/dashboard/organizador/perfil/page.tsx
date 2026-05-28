@@ -25,7 +25,7 @@ export default async function PerfilOrganizadorPage() {
         <header className="px-5 pt-12 pb-5">
           <div className="flex items-center gap-2 mb-5">
             <img src="/feirinha-logo.svg" alt="Feirinha" width={36} height={36} />
-            <span className="text-lg font-bold tracking-tight text-gray-900">Feirinhas</span>
+            <span className="text-lg font-bold tracking-tight text-gray-900">Feirinha</span>
           </div>
           <h1 className="text-3xl font-bold" style={{ color: "#1A1A1A" }}>Meu Perfil</h1>
         </header>

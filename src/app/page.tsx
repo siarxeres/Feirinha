@@ -13,8 +13,8 @@ export default async function LandingPage() {
       <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-5xl mx-auto px-5 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <img src="/feirinha-logo.svg" alt="Feirinhas" width={36} height={36} />
-            <span className="text-lg font-bold text-gray-900">Feirinhas</span>
+            <img src="/feirinha-logo.svg" alt="Feirinha" width={36} height={36} />
+            <span className="text-lg font-bold text-gray-900">Feirinha</span>
           </div>
           <nav className="flex items-center gap-3">
             {user ? (
@@ -215,9 +215,9 @@ export default async function LandingPage() {
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-gray-400">
           <div className="flex items-center gap-2">
             <img src="/feirinha-logo.svg" alt="" width={22} height={22} />
-            <span>Feirinhas</span>
+            <span>Feirinha</span>
           </div>
-          <span>© {new Date().getFullYear()} Feirinhas. Apresentado à APRAMAR.</span>
+          <span>© {new Date().getFullYear()} Feirinha. Apresentado à APRAMAR.</span>
           <div className="flex gap-4">
             <Link href="/auth/login" className="hover:text-gray-600">Entrar</Link>
             <Link href="/auth/cadastro" className="hover:text-gray-600">Cadastrar</Link>

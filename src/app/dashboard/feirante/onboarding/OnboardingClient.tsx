@@ -92,7 +92,7 @@ export function OnboardingClient({ initialNome, initialCpfCnpj, initialCobranca,
         {/* Logo */}
         <div className="flex items-center gap-2 mb-8">
           <img src="/feirinha-logo.svg" alt="Feirinha" width={36} height={36} />
-          <span className="text-lg font-bold tracking-tight text-gray-900">Feirinhas</span>
+          <span className="text-lg font-bold tracking-tight text-gray-900">Feirinha</span>
         </div>
 
         {/* Progress bar */}

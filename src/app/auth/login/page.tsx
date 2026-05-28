@@ -37,7 +37,7 @@ function LoginForm() {
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
           <img src="/feirinha-logo.svg" alt="Feirinha" width={52} height={52} className="mx-auto mb-2" />
-          <CardTitle className="text-2xl">Feirinhas</CardTitle>
+          <CardTitle className="text-2xl">Feirinha</CardTitle>
           <CardDescription>Entre na sua conta</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

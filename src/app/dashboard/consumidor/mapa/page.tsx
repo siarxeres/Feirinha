@@ -32,7 +32,7 @@ export default async function MapaConsumidorPage() {
         <header className="px-5 pt-12 pb-5 bg-gray-50">
           <div className="flex items-center gap-2 mb-5">
             <img src="/feirinha-logo.svg" alt="Feirinha" width={36} height={36} />
-            <span className="text-lg font-bold tracking-tight text-gray-900">Feirinhas</span>
+            <span className="text-lg font-bold tracking-tight text-gray-900">Feirinha</span>
           </div>
           <div className="flex items-center gap-2">
             <Map size={22} style={{ color: "#E8560A" }} />

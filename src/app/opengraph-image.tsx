@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og"
 
 export const runtime = "edge"
-export const alt = "Feirinhas — Gestão de Feiras Livres"
+export const alt = "Feirinha — Gestão de Feiras Livres"
 export const size = { width: 1200, height: 630 }
 export const contentType = "image/png"
 
@@ -60,7 +60,7 @@ export default function OGImage() {
               textAlign: "center",
             }}
           >
-            Feirinhas
+            Feirinha
           </div>
           <div
             style={{
