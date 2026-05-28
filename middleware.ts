@@ -1,4 +1,5 @@
 ﻿import { createServerClient } from '@supabase/ssr'
+import { createClient } from '@supabase/supabase-js'
 import { NextResponse, type NextRequest } from 'next/server'
 
 const PROTECTED_ROUTES = ['/dashboard', '/feiras', '/perfil', '/inscricoes', '/servicos']
@@ -51,13 +52,22 @@ export async function middleware(request: NextRequest) {
   // Verifica onboarding para usuários autenticados
   // Ignora a própria rota /onboarding para evitar loop
   if (user && !pathname.startsWith('/onboarding') && !pathname.startsWith('/auth') && !pathname.startsWith('/api')) {
-    const { data: profile } = await supabase
+    // Usa service role para bypassar RLS — anon key pode não ter permissão de leitura no profiles
+    const adminSupabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      { auth: { autoRefreshToken: false, persistSession: false } }
+    )
+
+    const { data: profile } = await adminSupabase
       .from('profiles')
       .select('onboarding_completo')
       .eq('id', user.id)
       .single()
 
-    if (profile && profile.onboarding_completo === false) {
+    // Só redireciona se o campo existir e for explicitamente false
+    // null/undefined = perfil novo, não forçamos onboarding ainda
+    if (profile?.onboarding_completo === false) {
       const url = request.nextUrl.clone()
       url.pathname = '/onboarding'
       return NextResponse.redirect(url)
