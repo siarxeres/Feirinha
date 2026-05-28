@@ -72,14 +72,17 @@ export default function OnboardingPage() {
   }, [step])
 
   async function handleConfirm() {
+    console.log('[handleConfirm] iniciando', { userId, selectedPlanId: state.selectedPlanId, role: state.role, ciclo: state.ciclo })
     setConfirmError(null)
 
     // Re-fetch userId on the spot to handle timing edge cases
     let uid = userId
     if (!uid) {
+      console.log('[handleConfirm] userId nulo, re-fetching...')
       const { data } = await supabase.auth.getUser()
       uid = data.user?.id ?? null
       if (uid) setUserId(uid)
+      console.log('[handleConfirm] re-fetch resultado:', uid)
     }
 
     if (!uid) {
@@ -107,9 +110,11 @@ export default function OnboardingPage() {
       return
     }
 
+    console.log('[handleConfirm] guards ok, chamando completeOnboarding...')
     setLoading(true)
     try {
       await completeOnboarding(uid, state.role, state.selectedPlanId, state.ciclo)
+      console.log('[handleConfirm] completeOnboarding ok, chamando router.replace(/dashboard)...')
       router.replace('/dashboard')
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e)

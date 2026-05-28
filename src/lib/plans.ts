@@ -95,6 +95,33 @@ export async function createTrialAssinatura(
   const trialEnd = new Date()
   trialEnd.setDate(trialEnd.getDate() + 30)
 
+  // Check across all statuses to avoid unique constraint conflicts on re-onboarding
+  const { data: existing, error: checkError } = await supabase
+    .from('assinaturas')
+    .select('id')
+    .eq('profile_id', userId)
+    .maybeSingle()
+
+  if (checkError) throw toError(checkError, 'Erro ao verificar assinatura existente')
+
+  if (existing) {
+    console.log('[createTrialAssinatura] assinatura existente encontrada, atualizando:', existing.id)
+    const { data, error } = await supabase
+      .from('assinaturas')
+      .update({
+        plan_id: planId,
+        ciclo,
+        status: 'trial',
+        trial_ends_at: trialEnd.toISOString(),
+      })
+      .eq('profile_id', userId)
+      .select()
+      .single()
+    if (error) throw toError(error, 'Erro ao atualizar assinatura trial')
+    return data
+  }
+
+  console.log('[createTrialAssinatura] inserindo nova assinatura para profile:', userId)
   const { data, error } = await supabase
     .from('assinaturas')
     .insert({
@@ -119,17 +146,21 @@ export async function completeOnboarding(
 ) {
   const supabase = createClient()
 
+  console.log('[completeOnboarding] criando/atualizando assinatura trial...')
   await createTrialAssinatura(userId, planId, ciclo)
+  console.log('[completeOnboarding] assinatura ok, atualizando profile...')
 
+  // upsert garante que a linha existe mesmo que o trigger de criação não tenha rodado
   const { error } = await supabase
     .from('profiles')
-    .update({
+    .upsert({
+      id: userId,
       onboarding_completo: true,
       assinatura_status: 'trial',
       aprovacao_status: role === 'feirante' ? 'pendente' : 'aprovado',
       roles: [role],
-    })
-    .eq('id', userId)
+    }, { onConflict: 'id' })
 
   if (error) throw toError(error, 'Erro ao finalizar onboarding')
+  console.log('[completeOnboarding] profile atualizado com sucesso')
 }
