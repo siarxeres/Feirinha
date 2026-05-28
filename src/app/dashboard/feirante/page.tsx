@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server"
+import { createClient, createAdminClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import { Bell, ClipboardList, CheckCircle2, Clock, Store, MapPin, CalendarDays, AlertTriangle, XCircle } from "lucide-react"
@@ -42,12 +42,14 @@ export default async function FeirantePage() {
 
   if (!user) redirect("/auth/login")
 
+  // Admin client bypassa RLS — garante leitura correta de roles
+  const admin = createAdminClient()
   const [{ data: profile }, { data: inscricoes }, { data: feirasPublicadas }] = await Promise.all([
-    supabase
+    admin
       .from("profiles")
       .select("nome, assinatura_status, aprovacao_status, roles")
       .eq("id", user.id)
-      .single(),
+      .maybeSingle(),
 
     supabase
       .from("inscricoes")

@@ -1,4 +1,4 @@
-﻿import { createClient } from "@/lib/supabase/server"
+﻿import { createClient, createAdminClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import { Bell, ClipboardList, CheckCircle2, DollarSign, Clock, LogOut } from "lucide-react"
 import { BottomNav } from "./_components/BottomNav"
@@ -20,11 +20,13 @@ export default async function OrganizadorPage() {
 
   if (!user) redirect("/auth/login")
 
-  const { data: profile } = await supabase
+  // Admin client bypassa RLS — garante leitura correta de roles
+  const admin = createAdminClient()
+  const { data: profile } = await admin
     .from("profiles")
     .select("nome, roles")
     .eq("id", user.id)
-    .single() as unknown as { data: { nome: string | null; roles: unknown } | null }
+    .maybeSingle() as unknown as { data: { nome: string | null; roles: unknown } | null }
 
   const rawRoles = profile?.roles
   let profileRoles: string[] = []

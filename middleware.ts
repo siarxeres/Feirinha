@@ -61,39 +61,15 @@ export async function middleware(request: NextRequest) {
 
     const { data: profile } = await adminSupabase
       .from('profiles')
-      .select('onboarding_completo, roles')
+      .select('onboarding_completo')
       .eq('id', user.id)
       .maybeSingle()
-
-    console.log('[middleware] profile:', profile)
-
-    const rawRoles = profile?.roles
-    let roles: string[] = []
-    if (Array.isArray(rawRoles)) {
-      roles = rawRoles
-    } else if (typeof rawRoles === 'string') {
-      roles = rawRoles
-        .replace(/^\{|\}$/g, '')
-        .split(',')
-        .map(r => r.trim().replace(/^"|"$/g, ''))
-        .filter(Boolean)
-    }
 
     // Só redireciona se o campo existir e for explicitamente false
     // null/undefined = perfil novo, não forçamos onboarding ainda
     if (profile?.onboarding_completo === false) {
       const url = request.nextUrl.clone()
       url.pathname = '/onboarding'
-      return NextResponse.redirect(url)
-    }
-
-    // Roteia /dashboard para o sub-dashboard correto baseado no role
-    if (pathname === '/dashboard') {
-      const url = request.nextUrl.clone()
-      if (roles.includes('admin'))       url.pathname = '/dashboard/admin'
-      else if (roles.includes('organizador')) url.pathname = '/dashboard/organizador'
-      else if (roles.includes('feirante'))    url.pathname = '/dashboard/feirante'
-      else                               url.pathname = '/dashboard/consumidor'
       return NextResponse.redirect(url)
     }
   }
