@@ -109,7 +109,7 @@ export async function createTrialAssinatura(
 
   if (existing) {
     console.log('[createTrialAssinatura] assinatura existente encontrada, atualizando:', existing.id)
-    const { data, error } = await supabase
+    const { data: updatedRows, error } = await supabase
       .from('assinaturas')
       .update({
         plan_id: planId,
@@ -119,13 +119,12 @@ export async function createTrialAssinatura(
       })
       .eq('id', existing.id)
       .select()
-      .single()
     if (error) throw toError(error, 'Erro ao atualizar assinatura trial')
-    return data
+    return (updatedRows ?? [])[0] ?? null
   }
 
   console.log('[createTrialAssinatura] inserindo nova assinatura para profile:', userId)
-  const { data, error } = await supabase
+  const { data: insertedRows, error } = await supabase
     .from('assinaturas')
     .insert({
       profile_id: userId,
@@ -135,10 +134,9 @@ export async function createTrialAssinatura(
       trial_ends_at: trialEnd.toISOString(),
     })
     .select()
-    .single()
 
   if (error) throw toError(error, 'Erro ao criar assinatura trial')
-  return data
+  return (insertedRows ?? [])[0] ?? null
 }
 
 export async function completeOnboarding(
