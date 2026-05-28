@@ -22,9 +22,12 @@ export default async function OrganizadorPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("nome")
+    .select("nome, roles")
     .eq("id", user.id)
-    .single() as unknown as { data: { nome: string | null } | null }
+    .single() as unknown as { data: { nome: string | null; roles: string[] | null } | null }
+
+  // Guard: não-organizador não tem acesso a esta área
+  if (!profile?.roles?.includes("organizador")) redirect("/dashboard")
 
   const { data: feiras } = await supabase
     .from("feiras")

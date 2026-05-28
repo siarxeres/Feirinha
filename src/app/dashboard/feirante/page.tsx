@@ -65,13 +65,15 @@ export default async function FeirantePage() {
   const p = profile as any
   const nome = p?.nome || user.user_metadata?.nome || user.email || "Feirante"
   const aprovacaoStatus = p?.aprovacao_status ?? null
-  const roles: string[] = p?.roles ?? user.user_metadata?.roles ?? []
+  // Usa apenas o banco — nunca user_metadata que pode estar estagnado
+  const roles: string[] = p?.roles ?? []
   const assinaturaAtiva = p?.assinatura_status === "ativa"
 
-  if (roles.includes("feirante")) {
-    if (!aprovacaoStatus || aprovacaoStatus === "pendente") {
-      redirect("/dashboard/feirante/onboarding")
-    }
+  // Guard: não-feirante não tem acesso a esta área
+  if (!roles.includes("feirante")) redirect("/dashboard")
+
+  if (!aprovacaoStatus || aprovacaoStatus === "pendente") {
+    redirect("/dashboard/feirante/onboarding")
   }
   const lista = (inscricoes ?? []) as any[]
   const feiras = (feirasPublicadas ?? []) as any[]
