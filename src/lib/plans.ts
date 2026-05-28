@@ -25,6 +25,11 @@ export interface Assinatura {
   plans: Plan
 }
 
+function toError(e: any, prefix: string): Error {
+  const msg = e?.message || e?.error_description || JSON.stringify(e)
+  return new Error(`${prefix}: ${msg}`)
+}
+
 export async function getPlans(role: PlanRole): Promise<Plan[]> {
   const supabase = createClient()
   const { data, error } = await supabase
@@ -33,7 +38,7 @@ export async function getPlans(role: PlanRole): Promise<Plan[]> {
     .eq('role', role)
     .eq('ativo', true)
     .order('preco_mensal', { ascending: true })
-  if (error) throw new Error(`Erro ao buscar planos: ${error.message}`)
+  if (error) throw toError(error, 'Erro ao buscar planos')
   return (data ?? []) as Plan[]
 }
 
@@ -42,12 +47,12 @@ export async function getUserAssinatura(userId: string): Promise<Assinatura | nu
   const { data, error } = await supabase
     .from('assinaturas')
     .select('*, plans(*)')
-    .eq('feirante_id', userId)
+    .eq('profile_id', userId)
     .in('status', ['ativo', 'trial', 'aguardando'])
     .order('created_at', { ascending: false })
     .limit(1)
     .maybeSingle()
-  if (error) throw error
+  if (error) throw toError(error, 'Erro ao buscar assinatura')
   return data as Assinatura | null
 }
 
@@ -93,19 +98,16 @@ export async function createTrialAssinatura(
   const { data, error } = await supabase
     .from('assinaturas')
     .insert({
-      feirante_id: userId,
+      profile_id: userId,
       plan_id: planId,
       ciclo,
       status: 'trial',
       trial_ends_at: trialEnd.toISOString(),
-      valor: 0,
-      tipo: 'PIX',
-      asaas_payment_id: `trial_${userId}_${Date.now()}`,
     })
     .select()
     .single()
 
-  if (error) throw error
+  if (error) throw toError(error, 'Erro ao criar assinatura trial')
   return data
 }
 
@@ -129,5 +131,5 @@ export async function completeOnboarding(
     })
     .eq('id', userId)
 
-  if (error) throw error
+  if (error) throw toError(error, 'Erro ao finalizar onboarding')
 }
