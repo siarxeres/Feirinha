@@ -63,7 +63,9 @@ export async function middleware(request: NextRequest) {
       .from('profiles')
       .select('onboarding_completo')
       .eq('id', user.id)
-      .single()
+      .maybeSingle()
+
+    console.log('[middleware] profile:', profile)
 
     // Só redireciona se o campo existir e for explicitamente false
     // null/undefined = perfil novo, não forçamos onboarding ainda

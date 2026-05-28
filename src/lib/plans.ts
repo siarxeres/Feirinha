@@ -96,13 +96,16 @@ export async function createTrialAssinatura(
   trialEnd.setDate(trialEnd.getDate() + 30)
 
   // Check across all statuses to avoid unique constraint conflicts on re-onboarding
-  const { data: existing, error: checkError } = await supabase
+  const { data: existingRows, error: checkError } = await supabase
     .from('assinaturas')
     .select('id')
     .eq('profile_id', userId)
-    .maybeSingle()
+    .order('created_at', { ascending: false })
+    .limit(1)
 
   if (checkError) throw toError(checkError, 'Erro ao verificar assinatura existente')
+
+  const existing = existingRows?.[0] ?? null
 
   if (existing) {
     console.log('[createTrialAssinatura] assinatura existente encontrada, atualizando:', existing.id)
@@ -114,7 +117,7 @@ export async function createTrialAssinatura(
         status: 'trial',
         trial_ends_at: trialEnd.toISOString(),
       })
-      .eq('profile_id', userId)
+      .eq('id', existing.id)
       .select()
       .single()
     if (error) throw toError(error, 'Erro ao atualizar assinatura trial')
