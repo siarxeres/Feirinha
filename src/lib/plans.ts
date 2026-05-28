@@ -151,16 +151,15 @@ export async function completeOnboarding(
   await createTrialAssinatura(userId, planId, ciclo)
   console.log('[completeOnboarding] assinatura ok, atualizando profile...')
 
-  // upsert garante que a linha existe mesmo que o trigger de criação não tenha rodado
   const { error } = await supabase
     .from('profiles')
-    .upsert({
-      id: userId,
+    .update({
       onboarding_completo: true,
       assinatura_status: 'trial',
       aprovacao_status: role === 'feirante' ? 'pendente' : 'aprovado',
       roles: [role],
-    }, { onConflict: 'id' })
+    })
+    .eq('id', userId)
 
   if (error) throw toError(error, 'Erro ao finalizar onboarding')
   console.log('[completeOnboarding] profile atualizado com sucesso')
