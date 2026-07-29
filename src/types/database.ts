@@ -24,6 +24,7 @@ export type Database = {
       perfis_feirantes: AnyRow
       pedidos_servicos: AnyRow
       itens_pedido:     AnyRow
+      despesas_feira:   AnyRow
     }
     Views: {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
