@@ -59,14 +59,13 @@ export default async function LandingPage() {
               Apresentado à APRAMAR
             </span>
             <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight mb-5">
-              O sistema operacional das{" "}
-              <span style={{ color: "#E8560A" }}>feiras livres</span>
+              Chega de controlar a feira no{" "}
+              <span style={{ color: "#E8560A" }}>caderno</span> e no{" "}
+              <span style={{ color: "#E8560A" }}>WhatsApp</span>.
             </h1>
             <p className="text-lg text-gray-500 mb-8 leading-relaxed">
-              Plataforma completa que conecta <strong className="text-gray-700">organizadores</strong>,{" "}
-              <strong className="text-gray-700">feirantes</strong> e{" "}
-              <strong className="text-gray-700">consumidores</strong> em uma solução digital única —
-              do cadastro ao pagamento.
+              Organize inscrições, presença e o rateio de despesas — automático e
+              transparente pra todo mundo.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
