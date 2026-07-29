@@ -1,5 +1,23 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Mapa de Rotas
+
+| Rota | Descrição |
+|---|---|
+| `/auth/login` | Login |
+| `/auth/cadastro` | Cadastro |
+| `/auth/recuperar-senha` | Recuperação de senha |
+| `/dashboard/feirante` | Painel do feirante (feiras disponíveis + inscrições) |
+| `/dashboard/feirante/inscricoes` | Lista de inscrições do feirante |
+| `/dashboard/feirante/mapa` | Mapa de feiras |
+| `/dashboard/feirante/perfil` | Perfil do feirante |
+| `/dashboard/feirante/assinatura` | Gestão de assinatura |
+| `/dashboard/organizador` | Painel do organizador |
+| `/dashboard/admin` | Painel administrativo |
+| `/feiras/nova` | Criar nova feira (organizador) |
+| `/feiras/[id]` | Detalhes da feira + gerenciar inscrições, mapa, comunicados e rateio de despesas (organizador) |
+| `/feiras/[id]/inscricao` | Tela de inscrição do feirante numa feira + rateio de despesas (leitura) |
+
 ## Getting Started
 
 First, run the development server:
