@@ -1,7 +1,7 @@
 import { createClient, createAdminClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { Bell, ClipboardList, CheckCircle2, Clock, Store, MapPin, CalendarDays, AlertTriangle, XCircle } from "lucide-react"
+import { Bell, ClipboardList, CheckCircle2, Clock, Store, MapPin, CalendarDays } from "lucide-react"
 import { BottomNav } from "./_components/BottomNav"
 import { LogoutButton } from "./_components/LogoutButton"
 
@@ -47,7 +47,7 @@ export default async function FeirantePage() {
   const [{ data: profile }, { data: inscricoes }, { data: feirasPublicadas }] = await Promise.all([
     admin
       .from("profiles")
-      .select("nome, assinatura_status, aprovacao_status, roles")
+      .select("nome, roles")
       .eq("id", user.id)
       .maybeSingle(),
 
@@ -66,7 +66,6 @@ export default async function FeirantePage() {
 
   const p = profile as any
   const nome = p?.nome || user.user_metadata?.nome || user.email || "Feirante"
-  const aprovacaoStatus = p?.aprovacao_status ?? null
   // Usa apenas o banco — nunca user_metadata que pode estar estagnado
   const rawRoles = p?.roles
   let roles: string[] = []
@@ -79,14 +78,10 @@ export default async function FeirantePage() {
       .map(r => r.trim().replace(/^"|"$/g, ''))
       .filter(Boolean)
   }
-  const assinaturaAtiva = p?.assinatura_status === "ativa"
 
   // Guard: não-feirante não tem acesso a esta área
   if (!roles.includes("feirante")) redirect("/dashboard")
 
-  if (!aprovacaoStatus || aprovacaoStatus === "pendente") {
-    redirect("/dashboard/feirante/onboarding")
-  }
   const lista = (inscricoes ?? []) as any[]
   const feiras = (feirasPublicadas ?? []) as any[]
 
@@ -122,122 +117,6 @@ export default async function FeirantePage() {
     },
   ]
 
-  // Aguardando aprovação do admin
-  if (aprovacaoStatus === "aguardando_aprovacao") {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-md mx-auto min-h-screen flex flex-col">
-          <header className="px-5 pt-12 pb-5">
-            <div className="flex items-center justify-between mb-5">
-              <div className="flex items-center gap-2">
-                <img src="/feirinha-logo.svg" alt="Feirinha" width={36} height={36} />
-                <span className="text-lg font-bold tracking-tight text-gray-900">Feirinha</span>
-              </div>
-              <LogoutButton />
-            </div>
-          </header>
-
-          <div className="flex-1 flex flex-col items-center justify-center px-5 pb-16 text-center">
-            <div
-              className="w-20 h-20 rounded-full flex items-center justify-center mb-6"
-              style={{ backgroundColor: "#fff7ed" }}
-            >
-              <Clock size={36} style={{ color: "#E8560A" }} />
-            </div>
-
-            <h1 className="text-2xl font-bold text-gray-900 mb-3">Em análise</h1>
-            <p className="text-sm text-gray-500 leading-relaxed max-w-xs mb-8">
-              Olá, {nome}! Recebemos seu cadastro e estamos analisando. Você terá acesso completo assim que nossa equipe aprovar sua conta.
-            </p>
-
-            {/* Timeline */}
-            <div className="w-full max-w-xs bg-white rounded-2xl p-5 border border-gray-100 shadow-sm mb-6">
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-4">Etapas</p>
-              <div className="space-y-4">
-                {[
-                  { label: "Cadastro realizado", done: true },
-                  { label: "Pagamento enviado", done: true },
-                  { label: "Análise da conta", done: false, active: true },
-                  { label: "Acesso liberado", done: false },
-                ].map((item) => (
-                  <div key={item.label} className="flex items-center gap-3">
-                    <div
-                      className="w-6 h-6 rounded-full flex items-center justify-center shrink-0"
-                      style={
-                        item.done
-                          ? { backgroundColor: "#1D9E75" }
-                          : item.active
-                          ? { backgroundColor: "#E8560A" }
-                          : { backgroundColor: "#e5e7eb" }
-                      }
-                    >
-                      {item.done ? (
-                        <CheckCircle2 size={14} className="text-white" />
-                      ) : (
-                        <div className={`w-2 h-2 rounded-full ${item.active ? "bg-white" : "bg-gray-400"}`} />
-                      )}
-                    </div>
-                    <span className={`text-sm ${item.done ? "text-gray-700 font-medium" : item.active ? "text-[#E8560A] font-semibold" : "text-gray-400"}`}>
-                      {item.label}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <p className="text-xs text-gray-400">
-              Dúvidas? Entre em contato pelo e-mail{" "}
-              <a href="mailto:suporte@feirinhas.app" className="text-[#1D9E75] font-medium">
-                suporte@feirinhas.app
-              </a>
-            </p>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // Cadastro rejeitado
-  if (aprovacaoStatus === "rejeitado") {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-md mx-auto min-h-screen flex flex-col">
-          <header className="px-5 pt-12 pb-5">
-            <div className="flex items-center justify-between mb-5">
-              <div className="flex items-center gap-2">
-                <img src="/feirinha-logo.svg" alt="Feirinha" width={36} height={36} />
-                <span className="text-lg font-bold tracking-tight text-gray-900">Feirinha</span>
-              </div>
-              <LogoutButton />
-            </div>
-          </header>
-
-          <div className="flex-1 flex flex-col items-center justify-center px-5 pb-16 text-center">
-            <div
-              className="w-20 h-20 rounded-full flex items-center justify-center mb-6"
-              style={{ backgroundColor: "#fef2f2" }}
-            >
-              <XCircle size={36} className="text-red-500" />
-            </div>
-
-            <h1 className="text-2xl font-bold text-gray-900 mb-3">Cadastro não aprovado</h1>
-            <p className="text-sm text-gray-500 leading-relaxed max-w-xs mb-8">
-              Olá, {nome}. Infelizmente seu cadastro não foi aprovado. Entre em contato com nossa equipe para mais informações.
-            </p>
-
-            <a
-              href="mailto:suporte@feirinhas.app"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold text-white"
-              style={{ backgroundColor: "#E8560A" }}
-            >
-              Falar com o suporte
-            </a>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-md mx-auto min-h-screen bg-gray-50 flex flex-col">
@@ -263,27 +142,6 @@ export default async function FeirantePage() {
 
         {/* Scrollable body */}
         <div className="flex-1 px-5 pb-28 space-y-5">
-
-          {/* Subscription banner */}
-          {!assinaturaAtiva && (
-            <section
-              className="rounded-2xl p-4 flex items-center gap-3"
-              style={{ background: "#fffbeb", border: "2px solid #fde68a" }}
-            >
-              <AlertTriangle size={18} className="text-yellow-500 shrink-0" />
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-yellow-800">Assinatura inativa</p>
-                <p className="text-xs text-yellow-700 mt-0.5">Ative para se inscrever em feiras.</p>
-              </div>
-              <Link
-                href="/dashboard/feirante/assinatura"
-                className="shrink-0 text-xs font-bold px-3 py-1.5 rounded-lg text-white"
-                style={{ backgroundColor: "#E8560A" }}
-              >
-                Assinar
-              </Link>
-            </section>
-          )}
 
           {/* Metrics 2×2 */}
           <section className="grid grid-cols-2 gap-3">
@@ -376,20 +234,13 @@ export default async function FeirantePage() {
                             <span className="text-xs px-2 py-1 rounded-full font-medium bg-green-100 text-green-700 shrink-0">
                               Inscrito
                             </span>
-                          ) : assinaturaAtiva ? (
+                          ) : (
                             <Link
                               href={`/feiras/${feira.id}/inscricao`}
                               className="text-xs px-3 py-1.5 rounded-full font-semibold text-white shrink-0 transition-colors"
                               style={{ backgroundColor: "#E8560A" }}
                             >
                               Me inscrever
-                            </Link>
-                          ) : (
-                            <Link
-                              href="/dashboard/feirante/assinatura"
-                              className="text-xs px-3 py-1.5 rounded-full font-semibold shrink-0 bg-gray-100 text-gray-500"
-                            >
-                              Assinar
                             </Link>
                           )}
                         </div>
