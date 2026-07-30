@@ -7,6 +7,13 @@ import { InscricoesAguardando } from "./_components/InscricoesAguardando"
 
 const PREVIEW_LIMIT = 5
 
+function countOrLog(label: string, query: PromiseLike<{ count: number | null; error: { message: string } | null }>) {
+  return query.then(r => {
+    if (r.error) console.error(`Erro ao contar ${label}:`, r.error)
+    return Number(r.count ?? 0)
+  })
+}
+
 async function logout() {
   "use server"
   const { createClient } = await import("@/lib/supabase/server")
@@ -54,29 +61,35 @@ export default async function OrganizadorPage() {
   const [totalCount, aprovadosCount, pendentesCount, inscricoesPendentes] =
     await Promise.all([
       feiraIds.length
-        ? supabase
-            .from("inscricoes")
-            .select("id", { count: "exact", head: true })
-            .in("feira_id", feiraIds)
-            .then(r => Number(r.count ?? 0))
+        ? countOrLog(
+            "inscrições",
+            supabase
+              .from("inscricoes")
+              .select("id", { count: "exact", head: true })
+              .in("feira_id", feiraIds)
+          )
         : Promise.resolve(0),
 
       feiraIds.length
-        ? supabase
-            .from("inscricoes")
-            .select("id", { count: "exact", head: true })
-            .in("feira_id", feiraIds)
-            .in("status", ["aprovado", "aprovada"])
-            .then(r => Number(r.count ?? 0))
+        ? countOrLog(
+            "aprovadas",
+            supabase
+              .from("inscricoes")
+              .select("id", { count: "exact", head: true })
+              .in("feira_id", feiraIds)
+              .eq("status", "aprovada")
+          )
         : Promise.resolve(0),
 
       feiraIds.length
-        ? supabase
-            .from("inscricoes")
-            .select("id", { count: "exact", head: true })
-            .in("feira_id", feiraIds)
-            .eq("status", "pendente")
-            .then(r => Number(r.count ?? 0))
+        ? countOrLog(
+            "pendentes",
+            supabase
+              .from("inscricoes")
+              .select("id", { count: "exact", head: true })
+              .in("feira_id", feiraIds)
+              .eq("status", "pendente")
+          )
         : Promise.resolve(0),
 
       feiraIds.length
