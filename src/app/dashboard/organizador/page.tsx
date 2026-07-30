@@ -82,7 +82,7 @@ export default async function OrganizadorPage() {
       feiraIds.length
         ? supabase
             .from("inscricoes")
-            .select("id, status, profiles(nome)")
+            .select("id, status, profiles(nome), feiras(nome)")
             .in("feira_id", feiraIds)
             .eq("status", "pendente")
             .order("created_at", { ascending: true })
@@ -180,17 +180,19 @@ export default async function OrganizadorPage() {
             ))}
           </section>
 
-          <section className="rounded-2xl shadow-sm overflow-hidden" style={{ border: '2px solid #c4b5fd', backgroundColor: '#f5f3ff' }}>
-            <div className="px-4 pt-4 pb-1">
-              <h2 className="text-base font-bold text-gray-800">Aguardando aprovação</h2>
-            </div>
-            <div className="px-4 pb-4">
-              <InscricoesAguardando
-                inscricoes={inscricoesPendentes as any}
-                totalPendentes={pendentesCount}
-              />
-            </div>
-          </section>
+          {pendentesCount > 0 && (
+            <section className="rounded-2xl shadow-sm overflow-hidden" style={{ border: '2px solid #c4b5fd', backgroundColor: '#f5f3ff' }}>
+              <div className="px-4 pt-4 pb-1">
+                <h2 className="text-base font-bold text-gray-800">Aguardando aprovação</h2>
+              </div>
+              <div className="px-4 pb-4">
+                <InscricoesAguardando
+                  inscricoes={inscricoesPendentes as any}
+                  totalPendentes={pendentesCount}
+                />
+              </div>
+            </section>
+          )}
         </div>
 
         <BottomNav />

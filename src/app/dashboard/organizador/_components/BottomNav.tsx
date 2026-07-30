@@ -1,14 +1,11 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutGrid, Store, Map, Bell, DollarSign } from 'lucide-react'
+import { LayoutGrid, Store } from 'lucide-react'
 
 const items = [
   { icon: LayoutGrid,  label: 'Painel',   href: '/dashboard/organizador' },
   { icon: Store,       label: 'Feiras',   href: '/dashboard/organizador/feiras' },
-  { icon: Map,         label: 'Mapa',     href: '/dashboard/organizador/mapa' },
-  { icon: Bell,        label: 'Avisos',   href: '/dashboard/organizador/avisos' },
-  { icon: DollarSign,  label: 'Receita',  href: '/dashboard/organizador/receita' },
 ]
 
 export function BottomNav() {

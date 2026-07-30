@@ -8,7 +8,9 @@ export function PublicarButton({ feiraId }: { feiraId: string }) {
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
-  function handlePublicar() {
+  function handlePublicar(e: React.MouseEvent) {
+    e.preventDefault()
+    e.stopPropagation()
     setError(null)
     startTransition(async () => {
       const result = await publicarFeiraAction(feiraId)

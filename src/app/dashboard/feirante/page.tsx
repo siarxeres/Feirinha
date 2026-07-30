@@ -13,29 +13,6 @@ function formatDate(value: string | null | undefined) {
   })
 }
 
-const AVATAR_COLORS = [
-  "bg-purple-500", "bg-blue-500", "bg-green-500",
-  "bg-pink-500", "bg-yellow-500", "bg-indigo-500", "bg-teal-500",
-]
-
-function initials(name: string | null | undefined) {
-  if (!name) return "?"
-  return name.split(" ").filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join("")
-}
-
-function avatarBg(name: string | null | undefined, id: string) {
-  const seed = (name?.charCodeAt(0) ?? 0) + (id.charCodeAt(0) ?? 0)
-  return AVATAR_COLORS[seed % AVATAR_COLORS.length]
-}
-
-function statusBadge(status: string) {
-  if (status === "aprovada")     return { label: "Aprovada",        cls: "bg-green-100 text-green-700" }
-  if (status === "pendente")     return { label: "Pendente",        cls: "bg-yellow-100 text-yellow-700" }
-  if (status === "rejeitada")    return { label: "Rejeitada",       cls: "bg-red-100 text-red-700" }
-  if (status === "lista_espera") return { label: "Lista de espera", cls: "bg-gray-100 text-gray-600" }
-  return { label: status, cls: "bg-gray-100 text-gray-600" }
-}
-
 export default async function FeirantePage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -154,50 +131,6 @@ export default async function FeirantePage() {
                 <p className="text-4xl font-bold text-gray-900">{m.value}</p>
               </div>
             ))}
-          </section>
-
-          {/* Minhas Inscrições */}
-          <section
-            className="rounded-2xl shadow-sm overflow-hidden"
-            style={{ border: "2px solid #e9d5ff", backgroundColor: "#faf5ff" }}
-          >
-            <div className="px-4 pt-4 pb-1">
-              <h2 className="text-base font-bold text-gray-800">Minhas Inscrições</h2>
-            </div>
-            <div className="px-4 pb-4">
-              {lista.length === 0 ? (
-                <p className="py-6 text-center text-sm text-gray-400">
-                  Você ainda não se inscreveu em nenhuma feira
-                </p>
-              ) : (
-                <div className="divide-y divide-purple-100">
-                  {lista.map((insc: any) => {
-                    const feiraData = Array.isArray(insc.feiras) ? insc.feiras[0] : insc.feiras
-                    const nomeFeira = feiraData?.nome ?? "Feira"
-                    const badge = statusBadge(insc.status)
-                    return (
-                      <div key={insc.id} className="flex items-center gap-3 py-3">
-                        <div
-                          className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0 ${avatarBg(nomeFeira, insc.id)}`}
-                        >
-                          {initials(nomeFeira)}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold text-gray-900 truncate">{nomeFeira}</p>
-                          <p className="text-xs text-gray-500 truncate">
-                            {feiraData?.cidade ?? "—"}
-                            {feiraData?.data_inicio ? ` · ${formatDate(feiraData.data_inicio)}` : ""}
-                          </p>
-                        </div>
-                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium shrink-0 ${badge.cls}`}>
-                          {badge.label}
-                        </span>
-                      </div>
-                    )
-                  })}
-                </div>
-              )}
-            </div>
           </section>
 
           {/* Feiras Disponíveis */}

@@ -4,12 +4,12 @@ import { CheckCircle2, XCircle, ChevronDown } from 'lucide-react'
 import { aprovarInscricao, rejeitarInscricao } from '../actions'
 
 type Profile = { nome?: string | null } | null
+type Feira = { nome?: string | null } | null
 type Inscricao = {
   id: string
   status: string
-  categoria?: string | null
-  subcategoria?: string | null
   profiles?: Profile | Profile[]
+  feiras?: Feira | Feira[]
 }
 
 const AVATAR_COLORS = [
@@ -30,6 +30,11 @@ function avatarBg(name: string | null | undefined, id: string) {
 function nomeDo(insc: Inscricao) {
   const p = Array.isArray(insc.profiles) ? insc.profiles[0] : insc.profiles
   return p?.nome ?? 'Feirante'
+}
+
+function feiraNomeDo(insc: Inscricao) {
+  const f = Array.isArray(insc.feiras) ? insc.feiras[0] : insc.feiras
+  return f?.nome ?? null
 }
 
 export function InscricoesAguardando({
@@ -65,8 +70,8 @@ export function InscricoesAguardando({
       <div className="divide-y divide-gray-100">
         {visible.map(insc => {
           const nome = nomeDo(insc)
+          const feiraNome = feiraNomeDo(insc)
           const isOpen = expanded === insc.id
-          const cat = [insc.categoria, insc.subcategoria].filter(Boolean).join(' · ')
 
           return (
             <div key={insc.id}>
@@ -81,7 +86,7 @@ export function InscricoesAguardando({
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-gray-900 truncate">{nome}</p>
-                  {cat && <p className="text-xs text-gray-400 truncate">{cat}</p>}
+                  {feiraNome && <p className="text-xs text-gray-400 truncate">{feiraNome}</p>}
                 </div>
                 <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500 text-white font-medium shrink-0">
                   Pendente

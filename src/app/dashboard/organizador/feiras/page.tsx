@@ -76,9 +76,10 @@ export default async function FeirasOrganizadorPage() {
             </div>
           ) : (
             lista.map((feira) => (
-              <div
+              <Link
                 key={feira.id}
-                className="rounded-2xl bg-white shadow-sm p-4 flex items-center justify-between gap-3"
+                href={`/feiras/${feira.id}`}
+                className="rounded-2xl bg-white shadow-sm p-4 flex items-center justify-between gap-3 active:bg-gray-50 transition-colors"
                 style={{ border: "2px solid #e5e7eb" }}
               >
                 <div className="min-w-0">
@@ -89,7 +90,7 @@ export default async function FeirasOrganizadorPage() {
                   </span>
                 </div>
                 {feira.status === "rascunho" && <PublicarButton feiraId={feira.id} />}
-              </div>
+              </Link>
             ))
           )}
         </div>
