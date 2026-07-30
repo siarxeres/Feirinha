@@ -82,12 +82,15 @@ export default async function OrganizadorPage() {
       feiraIds.length
         ? supabase
             .from("inscricoes")
-            .select("id, status, categoria, subcategoria, profiles(nome)")
+            .select("id, status, profiles(nome)")
             .in("feira_id", feiraIds)
             .eq("status", "pendente")
             .order("created_at", { ascending: true })
             .limit(PREVIEW_LIMIT)
-            .then(r => r.data ?? [])
+            .then(r => {
+              if (r.error) console.error("Erro ao buscar inscrições pendentes:", r.error)
+              return r.data ?? []
+            })
         : Promise.resolve([]),
     ])
 

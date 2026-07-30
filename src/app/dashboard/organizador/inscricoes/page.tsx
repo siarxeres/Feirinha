@@ -17,14 +17,18 @@ export default async function InscricoesOrganizadorPage() {
 
   const feiraIds = (feiras ?? []).map((f: any) => f.id).filter(Boolean)
 
-  const { data: inscricoes } = feiraIds.length
+  const { data: inscricoes, error: inscricoesError } = feiraIds.length
     ? await supabase
         .from("inscricoes")
-        .select("id, status, categoria, subcategoria, profiles(nome), feiras(nome)")
+        .select("id, status, profiles(nome), feiras(nome)")
         .in("feira_id", feiraIds)
         .eq("status", "pendente")
         .order("created_at", { ascending: true })
-    : { data: [] }
+    : { data: [], error: null }
+
+  if (inscricoesError) {
+    console.error("Erro ao buscar inscrições pendentes:", inscricoesError)
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
