@@ -1,10 +1,39 @@
-import { createClient } from "@/lib/supabase/server"
+import { createClient, createAdminClient } from "@/lib/supabase/server"
 import Link from "next/link"
 import { Store, Users, ShoppingBag, MapPin, CalendarDays, ClipboardList, ArrowRight, CheckCircle2 } from "lucide-react"
 
 export default async function LandingPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
+
+  // Painel a oferecer no atalho da landing: nunca o admin (painel interno,
+  // não deve ser exposto pela tela pública). Prioriza organizador > feirante > consumidor.
+  let painelHref: string | null = null
+  if (user) {
+    const admin = createAdminClient()
+    const { data: profile } = await admin
+      .from("profiles")
+      .select("roles")
+      .eq("id", user.id)
+      .maybeSingle() as unknown as { data: { roles: unknown } | null }
+
+    const rawRoles = profile?.roles
+    let roles: string[] = []
+    if (Array.isArray(rawRoles)) {
+      roles = rawRoles
+    } else if (typeof rawRoles === 'string') {
+      roles = rawRoles
+        .replace(/^\{|\}$/g, '')
+        .split(',')
+        .map(r => r.trim().replace(/^"|"$/g, ''))
+        .filter(Boolean)
+    }
+
+    if (roles.includes("organizador")) painelHref = "/dashboard/organizador"
+    else if (roles.includes("feirante")) painelHref = "/dashboard/feirante"
+    else if (roles.includes("consumidor")) painelHref = "/dashboard/consumidor"
+    // admin puro (sem outro papel) → painelHref continua null, botão não aparece
+  }
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -17,16 +46,16 @@ export default async function LandingPage() {
             <span className="text-lg font-bold text-gray-900">Feirinha</span>
           </div>
           <nav className="flex items-center gap-3">
-            {user ? (
+            {painelHref ? (
               <Link
-                href="/dashboard"
+                href={painelHref}
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-white"
                 style={{ backgroundColor: "#E8560A" }}
               >
                 Ir ao painel
                 <ArrowRight size={14} />
               </Link>
-            ) : (
+            ) : !user ? (
               <>
                 <Link
                   href="/auth/login"
@@ -42,7 +71,7 @@ export default async function LandingPage() {
                   Criar conta
                 </Link>
               </>
-            )}
+            ) : null}
           </nav>
         </div>
       </header>
