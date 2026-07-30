@@ -2,6 +2,21 @@
 
 import { createClient } from "@/lib/supabase/server"
 
+async function getFeiraOwnerByInscricaoId(inscricaoId: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { user: null, supabase, ok: false }
+
+  const { data: inscricao } = await supabase
+    .from('inscricoes')
+    .select('feira_id, feiras(organizador_id)')
+    .eq('id', inscricaoId)
+    .single()
+
+  const feira = Array.isArray(inscricao?.feiras) ? inscricao.feiras[0] : inscricao?.feiras
+  return { user, supabase, ok: feira?.organizador_id === user.id }
+}
+
 export async function aprovarInscricaoAction({
   inscricaoId,
   barracaId = null,
@@ -9,7 +24,10 @@ export async function aprovarInscricaoAction({
   inscricaoId: string
   barracaId: string | null
 }) {
-  const supabase = await createClient()
+  const { user, supabase, ok } = await getFeiraOwnerByInscricaoId(inscricaoId)
+  if (!user) return { error: 'Sessão expirada. Faça login novamente.' }
+  if (!ok) return { error: 'Não autorizado' }
+
   const { error } = await supabase.rpc("aprovar_inscricao", {
     p_inscricao_id: inscricaoId,
     p_barraca_id: barracaId,
@@ -27,7 +45,10 @@ export async function rejeitarInscricaoAction({
 }: {
   inscricaoId: string
 }) {
-  const supabase = await createClient()
+  const { user, supabase, ok } = await getFeiraOwnerByInscricaoId(inscricaoId)
+  if (!user) return { error: 'Sessão expirada. Faça login novamente.' }
+  if (!ok) return { error: 'Não autorizado' }
+
   const { error } = await supabase
     .from("inscricoes")
     .update({ status: "rejeitada" })

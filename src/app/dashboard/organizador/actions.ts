@@ -28,6 +28,7 @@ export async function aprovarInscricao(inscricaoId: string) {
 
   if (error) return { error: error.message }
   revalidatePath('/dashboard/organizador')
+  revalidatePath('/dashboard/organizador/inscricoes')
   return { success: true }
 }
 
@@ -42,5 +43,6 @@ export async function rejeitarInscricao(inscricaoId: string) {
 
   if (error) return { error: error.message }
   revalidatePath('/dashboard/organizador')
+  revalidatePath('/dashboard/organizador/inscricoes')
   return { success: true }
 }
