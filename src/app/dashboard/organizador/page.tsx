@@ -1,7 +1,7 @@
 ﻿import { createClient, createAdminClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { Bell, ClipboardList, CheckCircle2, DollarSign, Clock, LogOut, Plus, Store } from "lucide-react"
+import { Bell, ClipboardList, CheckCircle2, DollarSign, Clock, LogOut, Plus, Store, User } from "lucide-react"
 import { BottomNav } from "./_components/BottomNav"
 import { InscricoesAguardando } from "./_components/InscricoesAguardando"
 
@@ -152,6 +152,13 @@ export default async function OrganizadorPage() {
               <button aria-label="Notificações" className="p-2 rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors">
                 <Bell size={21} className="text-gray-700" />
               </button>
+              <Link
+                href="/dashboard/organizador/perfil"
+                aria-label="Meu perfil"
+                className="p-2 rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors"
+              >
+                <User size={21} className="text-gray-700" />
+              </Link>
               <form action={logout}>
                 <button type="submit" aria-label="Sair" className="p-2 rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors">
                   <LogOut size={21} className="text-gray-700" />
@@ -170,14 +177,24 @@ export default async function OrganizadorPage() {
             <Plus size={18} />
             Criar feira
           </Link>
-          <Link
-            href="/dashboard/organizador/feiras"
-            className="flex items-center justify-center gap-2 w-full py-3 mt-2 rounded-2xl text-sm font-bold transition-all active:scale-[0.98]"
-            style={{ border: '2px solid #E8560A', color: '#E8560A' }}
-          >
-            <Store size={18} />
-            Minhas feiras
-          </Link>
+          <div className="grid grid-cols-2 gap-2 mt-2">
+            <Link
+              href="/dashboard/organizador/feiras"
+              className="flex items-center justify-center gap-2 py-3 rounded-2xl text-sm font-bold transition-all active:scale-[0.98]"
+              style={{ border: '2px solid #E8560A', color: '#E8560A' }}
+            >
+              <Store size={18} />
+              Feiras
+            </Link>
+            <Link
+              href="/dashboard/organizador/inscricoes"
+              className="flex items-center justify-center gap-2 py-3 rounded-2xl text-sm font-bold transition-all active:scale-[0.98]"
+              style={{ border: '2px solid #E8560A', color: '#E8560A' }}
+            >
+              <ClipboardList size={18} />
+              Inscrições
+            </Link>
+          </div>
         </header>
 
         <div className="flex-1 px-5 pb-28 space-y-5">

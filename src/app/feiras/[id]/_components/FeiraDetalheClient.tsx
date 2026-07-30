@@ -273,7 +273,7 @@ export function FeiraDetalheClient({
         <header className="px-4 pt-12 pb-3 bg-white border-b border-gray-100">
           <div className="flex items-center gap-2 mb-1.5">
             <Link
-              href="/dashboard/organizador"
+              href="/dashboard/organizador/feiras"
               className="text-gray-500 p-1 -ml-1 rounded-lg hover:bg-gray-100 transition-colors text-xl leading-none"
             >
               ←

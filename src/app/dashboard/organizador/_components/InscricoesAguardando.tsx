@@ -122,12 +122,12 @@ export function InscricoesAguardando({
         })}
       </div>
 
-      {(extra > 0 || (done.size > 0 && visible.length === 0 && totalPendentes > done.size)) && (
+      {totalPendentes > 0 && (
         <a
           href="/dashboard/organizador/inscricoes"
           className="flex items-center gap-1 pt-3 border-t border-gray-100 text-sm font-medium text-[#E8560A]"
         >
-          + {extra > 0 ? extra : ''} inscrições · Ver todas
+          {extra > 0 ? `+ ${extra} inscrições · Ver todas` : 'Ver todas'}
         </a>
       )}
     </div>

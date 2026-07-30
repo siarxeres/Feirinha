@@ -92,7 +92,7 @@ export default function NovaFeira() {
         toast.error(result.error)
       } else {
         toast.success("Feira criada com sucesso!")
-        router.push("/dashboard/organizador")
+        router.push(result.feiraId ? `/feiras/${result.feiraId}` : "/dashboard/organizador/feiras")
       }
     } catch (err) {
       console.error(err)
