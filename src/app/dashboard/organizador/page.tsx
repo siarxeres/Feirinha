@@ -1,7 +1,7 @@
 ﻿import { createClient, createAdminClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { Bell, ClipboardList, CheckCircle2, DollarSign, Clock, LogOut, Plus } from "lucide-react"
+import { Bell, ClipboardList, CheckCircle2, DollarSign, Clock, LogOut, Plus, Store } from "lucide-react"
 import { BottomNav } from "./_components/BottomNav"
 import { InscricoesAguardando } from "./_components/InscricoesAguardando"
 
@@ -153,6 +153,14 @@ export default async function OrganizadorPage() {
           >
             <Plus size={18} />
             Criar feira
+          </Link>
+          <Link
+            href="/dashboard/organizador/feiras"
+            className="flex items-center justify-center gap-2 w-full py-3 mt-2 rounded-2xl text-sm font-bold transition-all active:scale-[0.98]"
+            style={{ border: '2px solid #E8560A', color: '#E8560A' }}
+          >
+            <Store size={18} />
+            Minhas feiras
           </Link>
         </header>
 

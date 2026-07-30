@@ -13,6 +13,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 | `/dashboard/feirante/perfil` | Perfil do feirante |
 | `/dashboard/feirante/assinatura` | Gestão de assinatura |
 | `/dashboard/organizador` | Painel do organizador |
+| `/dashboard/organizador/feiras` | Lista de feiras do organizador (rascunho/publicada) + ação de publicar |
 | `/dashboard/admin` | Painel administrativo |
 | `/feiras/nova` | Criar nova feira (organizador) |
 | `/feiras/[id]` | Detalhes da feira + gerenciar inscrições, mapa, comunicados e rateio de despesas (organizador) |
