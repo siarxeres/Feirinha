@@ -132,6 +132,7 @@ export function FeiraDetalheClient({
   const [destinatario, setDestinatario] = useState<'Todos' | 'Aprovados' | 'Lista de espera'>('Todos')
   const [sending, setSending] = useState(false)
   const [sent, setSent] = useState(false)
+  const [comunicadoErro, setComunicadoErro] = useState<string | null>(null)
   const [showDespesaForm, setShowDespesaForm] = useState(false)
   const [editingDespesaId, setEditingDespesaId] = useState<string | null>(null)
   const [despesaForm, setDespesaForm] = useState({ categoria: 'energia', descricao: '', valor: '' })
@@ -182,10 +183,15 @@ export function FeiraDetalheClient({
   async function handleEnviar() {
     if (!mensagem.trim() || sending) return
     setSending(true)
-    await enviarComunicadoAction({ feiraId, destinatario, mensagem })
+    setComunicadoErro(null)
+    const result = await enviarComunicadoAction({ feiraId, destinatario, mensagem })
+    setSending(false)
+    if (result?.error) {
+      setComunicadoErro(result.error)
+      return
+    }
     setMensagem('')
     setSent(true)
-    setSending(false)
     setTimeout(() => setSent(false), 3000)
   }
 
@@ -465,6 +471,12 @@ export function FeiraDetalheClient({
               {sent && (
                 <p className="text-sm text-green-600 bg-green-50 rounded-xl px-4 py-2.5 text-center font-medium">
                   Comunicado enviado!
+                </p>
+              )}
+
+              {comunicadoErro && (
+                <p className="text-sm text-red-600 bg-red-50 rounded-xl px-4 py-2.5 text-center font-medium">
+                  {comunicadoErro}
                 </p>
               )}
 

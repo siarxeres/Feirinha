@@ -161,7 +161,10 @@ export async function enviarComunicadoAction({
   destinatario: string
   mensagem: string
 }) {
-  const supabase = await createClient()
+  const { user, supabase, ok } = await getFeiraOwnerByFeiraId(feiraId)
+  if (!user) return { error: 'Sessão expirada. Faça login novamente.' }
+  if (!ok) return { error: 'Não autorizado' }
+
   const { error } = await supabase.from("comunicados").insert({
     feira_id: feiraId,
     destinatario,

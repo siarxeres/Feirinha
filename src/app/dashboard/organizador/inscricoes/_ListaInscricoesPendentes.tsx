@@ -42,13 +42,23 @@ function feiraNomeDo(insc: Inscricao) {
 export function ListaInscricoesPendentes({ inscricoes }: { inscricoes: Inscricao[] }) {
   const [expanded, setExpanded] = useState<string | null>(null)
   const [done, setDone] = useState<Set<string>>(new Set())
+  const [errors, setErrors] = useState<Record<string, string>>({})
   const [isPending, startTransition] = useTransition()
 
   const visible = inscricoes.filter(i => !done.has(i.id))
 
-  const act = (id: string, fn: (id: string) => Promise<unknown>) => {
+  const act = (id: string, fn: (id: string) => Promise<{ error?: string } | undefined>) => {
     startTransition(async () => {
-      await fn(id)
+      const result = await fn(id)
+      if (result?.error) {
+        setErrors(prev => ({ ...prev, [id]: result.error! }))
+        return
+      }
+      setErrors(prev => {
+        const next = { ...prev }
+        delete next[id]
+        return next
+      })
       setDone(prev => new Set([...prev, id]))
       setExpanded(null)
     })
@@ -92,23 +102,28 @@ export function ListaInscricoesPendentes({ inscricoes }: { inscricoes: Inscricao
             </button>
 
             {isOpen && (
-              <div className="flex gap-2 pb-3 pl-[52px]">
-                <button
-                  disabled={isPending}
-                  onClick={() => act(insc.id, aprovarInscricao)}
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-green-500 hover:bg-green-600 active:bg-green-700 text-white text-sm font-semibold transition-colors disabled:opacity-50"
-                >
-                  <CheckCircle2 size={16} />
-                  Aprovar
-                </button>
-                <button
-                  disabled={isPending}
-                  onClick={() => act(insc.id, rejeitarInscricao)}
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-red-100 hover:bg-red-200 active:bg-red-300 text-red-700 text-sm font-semibold transition-colors disabled:opacity-50"
-                >
-                  <XCircle size={16} />
-                  Rejeitar
-                </button>
+              <div className="pb-3 pl-[52px]">
+                <div className="flex gap-2">
+                  <button
+                    disabled={isPending}
+                    onClick={() => act(insc.id, aprovarInscricao)}
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-green-500 hover:bg-green-600 active:bg-green-700 text-white text-sm font-semibold transition-colors disabled:opacity-50"
+                  >
+                    <CheckCircle2 size={16} />
+                    Aprovar
+                  </button>
+                  <button
+                    disabled={isPending}
+                    onClick={() => act(insc.id, rejeitarInscricao)}
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-red-100 hover:bg-red-200 active:bg-red-300 text-red-700 text-sm font-semibold transition-colors disabled:opacity-50"
+                  >
+                    <XCircle size={16} />
+                    Rejeitar
+                  </button>
+                </div>
+                {errors[insc.id] && (
+                  <p className="text-xs text-red-600 mt-2">{errors[insc.id]}</p>
+                )}
               </div>
             )}
           </div>
