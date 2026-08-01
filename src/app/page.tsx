@@ -105,12 +105,6 @@ export default async function LandingPage() {
                 Começar agora
                 <ArrowRight size={16} />
               </Link>
-              <Link
-                href="/auth/login"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl text-base font-semibold text-gray-700 bg-white border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors"
-              >
-                Já tenho conta
-              </Link>
             </div>
           </div>
         </section>
