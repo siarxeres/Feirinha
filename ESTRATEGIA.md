@@ -216,6 +216,35 @@ mesma dor, achou o produto. Se cada um disser algo diferente, ainda não achou.
 
 ---
 
+## Modelo de cobrança — DEFINIDO (jul/2026)
+
+Decisão do founder (não é mais hipótese): **todo o recebimento passa pelo app.** O
+feirante faz um pagamento único na inscrição; o Asaas divide na origem (split).
+
+Exemplo:
+- Mensalidade: R$ 200 → organizador
+- Rateio: R$ 20 → organizador
+- Taxa do app: R$ 10 → app
+- **Total R$ 230** → split: **R$ 220 organizador / R$ 10 app**
+
+Os R$ 10 são a contrapartida da gestão que o app dá ao feirante, e aparecem
+discriminados no detalhamento do rateio no momento da inscrição (transparente).
+
+**Vantagem do split na origem:** o app NÃO segura nem repassa dinheiro — o Asaas
+manda cada fatia direto. Tira o app da posição de recebedor central (aliviando o
+lado regulatório).
+
+**Dependência técnica central (a resolver antes de codar):** para dividir na origem,
+o Asaas precisa da conta do organizador cadastrada como recebedor (subconta/wallet).
+Sem isso, não há para onde mandar os R$ 220. → Próxima conversa de arquitetura:
+como o organizador vira recebedor no Asaas (split de pagamento vs. subcontas/
+white-label). Resolvido isso, o resto é encaixe.
+
+**Status:** modelo definido; arquitetura do split NÃO implementada — categoria
+protegida, exige conversa dedicada antes de qualquer código.
+
+---
+
 ## Princípio de governança de pagamento
 
 Qualquer código ou mudança de arquitetura relacionada a pagamento (Asaas, PIX,
