@@ -10,6 +10,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 | `/dashboard/feirante` | Painel do feirante (feiras disponíveis + inscrições) |
 | `/dashboard/feirante/inscricoes` | Lista de inscrições do feirante |
 | `/dashboard/feirante/mapa` | Mapa de feiras |
+| `/dashboard/feirante/avisos` | Comunicados/avisos das feiras em que o feirante está inscrito |
 | `/dashboard/feirante/perfil` | Perfil do feirante |
 | `/dashboard/feirante/assinatura` | Gestão de assinatura |
 | `/dashboard/organizador` | Painel do organizador |
