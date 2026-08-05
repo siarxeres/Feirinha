@@ -155,6 +155,9 @@ export function FeiraDetalheClient({
   const [editingDespesaId, setEditingDespesaId] = useState<string | null>(null)
   const [despesaForm, setDespesaForm] = useState({ categoria: 'energia', descricao: '', valor: '' })
   const [despesaErro, setDespesaErro] = useState<string | null>(null)
+  const [aprovando, setAprovando] = useState<{ inscricaoId: string } | null>(null)
+  const [barracaEscolhidaId, setBarracaEscolhidaId] = useState<string | null>(null)
+  const [aprovarErro, setAprovarErro] = useState<string | null>(null)
 
   const totalInscricoes = inscricoes.length
   const aprovadas = inscricoes.filter(i => ['aprovado', 'aprovada'].includes(i.status)).length
@@ -176,14 +179,42 @@ export function FeiraDetalheClient({
 
   const inscricoesPendentes = inscricoes.filter(i => i.status === 'pendente')
 
+  const barracasOcupadasIds = new Set(
+    inscricoes
+      .filter(i => ['aprovado', 'aprovada'].includes(i.status) && i.barraca_id)
+      .map(i => i.barraca_id as string)
+  )
+
   function handleAprovar(inscricaoId: string) {
+    setAprovarErro(null)
+    setBarracaEscolhidaId(null)
+    setAprovando({ inscricaoId })
+  }
+
+  function handleFecharPicker() {
+    if (isPending) return
+    setAprovando(null)
+    setBarracaEscolhidaId(null)
+    setAprovarErro(null)
+  }
+
+  function handleConfirmarAprovacao() {
+    if (!aprovando || !barracaEscolhidaId) return
+    setAprovarErro(null)
     startTransition(async () => {
-      const result = await aprovarInscricaoAction({ inscricaoId, barracaId: null })
-      if (!result?.error) {
-        setDone(prev => new Set([...prev, inscricaoId]))
-        setExpanded(null)
-        router.refresh()
+      const result = await aprovarInscricaoAction({
+        inscricaoId: aprovando.inscricaoId,
+        barracaId: barracaEscolhidaId,
+      })
+      if (result?.error) {
+        setAprovarErro(result.error)
+        return
       }
+      setDone(prev => new Set([...prev, aprovando.inscricaoId]))
+      setExpanded(null)
+      setAprovando(null)
+      setBarracaEscolhidaId(null)
+      router.refresh()
     })
   }
 
@@ -434,7 +465,7 @@ export function FeiraDetalheClient({
                 <p className="text-center text-sm text-gray-400 py-10">Nenhuma barraca cadastrada</p>
               ) : (
                 <>
-                  <BarracaGrid barracas={barracas} inscricoes={inscricoesPendentes as any} />
+                  <BarracaGrid barracas={barracas} inscricoes={inscricoes as any} />
                   <div className="flex flex-wrap gap-3 mt-4 text-xs text-gray-500">
                     <span className="flex items-center gap-1.5">
                       <span className="w-3 h-3 rounded-full border-2 border-gray-300 inline-block" />Livre
@@ -443,7 +474,7 @@ export function FeiraDetalheClient({
                       <span className="w-3 h-3 rounded-full bg-yellow-400 inline-block" />Pendente
                     </span>
                     <span className="flex items-center gap-1.5">
-                      <span className="w-3 h-3 rounded-full bg-green-400 inline-block" />Aprovado
+                      <span className="w-3 h-3 rounded-full bg-green-400 inline-block" />Ocupada
                     </span>
                     <span className="flex items-center gap-1.5">
                       <span className="w-3 h-3 rounded-full bg-red-400 inline-block" />Rejeitado
@@ -683,6 +714,89 @@ export function FeiraDetalheClient({
           )}
 
         </div>
+
+        {aprovando && (
+          <>
+            <div className="fixed inset-0 bg-black/40 z-40" onClick={handleFecharPicker} />
+            <div className="fixed inset-x-0 bottom-0 z-50 mx-auto max-w-md bg-white rounded-t-3xl max-h-[80vh] flex flex-col">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+                <div>
+                  <h3 className="font-semibold text-base text-gray-900">Escolha uma barraca</h3>
+                  <p className="text-xs text-gray-400">
+                    Para {nomeDo(inscricoes.find(i => i.id === aprovando.inscricaoId) ?? { id: '', status: '' })}
+                  </p>
+                </div>
+                <button
+                  onClick={handleFecharPicker}
+                  aria-label="Fechar"
+                  className="p-1 rounded hover:bg-gray-100 transition-colors text-gray-500 text-xl leading-none"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="px-5 py-4 overflow-y-auto flex-1">
+                {barracas.length === 0 ? (
+                  <p className="text-center text-sm text-gray-400 py-10">Nenhuma barraca cadastrada</p>
+                ) : (
+                  <div className="grid grid-cols-5 gap-2.5">
+                    {barracas.map(b => {
+                      const ocupada = barracasOcupadasIds.has(b.id)
+                      const selecionada = barracaEscolhidaId === b.id
+                      return (
+                        <button
+                          key={b.id}
+                          type="button"
+                          disabled={ocupada}
+                          onClick={() => setBarracaEscolhidaId(b.id)}
+                          className="rounded-lg py-2.5 text-center text-xs font-bold transition-colors disabled:cursor-not-allowed"
+                          style={
+                            ocupada
+                              ? { backgroundColor: '#f3f4f6', color: '#9ca3af' }
+                              : selecionada
+                                ? { backgroundColor: '#E8560A', color: '#fff', border: '2px solid #E8560A' }
+                                : { backgroundColor: '#fff', color: '#374151', border: '2px solid #e5e7eb' }
+                          }
+                        >
+                          #{b.codigo ?? b.numero}
+                        </button>
+                      )
+                    })}
+                  </div>
+                )}
+
+                <div className="flex flex-wrap gap-3 mt-4 text-xs text-gray-500">
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-3 h-3 rounded-full border-2 border-gray-300 inline-block" />Livre
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-3 h-3 rounded-full bg-gray-300 inline-block" />Ocupada
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-3 h-3 rounded-full inline-block" style={{ backgroundColor: '#E8560A' }} />Selecionada
+                  </span>
+                </div>
+
+                {aprovarErro && (
+                  <p className="text-sm text-red-600 bg-red-50 rounded-xl px-4 py-2.5 text-center font-medium mt-4">
+                    {aprovarErro}
+                  </p>
+                )}
+              </div>
+
+              <div className="px-5 pb-6 pt-3 border-t border-gray-100">
+                <button
+                  onClick={handleConfirmarAprovacao}
+                  disabled={!barracaEscolhidaId || isPending}
+                  className="w-full py-3 rounded-xl text-sm font-semibold text-white transition-colors disabled:opacity-50"
+                  style={{ backgroundColor: '#E8560A' }}
+                >
+                  {isPending ? 'Aprovando…' : 'Confirmar aprovação'}
+                </button>
+              </div>
+            </div>
+          </>
+        )}
 
         <BottomNav />
       </div>

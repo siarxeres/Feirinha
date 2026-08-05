@@ -26,7 +26,12 @@ type Inscricao = {
   status: string
   mensagem?: string | null
   feirante_id: string
-  profiles: Perfil | null
+  profiles: Perfil | Perfil[] | null
+}
+
+function perfilDe(insc: Inscricao | undefined): Perfil | null {
+  if (!insc) return null
+  return Array.isArray(insc.profiles) ? (insc.profiles[0] ?? null) : insc.profiles
 }
 
 const gridColor: Record<string, string> = {
@@ -51,12 +56,24 @@ const badgeColor: Record<string, string> = {
   indisponivel: 'bg-gray-200 text-gray-600',
 }
 
+const statusLabel: Record<string, string> = {
+  livre:     'Livre',
+  pendente:  'Pendente',
+  aprovado:  'Ocupada',
+  rejeitado: 'Rejeitado',
+  bloqueado: 'Bloqueado',
+}
+
 function inscricaoDaBarraca(inscricoes: Inscricao[], barracaId: string): Inscricao | undefined {
   return inscricoes.find(i => i.barraca_id === barracaId)
 }
 
 function statusEfetivo(barraca: Barraca, inscricoes: Inscricao[]): string {
-  return inscricaoDaBarraca(inscricoes, barraca.id) ? 'pendente' : barraca.status
+  const insc = inscricaoDaBarraca(inscricoes, barraca.id)
+  if (!insc) return barraca.status
+  if (insc.status === 'aprovada' || insc.status === 'aprovado') return 'aprovado'
+  if (insc.status === 'rejeitada' || insc.status === 'rejeitado') return 'rejeitado'
+  return 'pendente'
 }
 
 export function BarracaGrid({
@@ -71,9 +88,11 @@ export function BarracaGrid({
   const [isPending, startTransition] = useTransition()
   const [actionError, setActionError] = useState<string | null>(null)
 
-  const inscricaoPendente = selected
+  const inscricaoVinculada = selected
     ? inscricaoDaBarraca(inscricoes, selected.id)
     : undefined
+
+  const inscricaoPendente = inscricaoVinculada?.status === 'pendente' ? inscricaoVinculada : undefined
 
   const statusDrawer = selected ? statusEfetivo(selected, inscricoes) : ''
 
@@ -122,6 +141,8 @@ export function BarracaGrid({
       <div className="grid grid-cols-5 gap-3">
         {barracas.map(b => {
           const status = statusEfetivo(b, inscricoes)
+          const insc = inscricaoDaBarraca(inscricoes, b.id)
+          const subtitulo = status === 'aprovado' ? (perfilDe(insc)?.nome ?? 'Ocupada') : (b.categoria ?? '—')
           return (
             <button
               key={b.id}
@@ -129,8 +150,8 @@ export function BarracaGrid({
               className={`rounded-lg p-3 text-left hover:opacity-80 transition ${gridColor[status] ?? 'bg-gray-100 border-2 border-gray-300'}`}
             >
               <p className="font-bold text-sm">#{b.numero ?? b.codigo}</p>
-              <p className="text-xs text-gray-500 capitalize">{b.categoria ?? '—'}</p>
-              <p className="text-xs text-gray-400 capitalize">{status}</p>
+              <p className="text-xs text-gray-500 truncate">{subtitulo}</p>
+              <p className="text-xs text-gray-400">{statusLabel[status] ?? status}</p>
             </button>
           )
         })}
@@ -165,27 +186,27 @@ export function BarracaGrid({
 
               <div>
                 <p className="text-xs text-gray-400 uppercase font-semibold mb-1">Status</p>
-                <span className={`inline-block px-2 py-1 rounded-full text-xs font-semibold capitalize ${badgeColor[statusDrawer] ?? 'bg-gray-100 text-gray-600'}`}>
-                  {statusDrawer}
+                <span className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${badgeColor[statusDrawer] ?? 'bg-gray-100 text-gray-600'}`}>
+                  {statusLabel[statusDrawer] ?? statusDrawer}
                 </span>
               </div>
 
-              {inscricaoPendente && (
+              {inscricaoVinculada && (
                 <>
                   <div>
                     <p className="text-xs text-gray-400 uppercase font-semibold mb-1">Feirante</p>
-                    <p className="font-medium">{inscricaoPendente.profiles?.nome ?? '—'}</p>
-                    <p className="text-xs text-gray-500">{inscricaoPendente.profiles?.email}</p>
-                    {inscricaoPendente.profiles?.whatsapp && (
-                      <p className="text-xs text-gray-500">{inscricaoPendente.profiles.whatsapp}</p>
+                    <p className="font-medium">{perfilDe(inscricaoVinculada)?.nome ?? '—'}</p>
+                    <p className="text-xs text-gray-500">{perfilDe(inscricaoVinculada)?.email}</p>
+                    {perfilDe(inscricaoVinculada)?.whatsapp && (
+                      <p className="text-xs text-gray-500">{perfilDe(inscricaoVinculada)?.whatsapp}</p>
                     )}
                   </div>
 
-                  {inscricaoPendente.mensagem && (
+                  {inscricaoVinculada.mensagem && (
                     <div>
                       <p className="text-xs text-gray-400 uppercase font-semibold mb-1">Mensagem</p>
                       <p className="text-sm text-gray-700 bg-gray-50 rounded-lg px-3 py-2">
-                        {inscricaoPendente.mensagem}
+                        {inscricaoVinculada.mensagem}
                       </p>
                     </div>
                   )}
@@ -214,6 +235,8 @@ export function BarracaGrid({
                       {isPending ? 'Processando…' : 'Rejeitar'}
                     </button>
                   </>
+                ) : statusDrawer === 'aprovado' ? (
+                  <p className="text-sm text-gray-500 text-center py-4">Barraca ocupada</p>
                 ) : selected.status === 'livre' ? (
                   <p className="text-sm text-gray-500 text-center py-4">Barraca disponível</p>
                 ) : null}
