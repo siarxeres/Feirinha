@@ -717,8 +717,8 @@ export function FeiraDetalheClient({
 
         {aprovando && (
           <>
-            <div className="fixed inset-0 bg-black/40 z-40" onClick={handleFecharPicker} />
-            <div className="fixed inset-x-0 bottom-0 z-50 mx-auto max-w-md max-h-[85dvh] bg-white rounded-t-3xl flex flex-col overflow-hidden">
+            <div className="fixed inset-0 bg-black/40 z-[60]" onClick={handleFecharPicker} />
+            <div className="fixed inset-x-0 bottom-0 z-[70] mx-auto max-w-md max-h-[85dvh] bg-white rounded-t-3xl flex flex-col overflow-hidden">
               <div className="shrink-0 flex items-center justify-between px-5 py-4 border-b border-gray-100">
                 <div>
                   <h3 className="font-semibold text-base text-gray-900">Escolha uma barraca</h3>

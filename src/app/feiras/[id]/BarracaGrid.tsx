@@ -159,9 +159,9 @@ export function BarracaGrid({
 
       {selected && (
         <>
-          <div className="fixed inset-0 bg-black/20 z-40" onClick={fechar} />
+          <div className="fixed inset-0 bg-black/20 z-[60]" onClick={fechar} />
 
-          <div className="fixed right-0 top-0 h-full w-80 bg-white shadow-xl z-50 flex flex-col">
+          <div className="fixed right-0 top-0 h-full w-80 bg-white shadow-xl z-[70] flex flex-col">
             <div className="flex items-center justify-between px-5 py-4 border-b">
               <h3 className="font-semibold text-lg">Barraca {label}</h3>
               <button
