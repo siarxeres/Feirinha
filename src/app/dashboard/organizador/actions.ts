@@ -17,21 +17,6 @@ async function getInscricaoOwner(inscricaoId: string) {
   return { user, supabase, feiranteOk: feira?.organizador_id === user.id }
 }
 
-export async function aprovarInscricao(inscricaoId: string) {
-  const { supabase, feiranteOk } = await getInscricaoOwner(inscricaoId)
-  if (!feiranteOk) return { error: 'Não autorizado' }
-
-  const { error } = await supabase
-    .from('inscricoes')
-    .update({ status: 'aprovada' })
-    .eq('id', inscricaoId)
-
-  if (error) return { error: error.message }
-  revalidatePath('/dashboard/organizador')
-  revalidatePath('/dashboard/organizador/inscricoes')
-  return { success: true }
-}
-
 export async function rejeitarInscricao(inscricaoId: string) {
   const { supabase, feiranteOk } = await getInscricaoOwner(inscricaoId)
   if (!feiranteOk) return { error: 'Não autorizado' }

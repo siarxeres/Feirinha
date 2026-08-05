@@ -1,13 +1,15 @@
 'use client'
 import { useState, useTransition } from 'react'
+import Link from 'next/link'
 import { CheckCircle2, XCircle, ChevronDown } from 'lucide-react'
-import { aprovarInscricao, rejeitarInscricao } from '../actions'
+import { rejeitarInscricao } from '../actions'
 
 type Profile = { nome?: string | null } | null
 type Feira = { nome?: string | null } | null
 type Inscricao = {
   id: string
   status: string
+  feira_id: string
   profiles?: Profile | Profile[]
   feiras?: Feira | Feira[]
 }
@@ -110,14 +112,13 @@ export function InscricoesAguardando({
               {isOpen && (
                 <div className="pb-3 pl-[52px]">
                   <div className="flex gap-2">
-                    <button
-                      disabled={isPending}
-                      onClick={() => act(insc.id, aprovarInscricao)}
-                      className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-green-500 hover:bg-green-600 active:bg-green-700 text-white text-sm font-semibold transition-colors disabled:opacity-50"
+                    <Link
+                      href={`/feiras/${insc.feira_id}`}
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-green-500 hover:bg-green-600 active:bg-green-700 text-white text-sm font-semibold transition-colors"
                     >
                       <CheckCircle2 size={16} />
-                      Aprovar
-                    </button>
+                      Ver / Aprovar
+                    </Link>
                     <button
                       disabled={isPending}
                       onClick={() => act(insc.id, rejeitarInscricao)}

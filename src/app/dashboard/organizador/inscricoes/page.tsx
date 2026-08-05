@@ -20,7 +20,7 @@ export default async function InscricoesOrganizadorPage() {
   const { data: inscricoes, error: inscricoesError } = feiraIds.length
     ? await supabase
         .from("inscricoes")
-        .select("id, status, profiles(nome), feiras(nome)")
+        .select("id, status, feira_id, profiles(nome), feiras(nome)")
         .in("feira_id", feiraIds)
         .eq("status", "pendente")
         .order("created_at", { ascending: true })
