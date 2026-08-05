@@ -2,12 +2,13 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutGrid, ClipboardList, Map, User } from 'lucide-react'
+import { LayoutGrid, ClipboardList, Map, Megaphone, User } from 'lucide-react'
 
 const items = [
   { icon: LayoutGrid,    label: 'Painel',      href: '/dashboard/feirante' },
   { icon: ClipboardList, label: 'Minha área',  href: '/dashboard/feirante/inscricoes' },
   { icon: Map,           label: 'Mapa',        href: '/dashboard/feirante/mapa' },
+  { icon: Megaphone,     label: 'Avisos',      href: '/dashboard/feirante/avisos' },
   { icon: User,          label: 'Perfil',      href: '/dashboard/feirante/perfil' },
 ]
 
