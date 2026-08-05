@@ -718,8 +718,8 @@ export function FeiraDetalheClient({
         {aprovando && (
           <>
             <div className="fixed inset-0 bg-black/40 z-40" onClick={handleFecharPicker} />
-            <div className="fixed inset-x-0 bottom-0 z-50 mx-auto max-w-md bg-white rounded-t-3xl max-h-[80vh] flex flex-col">
-              <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+            <div className="fixed inset-x-0 bottom-0 z-50 mx-auto max-w-md max-h-[85dvh] bg-white rounded-t-3xl flex flex-col overflow-hidden">
+              <div className="shrink-0 flex items-center justify-between px-5 py-4 border-b border-gray-100">
                 <div>
                   <h3 className="font-semibold text-base text-gray-900">Escolha uma barraca</h3>
                   <p className="text-xs text-gray-400">
@@ -735,7 +735,7 @@ export function FeiraDetalheClient({
                 </button>
               </div>
 
-              <div className="px-5 py-4 overflow-y-auto flex-1">
+              <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
                 {barracas.length === 0 ? (
                   <p className="text-center text-sm text-gray-400 py-10">Nenhuma barraca cadastrada</p>
                 ) : (
@@ -764,8 +764,10 @@ export function FeiraDetalheClient({
                     })}
                   </div>
                 )}
+              </div>
 
-                <div className="flex flex-wrap gap-3 mt-4 text-xs text-gray-500">
+              <div className="shrink-0 px-5 pt-3 pb-6 border-t border-gray-100 space-y-3">
+                <div className="flex flex-wrap gap-3 text-xs text-gray-500">
                   <span className="flex items-center gap-1.5">
                     <span className="w-3 h-3 rounded-full border-2 border-gray-300 inline-block" />Livre
                   </span>
@@ -778,13 +780,11 @@ export function FeiraDetalheClient({
                 </div>
 
                 {aprovarErro && (
-                  <p className="text-sm text-red-600 bg-red-50 rounded-xl px-4 py-2.5 text-center font-medium mt-4">
+                  <p className="text-sm text-red-600 bg-red-50 rounded-xl px-4 py-2.5 text-center font-medium">
                     {aprovarErro}
                   </p>
                 )}
-              </div>
 
-              <div className="px-5 pb-6 pt-3 border-t border-gray-100">
                 <button
                   onClick={handleConfirmarAprovacao}
                   disabled={!barracaEscolhidaId || isPending}
