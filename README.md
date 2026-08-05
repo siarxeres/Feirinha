@@ -69,6 +69,10 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - Navegação por clique nos dois fluxos (sem URL manual)
 - Painel admin com CRUD
 - FLUXO CENTRAL VALIDADO ponta a ponta (testado ao vivo)
+- Teste E2E de navegação (Playwright) — roda com npm run test:e2e, cobre login + todas as rotas do mapa de rotas
+- Comunicados de ponta a ponta: organizador envia + vê histórico dos enviados (aba Comunicados); feirante lê na nova aba "Avisos" (/dashboard/feirante/avisos, via RLS)
+- Atribuição de barraca ao aprovar: seletor de barracas (grid) obrigatório na aprovação; mapa da feira mostra barraca "Ocupada" com nome do feirante
+- Aprovação unificada num único caminho: painel do organizador leva à tela da feira (removida a aprovação sem barraca)
 
 ### ✅ Feito — Segurança pré-demo
 - enviarComunicadoAction com autorização
@@ -76,6 +80,11 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - Rota de debug removida da produção
 - Auditoria completa realizada
 - Nenhum segredo vazado
+
+### ✅ Corrigido — 05/ago
+- Envio de comunicado: corrigidos nomes de coluna (destinatarios, conteudo), coluna obrigatória organizador_id, e GRANT faltante na tabela comunicados para role authenticated (aplicado manual + versionado em migration 20260805_grant_comunicados.sql)
+- Bug de z-index: BottomNav (z-50) cobria o botão "Confirmar aprovação" do modal de barraca; corrigido subindo o modal para z-[60]/z-[70]; mesma correção aplicada ao drawer da aba Mapa
+- statusEfetivo em BarracaGrid sempre retornava "pendente" para barraca com inscrição vinculada; agora mapeia o status real
 
 ### ⏳ Pendente — Segurança de produção (pacote grande, pós-feira)
 - Staging (feirinha-staging Supabase separado) — plano pronto, não executado
@@ -95,6 +104,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - Inscrição não checa se feira está publicada
 - Endpoint morto /api/feiras/barracas
 - RLS de assinaturas com bug de coluna (profile_id vs feirante_id)
+- Sino de notificações do feirante ainda é decorativo (falta ligar + indicador de "novo")
+- Fuso horário diverge entre telas (feirante mostra UTC, organizador mostra horário local)
+- Arquivo órfão src/app/feiras/[id]/client.tsx (código morto) pode ser removido
 
 ### 🔴 Pendente — Validação de campo (bloqueia tudo à frente)
 - 5 conversas com organizadores em Porto Velho
