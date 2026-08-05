@@ -167,8 +167,9 @@ export async function enviarComunicadoAction({
 
   const { error } = await supabase.from("comunicados").insert({
     feira_id: feiraId,
+    organizador_id: user.id,
     destinatarios: destinatario,
-    mensagem,
+    conteudo: mensagem,
     created_at: new Date().toISOString(),
   })
 
