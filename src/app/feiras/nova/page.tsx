@@ -278,6 +278,9 @@ export default function NovaFeira() {
             {/* PASSO 4 */}
             {step === 4 && (
               <div className="space-y-6">
+                <p className="text-xs text-[#E8560A]">
+                  Monte o mapa de barracas da feira. Linhas × Colunas = total de vagas (ex: 5 × 5 = 25 barracas).
+                </p>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="linhas">Número de Linhas (1-20) *</Label>
