@@ -16,11 +16,12 @@ export default async function FeiraDetalhePage({ params }: { params: Promise<{ i
     { auth: { autoRefreshToken: false, persistSession: false } }
   )
 
-  const [{ data: feira }, { data: barracas }, { data: inscricoes }, { data: despesas }] = await Promise.all([
+  const [{ data: feira }, { data: barracas }, { data: inscricoes }, { data: despesas }, { data: comunicados }] = await Promise.all([
     supabase.from('feiras').select('*').eq('id', id).single(),
     adminClient.from('barracas').select('*').eq('feira_id', id).order('numero', { ascending: true }),
     adminClient.from('inscricoes').select('*, profiles(*)').eq('feira_id', id).order('created_at', { ascending: false }),
     adminClient.from('despesas_feira').select('*').eq('feira_id', id).order('created_at', { ascending: false }),
+    supabase.from('comunicados').select('id, conteudo, destinatarios, created_at').eq('feira_id', id).order('created_at', { ascending: false }),
   ])
 
   return (
@@ -30,6 +31,7 @@ export default async function FeiraDetalhePage({ params }: { params: Promise<{ i
       barracas={barracas ?? []}
       inscricoes={inscricoes ?? []}
       despesas={despesas ?? []}
+      comunicados={comunicados ?? []}
     />
   )
 }

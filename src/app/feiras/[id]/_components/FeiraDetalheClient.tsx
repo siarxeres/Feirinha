@@ -49,6 +49,12 @@ type Despesa = {
   descricao: string | null
   valor: number
 }
+type Comunicado = {
+  id: string
+  conteudo: string | null
+  destinatarios: string | null
+  created_at: string
+}
 
 type Tab = 'inscricoes' | 'mapa' | 'comunicados' | 'receita' | 'rateio'
 type Filtro = 'Todas' | 'Pendentes' | 'Aprovadas'
@@ -63,6 +69,16 @@ const CATEGORIA_LABELS: Record<string, string> = {
 
 function formatBRL(value: number): string {
   return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+}
+
+function formatDate(value: string): string {
+  return new Date(value).toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
 }
 
 const AVATAR_COLORS = [
@@ -115,12 +131,14 @@ export function FeiraDetalheClient({
   barracas,
   inscricoes,
   despesas,
+  comunicados,
 }: {
   feiraId: string
   feira: Feira
   barracas: Barraca[]
   inscricoes: Inscricao[]
   despesas: Despesa[]
+  comunicados: Comunicado[]
 }) {
   const router = useRouter()
   const [tab, setTab] = useState<Tab>('inscricoes')
@@ -192,6 +210,7 @@ export function FeiraDetalheClient({
     }
     setMensagem('')
     setSent(true)
+    router.refresh()
     setTimeout(() => setSent(false), 3000)
   }
 
@@ -488,6 +507,30 @@ export function FeiraDetalheClient({
               >
                 {sending ? 'Enviando…' : 'Enviar comunicado'}
               </button>
+
+              <div className="pt-2">
+                <p className="text-sm font-semibold text-gray-700 mb-2">Enviados</p>
+                {comunicados.length === 0 ? (
+                  <p className="text-center text-sm text-gray-400 py-10">Nenhum comunicado enviado ainda</p>
+                ) : (
+                  <div className="divide-y divide-gray-100 rounded-xl bg-white" style={{ border: '2px solid #e5e7eb' }}>
+                    {comunicados.map(c => (
+                      <div key={c.id} className="px-3 py-2.5">
+                        <p className="text-sm text-gray-700">{c.conteudo}</p>
+                        <div className="flex items-center gap-2 mt-1.5">
+                          <span
+                            className="text-xs px-2 py-0.5 rounded-full font-medium"
+                            style={{ backgroundColor: '#fff7ed', color: '#E8560A' }}
+                          >
+                            {c.destinatarios ?? 'Todos'}
+                          </span>
+                          <span className="text-xs text-gray-400">{formatDate(c.created_at)}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
