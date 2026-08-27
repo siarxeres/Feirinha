@@ -65,7 +65,9 @@ export default function NovaFeira() {
   }
 
   const handleVoltar = () => {
-    if (step > 1) {
+    if (step === 1) {
+      router.push("/dashboard/organizador/feiras")
+    } else {
       setStep(step - 1)
     }
   }
@@ -435,7 +437,6 @@ export default function NovaFeira() {
         <div className="mt-6 flex justify-between gap-4">
           <Button
             onClick={handleVoltar}
-            disabled={step === 1}
             variant="outline"
             className="gap-2"
           >
