@@ -12,6 +12,11 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 
 const CATEGORIAS = ["Artesanato", "Gastronomia", "Moda", "Decoração", "Orgânicos", "Outros"]
 
+const UFS = [
+  "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG",
+  "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO",
+]
+
 export default function NovaFeira() {
   const router = useRouter()
   const [step, setStep] = useState(1)
@@ -30,7 +35,7 @@ export default function NovaFeira() {
     // Passo 3
     endereco: "",
     cidade: "",
-    estado: "",
+    estado: "RO",
     cep: "",
     // Passo 4
     linhas: 5,
@@ -250,15 +255,19 @@ export default function NovaFeira() {
                   </div>
                   <div>
                     <Label htmlFor="estado">Estado *</Label>
-                    <Input
+                    <select
                       id="estado"
                       value={dados.estado}
                       onChange={(e) => handleInputChange("estado", e.target.value)}
-                      placeholder="SP"
-                      className="mt-1"
-                      maxLength={2}
+                      className="mt-1 flex h-8 w-full items-center rounded-lg border border-input bg-transparent px-2.5 py-1 text-base outline-none focus:ring-2 focus:ring-[#E8560A] md:text-sm"
                       required
-                    />
+                    >
+                      {UFS.map((uf) => (
+                        <option key={uf} value={uf}>
+                          {uf}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
                 <div>
