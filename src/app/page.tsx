@@ -81,12 +81,6 @@ export default async function LandingPage() {
         {/* ── Hero ── */}
         <section className="py-20 px-5 text-center" style={{ background: "linear-gradient(180deg, #fff7ed 0%, #ffffff 100%)" }}>
           <div className="max-w-2xl mx-auto">
-            <span
-              className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-6"
-              style={{ backgroundColor: "#fff0e6", color: "#E8560A", border: "1px solid #fcd5b8" }}
-            >
-              Apresentado à APRAMAR
-            </span>
             <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight mb-5">
               Chega de controlar a feira no{" "}
               <span style={{ color: "#E8560A" }}>caderno</span> e no{" "}
