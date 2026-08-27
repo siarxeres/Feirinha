@@ -86,20 +86,10 @@ export default async function LandingPage() {
               <span style={{ color: "#E8560A" }}>caderno</span> e no{" "}
               <span style={{ color: "#E8560A" }}>WhatsApp</span>.
             </h1>
-            <p className="text-lg text-gray-500 mb-8 leading-relaxed">
+            <p className="text-lg text-gray-500 leading-relaxed">
               Organize inscrições, presença e o rateio de despesas — automático e
               transparente pra todo mundo.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link
-                href="/auth/cadastro"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl text-base font-bold text-white shadow-md transition-all hover:scale-105 active:scale-100"
-                style={{ backgroundColor: "#E8560A" }}
-              >
-                Começar agora
-                <ArrowRight size={16} />
-              </Link>
-            </div>
           </div>
         </section>
 
@@ -236,7 +226,7 @@ export default async function LandingPage() {
           <span>© {new Date().getFullYear()} Feirinha</span>
           <div className="flex gap-4">
             <Link href="/auth/login" className="hover:text-gray-600">Entrar</Link>
-            <Link href="/auth/cadastro" className="hover:text-gray-600">Cadastrar</Link>
+            <Link href="/auth/cadastro" className="hover:text-gray-600">Começar agora</Link>
           </div>
         </div>
       </footer>
