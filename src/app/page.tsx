@@ -233,7 +233,7 @@ export default async function LandingPage() {
             <img src="/feirinha-logo.svg" alt="" width={22} height={22} />
             <span>Feirinha</span>
           </div>
-          <span>© {new Date().getFullYear()} Feirinha. Apresentado à APRAMAR.</span>
+          <span>© {new Date().getFullYear()} Feirinha</span>
           <div className="flex gap-4">
             <Link href="/auth/login" className="hover:text-gray-600">Entrar</Link>
             <Link href="/auth/cadastro" className="hover:text-gray-600">Cadastrar</Link>
