@@ -79,7 +79,7 @@ export default async function LandingPage() {
       <main className="flex-1">
 
         {/* ── Hero ── */}
-        <section className="py-20 px-5 text-center" style={{ background: "linear-gradient(180deg, #fff7ed 0%, #ffffff 100%)" }}>
+        <section className="pt-20 pb-12 px-5 text-center" style={{ background: "linear-gradient(180deg, #fff7ed 0%, #ffffff 100%)" }}>
           <div className="max-w-2xl mx-auto">
             <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight mb-5">
               Chega de controlar a feira no{" "}
@@ -208,7 +208,7 @@ export default async function LandingPage() {
               className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-base font-bold text-white shadow-lg transition-all hover:scale-105 active:scale-100"
               style={{ backgroundColor: "#E8560A" }}
             >
-              Criar conta gratuita
+              Começar agora
               <ArrowRight size={16} />
             </Link>
           </div>
