@@ -69,7 +69,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - Navegação por clique nos dois fluxos (sem URL manual)
 - Painel admin com CRUD
 - FLUXO CENTRAL VALIDADO ponta a ponta (testado ao vivo)
-- Teste E2E de navegação (Playwright) — roda com npm run test:e2e, cobre login + todas as rotas do mapa de rotas
 - Comunicados de ponta a ponta: organizador envia + vê histórico dos enviados (aba Comunicados); feirante lê na nova aba "Avisos" (/dashboard/feirante/avisos, via RLS)
 - Atribuição de barraca ao aprovar: seletor de barracas (grid) obrigatório na aprovação; mapa da feira mostra barraca "Ocupada" com nome do feirante
 - Aprovação unificada num único caminho: painel do organizador leva à tela da feira (removida a aprovação sem barraca)
