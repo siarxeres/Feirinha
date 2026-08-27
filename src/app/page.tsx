@@ -79,7 +79,7 @@ export default async function LandingPage() {
       <main className="flex-1">
 
         {/* ── Hero ── */}
-        <section className="pt-20 pb-12 px-5 text-center" style={{ background: "linear-gradient(180deg, #fff7ed 0%, #ffffff 100%)" }}>
+        <section className="pt-20 pb-6 px-5 text-center" style={{ background: "linear-gradient(180deg, #fff7ed 0%, #ffffff 100%)" }}>
           <div className="max-w-2xl mx-auto">
             <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight mb-5">
               Chega de controlar a feira no{" "}
@@ -94,7 +94,7 @@ export default async function LandingPage() {
         </section>
 
         {/* ── Personas ── */}
-        <section className="py-16 px-5">
+        <section className="pt-10 pb-16 px-5">
           <div className="max-w-5xl mx-auto">
             <h2 className="text-center text-2xl font-bold text-gray-900 mb-2">Para quem é?</h2>
             <p className="text-center text-gray-500 mb-10">Três perfis, uma plataforma integrada.</p>
