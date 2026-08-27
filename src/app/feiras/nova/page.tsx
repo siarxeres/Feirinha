@@ -66,7 +66,7 @@ export default function NovaFeira() {
 
   const handleVoltar = () => {
     if (step === 1) {
-      router.push("/dashboard/organizador/feiras")
+      router.push("/dashboard/organizador")
     } else {
       setStep(step - 1)
     }
