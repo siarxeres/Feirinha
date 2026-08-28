@@ -17,6 +17,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 | `/dashboard/organizador/feiras` | Lista de feiras do organizador (rascunho/publicada) + ação de publicar |
 | `/dashboard/admin` | Painel administrativo |
 | `/feiras/nova` | Criar nova feira (organizador) |
+| `/feiras/[id]/editar` | Editar dados da feira já criada (organizador); grid de barracas fica bloqueado se houver barraca ocupada, e a rota inteira é bloqueada se a feira estiver "Encerrada" |
 | `/feiras/[id]` | Detalhes da feira + gerenciar inscrições, mapa, comunicados e rateio de despesas (organizador) |
 | `/feiras/[id]/inscricao` | Tela de inscrição do feirante numa feira + rateio de despesas (leitura) |
 

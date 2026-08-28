@@ -1,6 +1,8 @@
 "use server"
 
-import { createClient } from "@/lib/supabase/server"
+import { createClient, createAdminClient } from "@/lib/supabase/server"
+import { revalidatePath } from "next/cache"
+import { isFeiraEncerradaPorData } from "@/lib/feira-status"
 
 export type NovaFeiraPayload = {
   nome: string
@@ -120,4 +122,91 @@ export async function criarFeiraAction(payload: FormData | NovaFeiraPayload) {
   }
 
   return { success: true, feiraId: feira.id }
+}
+
+export async function editarFeiraAction(feiraId: string, payload: FormData | NovaFeiraPayload) {
+  "use server"
+
+  const values = normalizePayload(payload)
+  const supabase = await createClient()
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser()
+
+  if (authError) return { error: authError.message }
+  if (!user) return { error: "Não autenticado" }
+
+  const { data: feiraAtual, error: feiraFetchError } = await supabase
+    .from("feiras")
+    .select("organizador_id, status, data_fim")
+    .eq("id", feiraId)
+    .single()
+
+  if (feiraFetchError || !feiraAtual) {
+    return { error: "Feira não encontrada" }
+  }
+
+  if (feiraAtual.organizador_id !== user.id) {
+    return { error: "Não autorizado" }
+  }
+
+  if (feiraAtual.status === "publicada" && isFeiraEncerradaPorData(feiraAtual.data_fim)) {
+    return { error: "Não é possível editar uma feira encerrada" }
+  }
+
+  const { error: updateError } = await supabase
+    .from("feiras")
+    .update({
+      nome: values.nome,
+      descricao: values.descricao,
+      categorias: values.categorias,
+      data_inicio: values.dataInicio,
+      data_fim: values.dataFim,
+      hora_abertura: values.horaAbertura,
+      hora_fechamento: values.horaFechamento,
+      endereco: values.endereco,
+      cidade: values.cidade,
+      estado: values.estado,
+      cep: values.cep,
+      taxa_inscricao: values.taxaInscricao,
+      taxa_barraca: values.taxaBarraca,
+      prazo_pagamento_h: values.prazoPagamento,
+      capacidade_barracas: values.capacidadeBarracas,
+    })
+    .eq("id", feiraId)
+
+  if (updateError) {
+    return { error: updateError.message }
+  }
+
+  const admin = createAdminClient()
+  const { data: barracasAtuais } = await admin
+    .from("barracas")
+    .select("linha, coluna, status")
+    .eq("feira_id", feiraId)
+
+  const lista = (barracasAtuais ?? []) as Array<{ linha: number; coluna: number; status: string }>
+  const temBarracaOcupada = lista.some((b) => b.status === "aprovado")
+  const linhasAtuais = lista.reduce((max, b) => Math.max(max, b.linha), 0)
+  const colunasAtuais = lista.reduce((max, b) => Math.max(max, b.coluna), 0)
+  const gridMudou = values.linhas !== linhasAtuais || values.colunas !== colunasAtuais
+
+  if (gridMudou && !temBarracaOcupada) {
+    await admin.from("barracas").delete().eq("feira_id", feiraId)
+    const { error: barracasError } = await admin.rpc("gerar_barracas", {
+      p_feira_id: feiraId,
+      p_linhas: values.linhas,
+      p_colunas: values.colunas,
+    })
+    if (barracasError) {
+      console.error("Erro ao regenerar barracas:", barracasError)
+    }
+  }
+
+  revalidatePath(`/feiras/${feiraId}`)
+  revalidatePath(`/feiras/${feiraId}/editar`)
+  revalidatePath("/dashboard/organizador/feiras")
+
+  return { success: true, feiraId }
 }

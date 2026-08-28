@@ -335,6 +335,17 @@ export function FeiraDetalheClient({
             <h1 className="text-lg font-bold text-gray-900 flex-1 truncate">
               {feira?.nome ?? 'Feira'}
             </h1>
+            {statusExibicao !== 'encerrada' && (
+              <Link
+                href={`/feiras/${feiraId}/editar`}
+                aria-label="Editar feira"
+                className="flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full shrink-0 transition-colors"
+                style={{ color: '#E8560A', backgroundColor: '#fff7ed' }}
+              >
+                <Pencil size={12} />
+                Editar
+              </Link>
+            )}
             <span className={`text-xs px-2 py-1 rounded-full font-medium ${FEIRA_STATUS_BADGE_CLASS[statusExibicao]}`}>
               {FEIRA_STATUS_LABEL[statusExibicao]}
             </span>
