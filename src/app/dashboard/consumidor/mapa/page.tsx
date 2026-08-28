@@ -4,6 +4,7 @@ import { redirect } from "next/navigation"
 import { Map } from "lucide-react"
 import { BottomNav } from "../_components/BottomNav"
 import { MapaFeirasClient } from "./MapaFeirasClient"
+import { dataDeHojeISO } from "@/lib/feira-status"
 
 export default async function MapaConsumidorPage() {
   const supabase = await createClient()
@@ -20,6 +21,7 @@ export default async function MapaConsumidorPage() {
     .from("feiras")
     .select("id, nome, cidade, estado, endereco, data_inicio, data_fim, categorias, foto_capa_url")
     .eq("status", "publicada")
+    .gte("data_fim", dataDeHojeISO())
     .order("data_inicio", { ascending: true })
 
   const feiras = (data ?? []) as any[]

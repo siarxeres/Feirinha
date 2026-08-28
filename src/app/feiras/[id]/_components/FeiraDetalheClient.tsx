@@ -15,6 +15,7 @@ import {
   editarDespesaAction,
   removerDespesaAction,
 } from '../actions'
+import { FEIRA_STATUS_BADGE_CLASS, FEIRA_STATUS_LABEL, resolveFeiraStatusExibicao } from '@/lib/feira-status'
 
 type Perfil = { nome?: string | null; email?: string | null } | null
 type Inscricao = {
@@ -41,6 +42,7 @@ type Feira = {
   cidade?: string | null
   estado?: string | null
   data_inicio?: string | null
+  data_fim?: string | null
   horario_inicio?: string | null
 } | null
 type Despesa = {
@@ -119,12 +121,6 @@ function statusBadgeClass(status: string): string {
   return 'bg-gray-100 text-gray-600'
 }
 
-function fairaBadgeClass(status?: string | null): string {
-  if (status === 'ativa') return 'bg-green-100 text-green-700'
-  if (status === 'encerrada') return 'bg-red-100 text-red-700'
-  return 'bg-gray-100 text-gray-600'
-}
-
 export function FeiraDetalheClient({
   feiraId,
   feira,
@@ -162,6 +158,8 @@ export function FeiraDetalheClient({
   const totalInscricoes = inscricoes.length
   const aprovadas = inscricoes.filter(i => ['aprovado', 'aprovada'].includes(i.status)).length
   const pendentes = inscricoes.filter(i => i.status === 'pendente').length
+
+  const statusExibicao = resolveFeiraStatusExibicao(feira?.status, feira?.data_fim)
 
   const dataInicio = feira?.data_inicio
     ? new Date(feira.data_inicio).toLocaleDateString('pt-BR')
@@ -337,8 +335,8 @@ export function FeiraDetalheClient({
             <h1 className="text-lg font-bold text-gray-900 flex-1 truncate">
               {feira?.nome ?? 'Feira'}
             </h1>
-            <span className={`text-xs px-2 py-1 rounded-full font-medium ${fairaBadgeClass(feira?.status)}`}>
-              {feira?.status ?? '—'}
+            <span className={`text-xs px-2 py-1 rounded-full font-medium ${FEIRA_STATUS_BADGE_CLASS[statusExibicao]}`}>
+              {FEIRA_STATUS_LABEL[statusExibicao]}
             </span>
           </div>
           <p className="text-sm text-gray-500 pl-1">

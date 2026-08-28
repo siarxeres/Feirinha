@@ -13,6 +13,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet"
 import { aprovarInscricaoAction, rejeitarInscricaoAction } from "./actions"
+import { FEIRA_STATUS_LABEL, resolveFeiraStatusExibicao } from "@/lib/feira-status"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -72,7 +73,7 @@ const BOOTH_STATUS_STYLES: Record<VisualStatus, { container: string; label: stri
 const FEIRA_STATUS_STYLES: Record<string, string> = {
   publicada: "bg-green-100 text-green-800 border border-green-200",
   rascunho:  "bg-slate-100 text-slate-700 border border-slate-200",
-  encerrada: "bg-red-100  text-red-700   border border-red-200",
+  encerrada: "bg-red-100 text-red-700 border border-red-200",
 }
 
 function formatDate(value: string | null | undefined) {
@@ -123,8 +124,9 @@ export default function FeiraDetalheClient({ feira, barracas, inscricoes }: Prop
     { label: "Pendentes",         value: pendentes,      color: "text-[#EF9F27]" },
   ]
 
+  const statusExibicao = resolveFeiraStatusExibicao(feira.status, feira.data_fim)
   const feiraStatusClass =
-    FEIRA_STATUS_STYLES[feira.status?.toLowerCase()] ?? "bg-slate-100 text-slate-700 border border-slate-200"
+    FEIRA_STATUS_STYLES[statusExibicao] ?? "bg-slate-100 text-slate-700 border border-slate-200"
 
   function handleClickBarraca(barraca: BarracaEnriquecida) {
     if (barraca.visualStatus === "pendente") {
@@ -185,7 +187,7 @@ export default function FeiraDetalheClient({ feira, barracas, inscricoes }: Prop
               <div className="flex flex-wrap items-center gap-3">
                 <h1 className="text-2xl font-bold text-slate-950">{feira.nome}</h1>
                 <span className={`inline-flex rounded-full px-3 py-1 text-sm font-medium ${feiraStatusClass}`}>
-                  {feira.status}
+                  {FEIRA_STATUS_LABEL[statusExibicao]}
                 </span>
               </div>
               <div className="flex flex-wrap items-center gap-4 text-sm text-slate-600">

@@ -5,6 +5,7 @@ import Link from "next/link"
 import { BuscaFeiras } from "./BuscaFeiras"
 import { BottomNav } from "./_components/BottomNav"
 import { LogoutButton } from "./_components/LogoutButton"
+import { dataDeHojeISO } from "@/lib/feira-status"
 
 function formatDate(value: string | null | undefined) {
   if (!value) return "—"
@@ -32,6 +33,7 @@ export default async function ConsumidorPage() {
       .from("feiras")
       .select("id, nome, cidade, estado, data_inicio, data_fim, capacidade_barracas, foto_capa_url, categorias")
       .eq("status", "publicada")
+      .gte("data_fim", dataDeHojeISO())
       .order("data_inicio", { ascending: true }),
   ])
 

@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Bell, ClipboardList, CheckCircle2, Clock, Store, MapPin, CalendarDays } from "lucide-react"
 import { BottomNav } from "./_components/BottomNav"
 import { LogoutButton } from "./_components/LogoutButton"
+import { dataDeHojeISO } from "@/lib/feira-status"
 
 function formatDate(value: string | null | undefined) {
   if (!value) return "—"
@@ -38,6 +39,7 @@ export default async function FeirantePage() {
       .from("feiras")
       .select("id, nome, cidade, estado, data_inicio, data_fim, capacidade_barracas, taxa_inscricao, taxa_barraca, categorias")
       .eq("status", "publicada")
+      .gte("data_fim", dataDeHojeISO())
       .order("data_inicio", { ascending: true }),
   ])
 

@@ -4,15 +4,12 @@ import Link from "next/link"
 import { Plus, Store } from "lucide-react"
 import { BottomNav } from "../_components/BottomNav"
 import { PublicarButton } from "./_PublicarButton"
-
-const STATUS_LABEL: Record<string, string> = {
-  rascunho: "Rascunho",
-  publicada: "Publicada",
-}
+import { FEIRA_STATUS_LABEL, resolveFeiraStatusExibicao } from "@/lib/feira-status"
 
 const STATUS_STYLE: Record<string, string> = {
   rascunho: "bg-gray-100 text-gray-700",
   publicada: "bg-green-100 text-green-700",
+  encerrada: "bg-red-100 text-red-700",
 }
 
 function formatData(dataInicio: string | null, dataFim: string | null) {
@@ -75,23 +72,26 @@ export default async function FeirasOrganizadorPage() {
               </Link>
             </div>
           ) : (
-            lista.map((feira) => (
-              <Link
-                key={feira.id}
-                href={`/feiras/${feira.id}`}
-                className="rounded-2xl bg-white shadow-sm p-4 flex items-center justify-between gap-3 active:bg-gray-50 transition-colors"
-                style={{ border: "2px solid #e5e7eb" }}
-              >
-                <div className="min-w-0">
-                  <p className="text-sm font-bold text-gray-900 truncate">{feira.nome}</p>
-                  <p className="text-xs text-gray-500 mt-0.5">{formatData(feira.data_inicio, feira.data_fim)}</p>
-                  <span className={`inline-block text-xs px-2.5 py-0.5 rounded-full mt-2 font-medium ${STATUS_STYLE[feira.status] ?? "bg-gray-100 text-gray-700"}`}>
-                    {STATUS_LABEL[feira.status] ?? feira.status}
-                  </span>
-                </div>
-                {feira.status === "rascunho" && <PublicarButton feiraId={feira.id} />}
-              </Link>
-            ))
+            lista.map((feira) => {
+              const statusExibicao = resolveFeiraStatusExibicao(feira.status, feira.data_fim)
+              return (
+                <Link
+                  key={feira.id}
+                  href={`/feiras/${feira.id}`}
+                  className="rounded-2xl bg-white shadow-sm p-4 flex items-center justify-between gap-3 active:bg-gray-50 transition-colors"
+                  style={{ border: "2px solid #e5e7eb" }}
+                >
+                  <div className="min-w-0">
+                    <p className="text-sm font-bold text-gray-900 truncate">{feira.nome}</p>
+                    <p className="text-xs text-gray-500 mt-0.5">{formatData(feira.data_inicio, feira.data_fim)}</p>
+                    <span className={`inline-block text-xs px-2.5 py-0.5 rounded-full mt-2 font-medium ${STATUS_STYLE[statusExibicao] ?? "bg-gray-100 text-gray-700"}`}>
+                      {FEIRA_STATUS_LABEL[statusExibicao] ?? feira.status}
+                    </span>
+                  </div>
+                  {feira.status === "rascunho" && <PublicarButton feiraId={feira.id} />}
+                </Link>
+              )
+            })
           )}
         </div>
 
