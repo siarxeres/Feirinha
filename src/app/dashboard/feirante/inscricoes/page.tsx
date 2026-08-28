@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
-import { ClipboardList, MapPin, CalendarDays } from "lucide-react"
+import { ClipboardList, MapPin, CalendarDays, Store } from "lucide-react"
 import { BottomNav } from "../_components/BottomNav"
 
 function formatDate(value: string | null | undefined) {
@@ -39,7 +39,7 @@ export default async function InscricoesFeirantePage() {
 
   const { data: inscricoes } = await supabase
     .from("inscricoes")
-    .select("id, status, created_at, feira_id, feiras(id, nome, cidade, estado, data_inicio, data_fim)")
+    .select("id, status, created_at, feira_id, barraca_id, feiras(id, nome, cidade, estado, data_inicio, data_fim), barracas(id, codigo, numero)")
     .eq("feirante_id", user.id)
     .order("created_at", { ascending: false })
 
@@ -68,6 +68,8 @@ export default async function InscricoesFeirantePage() {
               const feiraData = Array.isArray(insc.feiras) ? insc.feiras[0] : insc.feiras
               const nomeFeira = feiraData?.nome ?? "Feira"
               const badge = statusBadge(insc.status)
+              const barracaData = Array.isArray(insc.barracas) ? insc.barracas[0] : insc.barracas
+              const codigoBarraca = barracaData?.codigo ?? barracaData?.numero ?? null
               return (
                 <div
                   key={insc.id}
@@ -96,6 +98,12 @@ export default async function InscricoesFeirantePage() {
                           <span className="flex items-center gap-1 text-xs text-gray-500">
                             <CalendarDays size={11} />
                             {formatDate(feiraData.data_inicio)} – {formatDate(feiraData.data_fim)}
+                          </span>
+                        )}
+                        {insc.status === "aprovada" && codigoBarraca && (
+                          <span className="flex items-center gap-1 text-xs font-semibold" style={{ color: "#E8560A" }}>
+                            <Store size={11} />
+                            Barraca #{codigoBarraca}
                           </span>
                         )}
                       </div>
