@@ -133,6 +133,29 @@ dados de gestão. **O tap viabiliza; o contexto da feira é o que defende.**
 
 ---
 
+## Como o organizador vira recebedor — pesquisa
+
+*Achado de pesquisa (ago/2026), não é decisão fechada — retomar na próxima
+conversa de arquitetura.*
+
+- **Split não exige subconta:** o requisito do Asaas pra split é ter o
+  `walletId` de cada conta recebedora — pode ser de uma conta Asaas comum,
+  não precisa ser subconta criada via API.
+- **Criação de subconta via API é restrita a CNPJ (pessoa jurídica)** —
+  pessoa física não pode. Relevante porque organizadores de feira podem ser
+  pessoa física.
+- **Recomendação de pesquisa (não fechada):** caminho do `walletId` — o
+  organizador cria a própria conta Asaas (grátis, aprovação própria do
+  Asaas) e cola o `walletId` no sistema. Menos fricção regulatória pro
+  Feirinha, mas mais fricção de onboarding pro organizador (não é "um
+  clique").
+- **Pendência:** confirmar com o suporte do Asaas se há diferença de
+  taxa/limite entre `walletId` de conta comum vs. subconta via API.
+- **Confirmado:** Asaas Tap é gratuito (sem adesão, sem mensalidade) — hoje
+  só Android.
+
+---
+
 ## Parceria com operador de maquininhas
 
 Perfil do parceiro atual: **operação regional** (carteira local, relacionamento
