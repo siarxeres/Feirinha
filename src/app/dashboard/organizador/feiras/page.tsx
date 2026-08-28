@@ -28,7 +28,7 @@ export default async function FeirasOrganizadorPage() {
 
   const { data: feiras } = await supabase
     .from("feiras")
-    .select("id, nome, status, data_inicio, data_fim")
+    .select("id, nome, status, data_inicio, data_fim, categorias")
     .eq("organizador_id", user.id)
     .order("data_inicio", { ascending: false })
 
@@ -38,6 +38,7 @@ export default async function FeirasOrganizadorPage() {
     status: string
     data_inicio: string | null
     data_fim: string | null
+    categorias: string[] | null
   }>
 
   return (
@@ -74,6 +75,7 @@ export default async function FeirasOrganizadorPage() {
           ) : (
             lista.map((feira) => {
               const statusExibicao = resolveFeiraStatusExibicao(feira.status, feira.data_fim)
+              const categorias = Array.isArray(feira.categorias) ? feira.categorias : []
               return (
                 <Link
                   key={feira.id}
@@ -87,6 +89,19 @@ export default async function FeirasOrganizadorPage() {
                     <span className={`inline-block text-xs px-2.5 py-0.5 rounded-full mt-2 font-medium ${STATUS_STYLE[statusExibicao] ?? "bg-gray-100 text-gray-700"}`}>
                       {FEIRA_STATUS_LABEL[statusExibicao] ?? feira.status}
                     </span>
+                    {categorias.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 mt-2">
+                        {categorias.map((cat) => (
+                          <span
+                            key={cat}
+                            className="text-xs px-2 py-0.5 rounded-full capitalize"
+                            style={{ backgroundColor: "#fff7ed", color: "#c2410c", border: "1px solid #fed7aa" }}
+                          >
+                            {cat}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   {feira.status === "rascunho" && <PublicarButton feiraId={feira.id} />}
                 </Link>
