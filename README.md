@@ -73,7 +73,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - Comunicados de ponta a ponta: organizador envia + vê histórico dos enviados (aba Comunicados); feirante lê na nova aba "Avisos" (/dashboard/feirante/avisos, via RLS)
 - Atribuição de barraca ao aprovar: seletor de barracas (grid) obrigatório na aprovação; mapa da feira mostra barraca "Ocupada" com nome do feirante
 - Aprovação unificada num único caminho: painel do organizador leva à tela da feira (removida a aprovação sem barraca)
-- Status "Encerrada" calculado automaticamente por data (sem gravação no banco), aplicado nos badges e nas buscas de disponibilidade
+- Status "Encerrada" calculado por data para exibição (badges e buscas de disponibilidade); também persistido de verdade em `feiras.status` (enum real no Supabase: rascunho/publicada/encerrada/cancelada) via botão manual "Encerrar" em /feiras/[id] e auto-heal ao carregar as telas do organizador — nenhum caminho grava silenciosamente, erro sempre reportado
 - Edição de feira (/feiras/[id]/editar), com bloqueio de grid quando há barraca ocupada e bloqueio total quando a feira está encerrada
 - Filtro por chips (Ativas/Encerradas/Todas) na lista "Minhas Feiras" do organizador, com categorias visíveis nos cards
 - Aba "Localização" do feirante (ex-"Mapa"), com endereço clicável para o Google Maps
@@ -90,6 +90,10 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - Envio de comunicado: corrigidos nomes de coluna (destinatarios, conteudo), coluna obrigatória organizador_id, e GRANT faltante na tabela comunicados para role authenticated (aplicado manual + versionado em migration 20260805_grant_comunicados.sql)
 - Bug de z-index: BottomNav (z-50) cobria o botão "Confirmar aprovação" do modal de barraca; corrigido subindo o modal para z-[60]/z-[70]; mesma correção aplicada ao drawer da aba Mapa
 - statusEfetivo em BarracaGrid sempre retornava "pendente" para barraca com inscrição vinculada; agora mapeia o status real
+
+### ✅ Corrigido — 29/ago
+- feiras.status nunca era gravado como "encerrada" (nenhum código escrevia isso, apesar do enum já suportar) — feiras vencidas ficavam "publicada" pra sempre no banco. Corrigido com ação manual (botão "Encerrar" em /feiras/[id]) + auto-heal ao carregar as telas do organizador; rodado também um UPDATE único para corrigir o estado acumulado
+- Aba "Todas" de inscrições em /feiras/[id] não atualizava sozinha após aprovar/rejeitar (ficava escondendo o item até F5) — o Set usado para sumir instantaneamente da aba Pendentes também escondia de Todas/Aprovadas; agora só afeta Pendentes
 
 ### ⏳ Pendente — Segurança de produção (pacote grande, pós-feira)
 - Staging (feirinha-staging Supabase separado) — plano pronto, não executado
