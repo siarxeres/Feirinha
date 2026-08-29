@@ -1,11 +1,10 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutGrid, Store, ClipboardList, Plus, type LucideIcon } from 'lucide-react'
+import { LayoutGrid, ClipboardList, Plus, type LucideIcon } from 'lucide-react'
 
 const itemsEsquerda: { icon: LucideIcon; label: string; href: string }[] = [
   { icon: LayoutGrid, label: 'Painel', href: '/dashboard/organizador' },
-  { icon: Store,      label: 'Feiras', href: '/dashboard/organizador/feiras' },
 ]
 
 const itemsDireita: { icon: LucideIcon; label: string; href: string }[] = [
