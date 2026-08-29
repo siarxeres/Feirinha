@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { criarFeiraAction, editarFeiraAction } from "../nova/actions"
+import { celebrar } from "@/lib/celebrar"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -145,6 +146,7 @@ export function FeiraFormWizard({
         toast.success("Feira atualizada com sucesso!")
         router.push(`/feiras/${feiraId}`)
       } else {
+        celebrar()
         toast.success("Feira criada com sucesso!")
         router.push("feiraId" in result && result.feiraId ? `/feiras/${result.feiraId}` : "/dashboard/organizador/feiras")
       }

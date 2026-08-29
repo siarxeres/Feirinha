@@ -16,6 +16,7 @@ import {
   removerDespesaAction,
 } from '../actions'
 import { FEIRA_STATUS_BADGE_CLASS, FEIRA_STATUS_LABEL, resolveFeiraStatusExibicao } from '@/lib/feira-status'
+import { celebrar } from '@/lib/celebrar'
 
 type Perfil = { nome?: string | null; email?: string | null } | null
 type Inscricao = {
@@ -208,6 +209,7 @@ export function FeiraDetalheClient({
         setAprovarErro(result.error)
         return
       }
+      celebrar()
       setDone(prev => new Set([...prev, aprovando.inscricaoId]))
       setExpanded(null)
       setAprovando(null)
