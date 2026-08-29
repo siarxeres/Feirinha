@@ -1,7 +1,7 @@
 ﻿import { createClient, createAdminClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { Bell, ClipboardList, CheckCircle2, DollarSign, Clock, LogOut, Plus, Store, User } from "lucide-react"
+import { Bell, ClipboardList, CheckCircle2, DollarSign, Clock, LogOut, User } from "lucide-react"
 import { BottomNav } from "./_components/BottomNav"
 import { InscricoesAguardando } from "./_components/InscricoesAguardando"
 
@@ -166,35 +166,9 @@ export default async function OrganizadorPage() {
               </form>
             </div>
           </div>
-          <h1 className="text-3xl font-bold mb-4" style={{ color: '#1A1A1A' }}>
+          <h1 className="text-3xl font-bold" style={{ color: '#1A1A1A' }}>
             {greeting}, {userName}
           </h1>
-          <Link
-            href="/feiras/nova"
-            className="flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl text-sm font-bold text-white shadow-md transition-all active:scale-[0.98]"
-            style={{ backgroundColor: '#E8560A' }}
-          >
-            <Plus size={18} />
-            Criar feira
-          </Link>
-          <div className="grid grid-cols-2 gap-2 mt-2">
-            <Link
-              href="/dashboard/organizador/feiras"
-              className="flex items-center justify-center gap-2 py-3 rounded-2xl text-sm font-bold transition-all active:scale-[0.98]"
-              style={{ border: '2px solid #E8560A', color: '#E8560A' }}
-            >
-              <Store size={18} />
-              Feiras
-            </Link>
-            <Link
-              href="/dashboard/organizador/inscricoes"
-              className="flex items-center justify-center gap-2 py-3 rounded-2xl text-sm font-bold transition-all active:scale-[0.98]"
-              style={{ border: '2px solid #E8560A', color: '#E8560A' }}
-            >
-              <ClipboardList size={18} />
-              Inscrições
-            </Link>
-          </div>
         </header>
 
         <div className="flex-1 px-5 pb-28 space-y-5">
