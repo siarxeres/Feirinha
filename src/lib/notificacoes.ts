@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@supabase/supabase-js"
+import { createAdminClient } from "@/lib/supabase/server"
 
 export type NotificacaoTipo =
   | "inscricao_aprovada"
@@ -18,12 +18,19 @@ type NovaNotificacao = {
 }
 
 /**
- * Cria uma notificação. Nunca lança erro — uma falha aqui (ex: GRANT pendente
- * na tabela notificacoes) não pode derrubar a ação principal (aprovar,
- * rejeitar, enviar comunicado).
+ * Cria uma notificação. Usa a service role (bypassa a RLS notificacoes_own,
+ * que restringe auth.uid() = user_id) porque quem grava aqui é o organizador
+ * notificando o feirante — não o próprio dono da notificação. A autorização
+ * de quem pode disparar cada notificação já foi checada antes, na action que
+ * chama esta função (ex: só o organizador dono da feira aprova/rejeita
+ * inscrição ou envia comunicado).
+ *
+ * Nunca lança erro — uma falha aqui não pode derrubar a ação principal
+ * (aprovar, rejeitar, enviar comunicado).
  */
-export async function criarNotificacao(supabase: SupabaseClient, item: NovaNotificacao) {
-  const { error } = await supabase.from("notificacoes").insert({
+export async function criarNotificacao(item: NovaNotificacao) {
+  const admin = createAdminClient()
+  const { error } = await admin.from("notificacoes").insert({
     user_id: item.userId,
     tipo: item.tipo,
     titulo: item.titulo,
@@ -37,10 +44,11 @@ export async function criarNotificacao(supabase: SupabaseClient, item: NovaNotif
 }
 
 /** Mesma garantia de não lançar erro, para notificar vários usuários de uma vez (ex: comunicado). */
-export async function criarNotificacoes(supabase: SupabaseClient, itens: NovaNotificacao[]) {
+export async function criarNotificacoes(itens: NovaNotificacao[]) {
   if (itens.length === 0) return
 
-  const { error } = await supabase.from("notificacoes").insert(
+  const admin = createAdminClient()
+  const { error } = await admin.from("notificacoes").insert(
     itens.map((item) => ({
       user_id: item.userId,
       tipo: item.tipo,

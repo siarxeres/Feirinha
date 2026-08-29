@@ -37,7 +37,7 @@ export async function rejeitarInscricao(inscricaoId: string) {
   if (error) return { error: error.message }
 
   if (feiranteId) {
-    await criarNotificacao(supabase, {
+    await criarNotificacao({
       userId: feiranteId,
       tipo: 'inscricao_rejeitada',
       titulo: 'Inscrição não aprovada',

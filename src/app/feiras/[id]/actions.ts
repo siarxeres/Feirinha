@@ -46,7 +46,7 @@ export async function aprovarInscricaoAction({
   }
 
   if (feiranteId) {
-    await criarNotificacao(supabase, {
+    await criarNotificacao({
       userId: feiranteId,
       tipo: 'inscricao_aprovada',
       titulo: 'Inscrição aprovada!',
@@ -79,7 +79,7 @@ export async function rejeitarInscricaoAction({
   }
 
   if (feiranteId) {
-    await criarNotificacao(supabase, {
+    await criarNotificacao({
       userId: feiranteId,
       tipo: 'inscricao_rejeitada',
       titulo: 'Inscrição não aprovada',
@@ -221,7 +221,6 @@ export async function enviarComunicadoAction({
   const mensagemCurta = mensagem.length > 140 ? `${mensagem.slice(0, 137)}...` : mensagem
 
   await criarNotificacoes(
-    supabase,
     feiranteIds.map((feiranteId) => ({
       userId: feiranteId,
       tipo: 'comunicado' as const,
