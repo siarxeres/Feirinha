@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Bell, ClipboardList, CheckCircle2, DollarSign, Clock, LogOut, Store, User } from "lucide-react"
 import { BottomNav } from "./_components/BottomNav"
 import { InscricoesAguardando } from "./_components/InscricoesAguardando"
+import { dataDeHojeISO } from "@/lib/feira-status"
 
 const PREVIEW_LIMIT = 5
 
@@ -55,6 +56,8 @@ export default async function OrganizadorPage() {
     .from("feiras")
     .select("id")
     .eq("organizador_id", user.id)
+    .eq("status", "publicada")
+    .gte("data_fim", dataDeHojeISO())
 
   const feiraIds = (feiras ?? []).map((f: any) => f.id).filter(Boolean)
 
