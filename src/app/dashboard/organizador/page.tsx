@@ -1,11 +1,14 @@
 ﻿import { createClient, createAdminClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { Bell, ClipboardList, CheckCircle2, DollarSign, Clock, LogOut, Store, User } from "lucide-react"
+import { ClipboardList, CheckCircle2, DollarSign, Clock, LogOut, Store, User } from "lucide-react"
 import { BottomNav } from "./_components/BottomNav"
 import { InscricoesAguardando } from "./_components/InscricoesAguardando"
+import { NotificationBell } from "@/components/NotificationBell"
 import { dataDeHojeISO } from "@/lib/feira-status"
 import { autoEncerrarFeirasVencidas } from "@/lib/auto-encerrar-feiras"
+
+const NOTIFICACOES_LIMIT = 20
 
 const PREVIEW_LIMIT = 5
 
@@ -54,6 +57,13 @@ export default async function OrganizadorPage() {
   if (!profileRoles.includes("organizador")) redirect("/dashboard")
 
   await autoEncerrarFeirasVencidas(supabase, user.id)
+
+  const { data: notificacoes } = await supabase
+    .from("notificacoes")
+    .select("id, titulo, mensagem, lida, created_at")
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false })
+    .limit(NOTIFICACOES_LIMIT)
 
   const { data: feiras } = await supabase
     .from("feiras")
@@ -155,9 +165,7 @@ export default async function OrganizadorPage() {
               <span className="text-lg font-bold tracking-tight text-gray-900">Feirinha</span>
             </div>
             <div className="flex items-center gap-1">
-              <button aria-label="Notificações" className="p-2 rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors">
-                <Bell size={21} className="text-gray-700" />
-              </button>
+              <NotificationBell notificacoes={notificacoes ?? []} />
               <Link
                 href="/dashboard/organizador/perfil"
                 aria-label="Meu perfil"

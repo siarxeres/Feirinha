@@ -1,11 +1,14 @@
 import { createClient, createAdminClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { Bell, ClipboardList, CheckCircle2, Clock, Store, MapPin, CalendarDays } from "lucide-react"
+import { ClipboardList, CheckCircle2, Clock, Store, MapPin, CalendarDays } from "lucide-react"
 import { BottomNav } from "./_components/BottomNav"
 import { LogoutButton } from "./_components/LogoutButton"
+import { NotificationBell } from "@/components/NotificationBell"
 import { dataDeHojeISO } from "@/lib/feira-status"
 import { EmptyState } from "@/components/EmptyState"
+
+const NOTIFICACOES_LIMIT = 20
 
 function formatDate(value: string | null | undefined) {
   if (!value) return "—"
@@ -23,7 +26,7 @@ export default async function FeirantePage() {
 
   // Admin client bypassa RLS — garante leitura correta de roles
   const admin = createAdminClient()
-  const [{ data: profile }, { data: inscricoes }, { data: feirasPublicadas }] = await Promise.all([
+  const [{ data: profile }, { data: inscricoes }, { data: feirasPublicadas }, { data: notificacoes }] = await Promise.all([
     admin
       .from("profiles")
       .select("nome, roles")
@@ -42,6 +45,13 @@ export default async function FeirantePage() {
       .eq("status", "publicada")
       .gte("data_fim", dataDeHojeISO())
       .order("data_inicio", { ascending: true }),
+
+    supabase
+      .from("notificacoes")
+      .select("id, titulo, mensagem, lida, created_at")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(NOTIFICACOES_LIMIT),
   ])
 
   const p = profile as any
@@ -109,9 +119,7 @@ export default async function FeirantePage() {
               <span className="text-lg font-bold tracking-tight text-gray-900">Feirinha</span>
             </div>
             <div className="flex items-center gap-1">
-              <button aria-label="Notificações" className="p-2 rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors">
-                <Bell size={21} className="text-gray-700" />
-              </button>
+              <NotificationBell notificacoes={notificacoes ?? []} />
               <LogoutButton />
             </div>
           </div>

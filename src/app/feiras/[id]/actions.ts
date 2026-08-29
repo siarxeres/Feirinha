@@ -1,20 +1,28 @@
 "use server"
 
 import { createClient } from "@/lib/supabase/server"
+import { criarNotificacao, criarNotificacoes } from "@/lib/notificacoes"
 
 async function getFeiraOwnerByInscricaoId(inscricaoId: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { user: null, supabase, ok: false }
+  if (!user) return { user: null, supabase, ok: false, feiranteId: null, feiraId: null, feiraNome: null }
 
   const { data: inscricao } = await supabase
     .from('inscricoes')
-    .select('feira_id, feiras(organizador_id)')
+    .select('feira_id, feirante_id, feiras(organizador_id, nome)')
     .eq('id', inscricaoId)
     .single()
 
   const feira = Array.isArray(inscricao?.feiras) ? inscricao.feiras[0] : inscricao?.feiras
-  return { user, supabase, ok: feira?.organizador_id === user.id }
+  return {
+    user,
+    supabase,
+    ok: feira?.organizador_id === user.id,
+    feiranteId: inscricao?.feirante_id ?? null,
+    feiraId: inscricao?.feira_id ?? null,
+    feiraNome: feira?.nome ?? null,
+  }
 }
 
 export async function aprovarInscricaoAction({
@@ -24,7 +32,7 @@ export async function aprovarInscricaoAction({
   inscricaoId: string
   barracaId: string | null
 }) {
-  const { user, supabase, ok } = await getFeiraOwnerByInscricaoId(inscricaoId)
+  const { user, supabase, ok, feiranteId, feiraId, feiraNome } = await getFeiraOwnerByInscricaoId(inscricaoId)
   if (!user) return { error: 'Sessão expirada. Faça login novamente.' }
   if (!ok) return { error: 'Não autorizado' }
 
@@ -37,6 +45,18 @@ export async function aprovarInscricaoAction({
     return { error: error.message }
   }
 
+  if (feiranteId) {
+    await criarNotificacao(supabase, {
+      userId: feiranteId,
+      tipo: 'inscricao_aprovada',
+      titulo: 'Inscrição aprovada!',
+      mensagem: feiraNome
+        ? `Sua inscrição na feira "${feiraNome}" foi aprovada.`
+        : 'Sua inscrição foi aprovada.',
+      payload: { feira_id: feiraId, inscricao_id: inscricaoId },
+    })
+  }
+
   return { success: true }
 }
 
@@ -45,7 +65,7 @@ export async function rejeitarInscricaoAction({
 }: {
   inscricaoId: string
 }) {
-  const { user, supabase, ok } = await getFeiraOwnerByInscricaoId(inscricaoId)
+  const { user, supabase, ok, feiranteId, feiraId, feiraNome } = await getFeiraOwnerByInscricaoId(inscricaoId)
   if (!user) return { error: 'Sessão expirada. Faça login novamente.' }
   if (!ok) return { error: 'Não autorizado' }
 
@@ -58,21 +78,33 @@ export async function rejeitarInscricaoAction({
     return { error: error.message }
   }
 
+  if (feiranteId) {
+    await criarNotificacao(supabase, {
+      userId: feiranteId,
+      tipo: 'inscricao_rejeitada',
+      titulo: 'Inscrição não aprovada',
+      mensagem: feiraNome
+        ? `Sua inscrição na feira "${feiraNome}" não foi aprovada dessa vez.`
+        : 'Sua inscrição não foi aprovada dessa vez.',
+      payload: { feira_id: feiraId, inscricao_id: inscricaoId },
+    })
+  }
+
   return { success: true }
 }
 
 async function getFeiraOwnerByFeiraId(feiraId: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { user: null, supabase, ok: false }
+  if (!user) return { user: null, supabase, ok: false, feiraNome: null }
 
   const { data: feira } = await supabase
     .from('feiras')
-    .select('organizador_id')
+    .select('organizador_id, nome')
     .eq('id', feiraId)
     .single()
 
-  return { user, supabase, ok: feira?.organizador_id === user.id }
+  return { user, supabase, ok: feira?.organizador_id === user.id, feiraNome: feira?.nome ?? null }
 }
 
 async function getFeiraOwnerByDespesaId(despesaId: string) {
@@ -161,7 +193,7 @@ export async function enviarComunicadoAction({
   destinatario: string
   mensagem: string
 }) {
-  const { user, supabase, ok } = await getFeiraOwnerByFeiraId(feiraId)
+  const { user, supabase, ok, feiraNome } = await getFeiraOwnerByFeiraId(feiraId)
   if (!user) return { error: 'Sessão expirada. Faça login novamente.' }
   if (!ok) return { error: 'Não autorizado' }
 
@@ -176,6 +208,28 @@ export async function enviarComunicadoAction({
   if (error) {
     return { error: error.message }
   }
+
+  const { data: inscritos } = await supabase
+    .from('inscricoes')
+    .select('feirante_id')
+    .eq('feira_id', feiraId)
+
+  const feiranteIds = Array.from(
+    new Set((inscritos ?? []).map((i) => i.feirante_id).filter(Boolean))
+  ) as string[]
+
+  const mensagemCurta = mensagem.length > 140 ? `${mensagem.slice(0, 137)}...` : mensagem
+
+  await criarNotificacoes(
+    supabase,
+    feiranteIds.map((feiranteId) => ({
+      userId: feiranteId,
+      tipo: 'comunicado' as const,
+      titulo: feiraNome ? `Novo aviso — ${feiraNome}` : 'Novo aviso',
+      mensagem: mensagemCurta,
+      payload: { feira_id: feiraId },
+    }))
+  )
 
   return { success: true }
 }

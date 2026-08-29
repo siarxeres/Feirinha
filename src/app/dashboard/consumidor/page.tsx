@@ -1,11 +1,14 @@
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
-import { Bell, Store, CalendarDays, Clock, Tag, MapPin } from "lucide-react"
+import { Store, CalendarDays, Clock, Tag, MapPin } from "lucide-react"
 import Link from "next/link"
 import { BuscaFeiras } from "./BuscaFeiras"
 import { BottomNav } from "./_components/BottomNav"
 import { LogoutButton } from "./_components/LogoutButton"
+import { NotificationBell } from "@/components/NotificationBell"
 import { dataDeHojeISO } from "@/lib/feira-status"
+
+const NOTIFICACOES_LIMIT = 20
 
 function formatDate(value: string | null | undefined) {
   if (!value) return "—"
@@ -27,7 +30,7 @@ export default async function ConsumidorPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/auth/login")
 
-  const [{ data: profile }, { data: todasFeiras }] = await Promise.all([
+  const [{ data: profile }, { data: todasFeiras }, { data: notificacoes }] = await Promise.all([
     supabase.from("profiles").select("nome").eq("id", user.id).single(),
     supabase
       .from("feiras")
@@ -35,6 +38,12 @@ export default async function ConsumidorPage() {
       .eq("status", "publicada")
       .gte("data_fim", dataDeHojeISO())
       .order("data_inicio", { ascending: true }),
+    supabase
+      .from("notificacoes")
+      .select("id, titulo, mensagem, lida, created_at")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(NOTIFICACOES_LIMIT),
   ])
 
   const nome = (profile as any)?.nome || user.user_metadata?.nome || user.email || "visitante"
@@ -87,12 +96,7 @@ export default async function ConsumidorPage() {
               <span className="text-lg font-bold tracking-tight text-gray-900">Feirinha</span>
             </div>
             <div className="flex items-center gap-1">
-              <button
-                aria-label="Notificações"
-                className="p-2 rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors"
-              >
-                <Bell size={21} className="text-gray-700" />
-              </button>
+              <NotificationBell notificacoes={notificacoes ?? []} />
               <LogoutButton />
             </div>
           </div>
