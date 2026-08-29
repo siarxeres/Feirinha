@@ -4,7 +4,8 @@ import { useState, useTransition } from 'react'
 import type { CSSProperties } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ChevronDown, Pencil, Trash2 } from 'lucide-react'
+import { ChevronDown, Pencil, Trash2, ClipboardList, Megaphone, Store, Receipt } from 'lucide-react'
+import { EmptyState } from '@/components/EmptyState'
 import { BarracaGrid } from '../BarracaGrid'
 import { BottomNav } from '@/app/dashboard/organizador/_components/BottomNav'
 import {
@@ -441,7 +442,23 @@ export function FeiraDetalheClient({
               </div>
 
               {filtered.length === 0 ? (
-                <p className="text-center text-sm text-gray-400 py-10">Nenhuma inscrição</p>
+                <EmptyState
+                  icon={ClipboardList}
+                  title={
+                    filtro === 'Pendentes'
+                      ? 'Nenhuma inscrição pendente'
+                      : filtro === 'Aprovadas'
+                        ? 'Nenhuma inscrição aprovada ainda'
+                        : 'Nenhuma inscrição por enquanto'
+                  }
+                  description={
+                    filtro === 'Pendentes'
+                      ? 'Você já respondeu tudo que chegou até agora.'
+                      : filtro === 'Aprovadas'
+                        ? 'Aprove uma inscrição pendente para ela aparecer aqui.'
+                        : 'Assim que alguém se inscrever nessa feira, aparece aqui.'
+                  }
+                />
               ) : (
                 <div className="divide-y divide-gray-100">
                   {filtered.map(insc => {
@@ -506,7 +523,11 @@ export function FeiraDetalheClient({
           {tab === 'mapa' && (
             <div className="py-3">
               {barracas.length === 0 ? (
-                <p className="text-center text-sm text-gray-400 py-10">Nenhuma barraca cadastrada</p>
+                <EmptyState
+                  icon={Store}
+                  title="Nenhuma barraca cadastrada"
+                  description="O mapa de barracas dessa feira ainda não foi gerado."
+                />
               ) : (
                 <>
                   <BarracaGrid barracas={barracas} inscricoes={inscricoes as any} />
@@ -586,7 +607,11 @@ export function FeiraDetalheClient({
               <div className="pt-2">
                 <p className="text-sm font-semibold text-gray-700 mb-2">Enviados</p>
                 {comunicados.length === 0 ? (
-                  <p className="text-center text-sm text-gray-400 py-10">Nenhum comunicado enviado ainda</p>
+                  <EmptyState
+                    icon={Megaphone}
+                    title="Nenhum comunicado enviado ainda"
+                    description="Os avisos que você mandar pros feirantes aparecem aqui."
+                  />
                 ) : (
                   <div className="divide-y divide-gray-100 rounded-xl bg-white" style={{ border: '2px solid #e5e7eb' }}>
                     {comunicados.map(c => (
@@ -715,7 +740,12 @@ export function FeiraDetalheClient({
               )}
 
               {despesas.length === 0 ? (
-                <p className="text-center text-sm text-gray-400 py-10">Nenhuma despesa lançada</p>
+                <EmptyState
+                  icon={Receipt}
+                  title="Nenhuma despesa lançada"
+                  description="Lance mesa, cadeira, energia ou outro custo pra dividir com os feirantes."
+                  action={showDespesaForm ? undefined : { label: 'Lançar despesa', onClick: handleNovaDespesa }}
+                />
               ) : (
                 <div className="space-y-3">
                   {Object.entries(despesasPorCategoria).map(([cat, items]) => (
@@ -781,7 +811,11 @@ export function FeiraDetalheClient({
 
               <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
                 {barracas.length === 0 ? (
-                  <p className="text-center text-sm text-gray-400 py-10">Nenhuma barraca cadastrada</p>
+                  <EmptyState
+                    icon={Store}
+                    title="Nenhuma barraca cadastrada"
+                    description="Cadastre o grid de barracas dessa feira antes de aprovar inscrições."
+                  />
                 ) : (
                   <div className="grid grid-cols-5 gap-2.5">
                     {barracas.map(b => {

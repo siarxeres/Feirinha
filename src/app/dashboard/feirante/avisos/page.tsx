@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import { Megaphone } from "lucide-react"
 import { BottomNav } from "../_components/BottomNav"
+import { EmptyState } from "@/components/EmptyState"
 
 function formatDate(value: string | null | undefined) {
   if (!value) return "—"
@@ -40,10 +41,12 @@ export default async function AvisosFeirantePage() {
 
         <div className="flex-1 px-5 pb-28 space-y-3">
           {lista.length === 0 ? (
-            <div className="rounded-2xl bg-white shadow-sm border border-gray-200 p-10 text-center">
-              <Megaphone size={32} className="text-gray-300 mx-auto mb-3" />
-              <p className="text-sm text-gray-400">Nenhum aviso ainda.</p>
-            </div>
+            <EmptyState
+              icon={Megaphone}
+              title="Nenhum aviso ainda"
+              description="Os comunicados dos organizadores das feiras em que você está inscrito aparecem aqui."
+              card
+            />
           ) : (
             lista.map((comunicado: any) => {
               const feiraData = Array.isArray(comunicado.feiras) ? comunicado.feiras[0] : comunicado.feiras

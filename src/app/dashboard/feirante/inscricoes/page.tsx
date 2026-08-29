@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import { ClipboardList, MapPin, CalendarDays, Store } from "lucide-react"
 import { BottomNav } from "../_components/BottomNav"
+import { EmptyState } from "@/components/EmptyState"
 
 function formatDate(value: string | null | undefined) {
   if (!value) return "—"
@@ -59,10 +60,13 @@ export default async function InscricoesFeirantePage() {
 
         <div className="flex-1 px-5 pb-28 space-y-3">
           {lista.length === 0 ? (
-            <div className="rounded-2xl bg-white shadow-sm border border-gray-200 p-10 text-center">
-              <ClipboardList size={32} className="text-gray-300 mx-auto mb-3" />
-              <p className="text-sm text-gray-400">Nenhuma inscrição ainda.</p>
-            </div>
+            <EmptyState
+              icon={ClipboardList}
+              title="Você ainda não se inscreveu em nenhuma feira"
+              description="Encontre uma feira publicada perto de você e garanta sua vaga."
+              action={{ label: "Ver feiras disponíveis", href: "/dashboard/feirante" }}
+              card
+            />
           ) : (
             lista.map((insc: any) => {
               const feiraData = Array.isArray(insc.feiras) ? insc.feiras[0] : insc.feiras

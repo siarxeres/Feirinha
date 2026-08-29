@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import { MapPin } from "lucide-react"
 import { BottomNav } from "../_components/BottomNav"
+import { EmptyState } from "@/components/EmptyState"
 
 export default async function MapaFeirantePage() {
   const supabase = await createClient()
@@ -33,10 +34,13 @@ export default async function MapaFeirantePage() {
 
         <div className="flex-1 px-5 pb-28 space-y-3">
           {feirasAprovadas.length === 0 ? (
-            <div className="rounded-2xl bg-white shadow-sm border border-gray-200 p-10 text-center">
-              <MapPin size={32} className="text-gray-300 mx-auto mb-3" />
-              <p className="text-sm text-gray-400">Nenhuma feira aprovada para exibir localização.</p>
-            </div>
+            <EmptyState
+              icon={MapPin}
+              title="Nenhuma localização para mostrar ainda"
+              description="Assim que uma inscrição sua for aprovada, o endereço da feira aparece aqui."
+              action={{ label: "Ver feiras disponíveis", href: "/dashboard/feirante" }}
+              card
+            />
           ) : (
             feirasAprovadas.map((feira: any) => {
               const enderecoCompleto = `${feira.endereco ? `${feira.endereco}, ` : ""}${feira.cidade}, ${feira.estado}`

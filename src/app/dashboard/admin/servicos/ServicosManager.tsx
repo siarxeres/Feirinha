@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react"
 import { createClient } from "@/lib/supabase/client"
-import { Plus, Pencil, Trash2, Zap, Droplets, Tent, UtensilsCrossed, Armchair, Snowflake, Flame } from "lucide-react"
+import { Plus, Pencil, Trash2, Zap, Droplets, Tent, UtensilsCrossed, Armchair, Snowflake, Flame, Wrench } from "lucide-react"
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from "@/components/ui/dialog"
+import { EmptyState } from "@/components/EmptyState"
 import { criarServico, editarServico, excluirServico } from "./actions"
 
 type Servico = {
@@ -137,9 +138,13 @@ export function ServicosManager() {
       {loading ? (
         <p className="text-sm text-gray-400">Carregando...</p>
       ) : lista.length === 0 ? (
-        <div className="bg-white rounded-2xl p-12 shadow-sm text-center border border-gray-200">
-          <p className="text-gray-400 text-sm">Nenhum serviço cadastrado.</p>
-        </div>
+        <EmptyState
+          icon={Wrench}
+          title="Nenhum serviço cadastrado"
+          description="Cadastre os prestadores de serviço disponíveis pra infraestrutura das feiras."
+          action={{ label: "Novo serviço", onClick: abrirNovo }}
+          card
+        />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {lista.map((s) => {

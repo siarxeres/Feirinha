@@ -5,6 +5,7 @@ import { Bell, ClipboardList, CheckCircle2, Clock, Store, MapPin, CalendarDays }
 import { BottomNav } from "./_components/BottomNav"
 import { LogoutButton } from "./_components/LogoutButton"
 import { dataDeHojeISO } from "@/lib/feira-status"
+import { EmptyState } from "@/components/EmptyState"
 
 function formatDate(value: string | null | undefined) {
   if (!value) return "—"
@@ -140,9 +141,12 @@ export default async function FeirantePage() {
             <h2 className="text-base font-bold text-gray-800 mb-3">Feiras Disponíveis</h2>
 
             {feiras.length === 0 ? (
-              <div className="rounded-2xl bg-white shadow-sm border border-gray-200 p-8 text-center">
-                <p className="text-sm text-gray-400">Nenhuma feira publicada no momento.</p>
-              </div>
+              <EmptyState
+                icon={Store}
+                title="Nenhuma feira publicada no momento"
+                description="Assim que um organizador publicar uma feira, ela aparece aqui."
+                card
+              />
             ) : (
               <div className="space-y-3">
                 {feiras.map((feira: any) => {

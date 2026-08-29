@@ -2,9 +2,10 @@
 
 import { useState, useTransition, type ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
-import { CheckCircle2, Loader2, ClipboardList, AlertCircle } from 'lucide-react'
+import { CheckCircle2, Loader2, ClipboardList, AlertCircle, Receipt } from 'lucide-react'
 import Link from 'next/link'
 import { inscreverFeirante } from './actions'
+import { EmptyState } from '@/components/EmptyState'
 
 type Despesa = {
   id: string
@@ -215,7 +216,11 @@ export function InscricaoClient({
           </div>
 
           {despesas.length === 0 ? (
-            <p className="text-center text-sm text-gray-400 py-10">Nenhuma despesa lançada ainda</p>
+            <EmptyState
+              icon={Receipt}
+              title="Nenhuma despesa lançada ainda"
+              description="Quando o organizador lançar um custo do rateio, ele aparece aqui."
+            />
           ) : (
             <div className="space-y-3">
               {Object.entries(despesasPorCategoria).map(([cat, items]) => (

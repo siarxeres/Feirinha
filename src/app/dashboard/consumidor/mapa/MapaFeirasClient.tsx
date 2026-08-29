@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { Search, MapPin, CalendarDays, Navigation, Store } from "lucide-react"
+import { Search, MapPin, CalendarDays, Navigation, Store, SearchX } from "lucide-react"
+import { EmptyState } from "@/components/EmptyState"
 
 type Feira = {
   id: string
@@ -121,10 +122,22 @@ export function MapaFeirasClient({ feiras }: { feiras: Feira[] }) {
       {/* List */}
       <div className="flex-1 px-5 pb-28 space-y-3">
         {filtradas.length === 0 ? (
-          <div className="rounded-2xl bg-white shadow-sm border border-gray-200 p-10 text-center">
-            <MapPin size={32} className="text-gray-300 mx-auto mb-3" />
-            <p className="text-sm text-gray-400">Nenhuma feira encontrada.</p>
-          </div>
+          query || cidadeSelecionada ? (
+            <EmptyState
+              icon={SearchX}
+              title="Nenhuma feira encontrada"
+              description="Tente buscar por outro nome, cidade ou limpar os filtros."
+              action={{ label: "Limpar filtros", onClick: () => { setQuery(""); setCidadeSelecionada(null) } }}
+              card
+            />
+          ) : (
+            <EmptyState
+              icon={MapPin}
+              title="Nenhuma feira publicada no momento"
+              description="Assim que um organizador publicar uma feira, ela aparece aqui no mapa."
+              card
+            />
+          )
         ) : (
           filtradas.map(feira => {
             const local = [feira.endereco, feira.cidade, feira.estado].filter(Boolean).join(", ")

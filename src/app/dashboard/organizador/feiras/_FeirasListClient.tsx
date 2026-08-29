@@ -2,9 +2,10 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Plus, Store } from "lucide-react"
+import { Store } from "lucide-react"
 import { PublicarButton } from "./_PublicarButton"
 import { FEIRA_STATUS_LABEL, resolveFeiraStatusExibicao } from "@/lib/feira-status"
+import { EmptyState } from "@/components/EmptyState"
 
 const STATUS_STYLE: Record<string, string> = {
   rascunho: "bg-gray-100 text-gray-700",
@@ -46,23 +47,13 @@ export function FeirasListClient({ lista }: { lista: Feira[] }) {
 
   if (lista.length === 0) {
     return (
-      <div className="rounded-2xl bg-white shadow-sm p-6 flex flex-col items-center text-center gap-3" style={{ border: "2px solid #e5e7eb" }}>
-        <div className="w-14 h-14 rounded-full bg-orange-50 flex items-center justify-center">
-          <Store size={24} className="text-orange-500" />
-        </div>
-        <div>
-          <p className="text-sm font-bold text-gray-900">Você ainda não criou nenhuma feira</p>
-          <p className="text-xs text-gray-500 mt-1">Crie sua primeira feira para começar a receber inscrições.</p>
-        </div>
-        <Link
-          href="/feiras/nova"
-          className="flex items-center justify-center gap-2 px-5 py-3 rounded-2xl text-sm font-bold text-white shadow-md transition-all active:scale-[0.98]"
-          style={{ backgroundColor: "#E8560A" }}
-        >
-          <Plus size={18} />
-          Criar feira
-        </Link>
-      </div>
+      <EmptyState
+        icon={Store}
+        title="Você ainda não criou nenhuma feira"
+        description="Crie sua primeira feira para começar a receber inscrições."
+        action={{ label: "Criar feira", href: "/feiras/nova" }}
+        card
+      />
     )
   }
 
@@ -87,9 +78,24 @@ export function FeirasListClient({ lista }: { lista: Feira[] }) {
       </div>
 
       {listaFiltrada.length === 0 ? (
-        <div className="rounded-2xl bg-white shadow-sm p-6 text-center" style={{ border: "2px solid #e5e7eb" }}>
-          <p className="text-sm text-gray-500">Nenhuma feira {filtro.toLowerCase()} no momento.</p>
-        </div>
+        <EmptyState
+          icon={Store}
+          title={
+            filtro === "Encerradas"
+              ? "Nenhuma feira encerrada ainda"
+              : filtro === "Ativas"
+                ? "Nenhuma feira ativa no momento"
+                : "Nenhuma feira por aqui"
+          }
+          description={
+            filtro === "Encerradas"
+              ? "As feiras já concluídas vão aparecer aqui."
+              : filtro === "Ativas"
+                ? "Suas feiras em rascunho ou publicadas aparecem aqui."
+                : undefined
+          }
+          card
+        />
       ) : (
         <div className="space-y-3">
           {listaFiltrada.map((feira) => {

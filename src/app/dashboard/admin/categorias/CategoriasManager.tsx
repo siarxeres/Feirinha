@@ -4,13 +4,14 @@ import type { ComponentType } from "react"
 import { useEffect, useState } from "react"
 import { createClient } from "@/lib/supabase/client"
 import {
-  Plus, Pencil, Trash2,
+  Plus, Pencil, Trash2, Tag,
   Utensils, Palette, Gem, Music, Leaf, Flower2, Wrench, Shirt,
   type LucideProps,
 } from "lucide-react"
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from "@/components/ui/dialog"
+import { EmptyState } from "@/components/EmptyState"
 import { criarCategoria, editarCategoria, excluirCategoria } from "./actions"
 
 type Categoria = {
@@ -126,9 +127,13 @@ export function CategoriasManager() {
       {loading ? (
         <p className="text-sm text-gray-400">Carregando...</p>
       ) : lista.length === 0 ? (
-        <div className="bg-white rounded-2xl p-12 shadow-sm text-center border border-gray-200">
-          <p className="text-gray-400 text-sm">Nenhuma categoria cadastrada.</p>
-        </div>
+        <EmptyState
+          icon={Tag}
+          title="Nenhuma categoria cadastrada"
+          description="Cadastre as categorias que os organizadores vão usar pra classificar suas feiras."
+          action={{ label: "Nova categoria", onClick: abrirNovo }}
+          card
+        />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {lista.map((cat) => (

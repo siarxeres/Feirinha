@@ -1,8 +1,9 @@
 'use client'
 import { useState, useTransition } from 'react'
 import Link from 'next/link'
-import { CheckCircle2, XCircle, ChevronDown } from 'lucide-react'
+import { CheckCircle2, XCircle, ChevronDown, ClipboardList } from 'lucide-react'
 import { rejeitarInscricao } from '../actions'
+import { EmptyState } from '@/components/EmptyState'
 
 type Profile = { nome?: string | null } | null
 type Feira = { nome?: string | null } | null
@@ -73,7 +74,11 @@ export function InscricoesAguardando({
 
   if (visible.length === 0 && totalPendentes === 0) {
     return (
-      <p className="py-6 text-center text-sm text-gray-400">Nenhuma inscrição pendente</p>
+      <EmptyState
+        icon={ClipboardList}
+        title="Nenhuma inscrição pendente"
+        description="Quando um feirante se inscrever, ela aparece aqui pra você aprovar."
+      />
     )
   }
 

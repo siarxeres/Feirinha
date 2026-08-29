@@ -2,7 +2,8 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
-import { Search, MapPin, CalendarDays, Store } from 'lucide-react'
+import { Search, MapPin, CalendarDays, Store, SearchX } from 'lucide-react'
+import { EmptyState } from '@/components/EmptyState'
 
 type Feira = {
   id: string
@@ -127,20 +128,27 @@ export function BuscaFeiras({ feiras }: { feiras: Feira[] }) {
       </div>
 
       {/* Contagem */}
-      {query && (
+      {query && filtradas.length > 0 && (
         <p className="text-sm text-gray-500">
-          {filtradas.length === 0
-            ? 'Nenhuma feira encontrada para essa busca.'
-            : `${filtradas.length} feira${filtradas.length > 1 ? 's' : ''} encontrada${filtradas.length > 1 ? 's' : ''}`}
+          {`${filtradas.length} feira${filtradas.length > 1 ? 's' : ''} encontrada${filtradas.length > 1 ? 's' : ''}`}
         </p>
       )}
 
       {/* Grid */}
       {filtradas.length === 0 && !query ? (
-        <div className="py-16 text-center text-gray-400">
-          Nenhuma feira disponível no momento.
-        </div>
-      ) : filtradas.length === 0 ? null : (
+        <EmptyState
+          icon={Store}
+          title="Nenhuma feira disponível no momento"
+          description="Assim que um organizador publicar uma feira, ela aparece aqui."
+        />
+      ) : filtradas.length === 0 ? (
+        <EmptyState
+          icon={SearchX}
+          title="Nenhuma feira encontrada"
+          description="Tente buscar por outro nome ou cidade."
+          action={{ label: 'Limpar busca', onClick: () => setQuery('') }}
+        />
+      ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtradas.map(f => (
             <FeiraCard key={f.id} feira={f} />
