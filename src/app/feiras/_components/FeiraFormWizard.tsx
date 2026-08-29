@@ -393,7 +393,7 @@ export function FeiraFormWizard({
                     />
                   </div>
                   <div>
-                    <Label htmlFor="taxaBarraca">Taxa de Barraca (R$) *</Label>
+                    <Label htmlFor="taxaBarraca">Taxa do App (R$) *</Label>
                     <Input
                       id="taxaBarraca"
                       type="number"
@@ -477,7 +477,7 @@ export function FeiraFormWizard({
                       <p className="font-semibold text-gray-900">R$ {dados.taxaInscricao.toFixed(2)}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-600">Taxa de Barraca</p>
+                      <p className="text-sm text-gray-600">Taxa do App</p>
                       <p className="font-semibold text-gray-900">R$ {dados.taxaBarraca.toFixed(2)}</p>
                     </div>
                   </div>

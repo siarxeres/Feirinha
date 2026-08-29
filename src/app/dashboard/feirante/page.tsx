@@ -219,7 +219,7 @@ export default async function FeirantePage() {
                           <p className="text-xs text-gray-400 mt-2">
                             {feira.taxa_inscricao > 0 && `Inscrição: R$ ${Number(feira.taxa_inscricao).toFixed(2)}`}
                             {feira.taxa_inscricao > 0 && feira.taxa_barraca > 0 && " · "}
-                            {feira.taxa_barraca > 0 && `Barraca: R$ ${Number(feira.taxa_barraca).toFixed(2)}`}
+                            {feira.taxa_barraca > 0 && `Taxa do App: R$ ${Number(feira.taxa_barraca).toFixed(2)}`}
                           </p>
                         )}
                       </div>
