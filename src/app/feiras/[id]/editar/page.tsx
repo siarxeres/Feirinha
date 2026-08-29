@@ -21,8 +21,9 @@ export default async function EditarFeiraPage({ params }: { params: Promise<{ id
   if (statusExibicao === "encerrada") redirect(`/feiras/${id}`)
 
   const listaBarracas = (barracas ?? []) as Array<{ linha: number; coluna: number; status: string }>
-  const linhas = listaBarracas.reduce((max, b) => Math.max(max, b.linha), 0) || 5
-  const colunas = listaBarracas.reduce((max, b) => Math.max(max, b.coluna), 0) || 5
+  // linha/coluna são 0-indexadas (gerar_barracas gera 0..N-1) — a contagem de linhas/colunas é o maior índice + 1
+  const linhas = listaBarracas.length === 0 ? 5 : listaBarracas.reduce((max, b) => Math.max(max, b.linha), 0) + 1
+  const colunas = listaBarracas.length === 0 ? 5 : listaBarracas.reduce((max, b) => Math.max(max, b.coluna), 0) + 1
   const gridBloqueado = listaBarracas.some((b) => b.status === "aprovado")
 
   return (
