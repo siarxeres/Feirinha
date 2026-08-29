@@ -15,6 +15,7 @@ import {
   editarDespesaAction,
   removerDespesaAction,
 } from '../actions'
+import { encerrarFeiraAction } from '@/app/dashboard/organizador/feiras/actions'
 import { FEIRA_STATUS_BADGE_CLASS, FEIRA_STATUS_LABEL, resolveFeiraStatusExibicao } from '@/lib/feira-status'
 import { celebrar } from '@/lib/celebrar'
 
@@ -155,6 +156,7 @@ export function FeiraDetalheClient({
   const [aprovando, setAprovando] = useState<{ inscricaoId: string } | null>(null)
   const [barracaEscolhidaId, setBarracaEscolhidaId] = useState<string | null>(null)
   const [aprovarErro, setAprovarErro] = useState<string | null>(null)
+  const [encerrarErro, setEncerrarErro] = useState<string | null>(null)
 
   const totalInscricoes = inscricoes.length
   const aprovadas = inscricoes.filter(i => ['aprovado', 'aprovada'].includes(i.status)).length
@@ -170,8 +172,9 @@ export function FeiraDetalheClient({
     : '—'
 
   const filtered = inscricoes.filter(i => {
-    if (done.has(i.id)) return false
-    if (filtro === 'Pendentes') return i.status === 'pendente'
+    // "done" só esconde instantaneamente da aba Pendentes (antes do router.refresh() trazer
+    // o status novo); em Todas/Aprovadas a inscrição deve aparecer assim que os dados atualizarem
+    if (filtro === 'Pendentes') return i.status === 'pendente' && !done.has(i.id)
     if (filtro === 'Aprovadas') return ['aprovado', 'aprovada'].includes(i.status)
     return true
   })
@@ -226,6 +229,22 @@ export function FeiraDetalheClient({
         setExpanded(null)
         router.refresh()
       }
+    })
+  }
+
+  function handleEncerrarFeira() {
+    const confirmado = confirm(
+      'Encerrar esta feira? Não será mais possível receber novas inscrições, e não há como reabrir por aqui.'
+    )
+    if (!confirmado) return
+    setEncerrarErro(null)
+    startTransition(async () => {
+      const result = await encerrarFeiraAction(feiraId)
+      if (result?.error) {
+        setEncerrarErro(result.error)
+        return
+      }
+      router.refresh()
     })
   }
 
@@ -348,6 +367,17 @@ export function FeiraDetalheClient({
                 Editar
               </Link>
             )}
+            {feira?.status === 'publicada' && (
+              <button
+                type="button"
+                onClick={handleEncerrarFeira}
+                disabled={isPending}
+                aria-label="Encerrar feira"
+                className="text-xs font-semibold px-2 py-1 rounded-full shrink-0 bg-red-50 text-red-600 transition-colors disabled:opacity-50"
+              >
+                Encerrar
+              </button>
+            )}
             <span className={`text-xs px-2 py-1 rounded-full font-medium ${FEIRA_STATUS_BADGE_CLASS[statusExibicao]}`}>
               {FEIRA_STATUS_LABEL[statusExibicao]}
             </span>
@@ -355,6 +385,9 @@ export function FeiraDetalheClient({
           <p className="text-sm text-gray-500 pl-1">
             {dataInicio} · {feira?.cidade ?? '—'} · {horario}
           </p>
+          {encerrarErro && (
+            <p className="text-xs text-red-600 mt-1 pl-1">{encerrarErro}</p>
+          )}
         </header>
 
         {/* Metric cards */}

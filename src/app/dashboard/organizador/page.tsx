@@ -5,6 +5,7 @@ import { Bell, ClipboardList, CheckCircle2, DollarSign, Clock, LogOut, Store, Us
 import { BottomNav } from "./_components/BottomNav"
 import { InscricoesAguardando } from "./_components/InscricoesAguardando"
 import { dataDeHojeISO } from "@/lib/feira-status"
+import { autoEncerrarFeirasVencidas } from "@/lib/auto-encerrar-feiras"
 
 const PREVIEW_LIMIT = 5
 
@@ -51,6 +52,8 @@ export default async function OrganizadorPage() {
 
   // Guard: não-organizador não tem acesso a esta área
   if (!profileRoles.includes("organizador")) redirect("/dashboard")
+
+  await autoEncerrarFeirasVencidas(supabase, user.id)
 
   const { data: feiras } = await supabase
     .from("feiras")

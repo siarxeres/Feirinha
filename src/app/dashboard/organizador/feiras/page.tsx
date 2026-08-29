@@ -2,11 +2,14 @@ import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import { BottomNav } from "../_components/BottomNav"
 import { FeirasListClient } from "./_FeirasListClient"
+import { autoEncerrarFeirasVencidas } from "@/lib/auto-encerrar-feiras"
 
 export default async function FeirasOrganizadorPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/auth/login")
+
+  await autoEncerrarFeirasVencidas(supabase, user.id)
 
   const { data: feiras } = await supabase
     .from("feiras")
