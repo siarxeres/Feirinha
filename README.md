@@ -73,6 +73,11 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - Comunicados de ponta a ponta: organizador envia + vê histórico dos enviados (aba Comunicados); feirante lê na nova aba "Avisos" (/dashboard/feirante/avisos, via RLS)
 - Atribuição de barraca ao aprovar: seletor de barracas (grid) obrigatório na aprovação; mapa da feira mostra barraca "Ocupada" com nome do feirante
 - Aprovação unificada num único caminho: painel do organizador leva à tela da feira (removida a aprovação sem barraca)
+- Status "Encerrada" calculado automaticamente por data (sem gravação no banco), aplicado nos badges e nas buscas de disponibilidade
+- Edição de feira (/feiras/[id]/editar), com bloqueio de grid quando há barraca ocupada e bloqueio total quando a feira está encerrada
+- Filtro por chips (Ativas/Encerradas/Todas) na lista "Minhas Feiras" do organizador, com categorias visíveis nos cards
+- Aba "Localização" do feirante (ex-"Mapa"), com endereço clicável para o Google Maps
+- Card "Barraca #X" na tela de inscrições do feirante ("Minhas Inscrições"), para inscrições aprovadas com barraca atribuída
 
 ### ✅ Feito — Segurança pré-demo
 - enviarComunicadoAction com autorização
@@ -107,6 +112,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - Sino de notificações do feirante ainda é decorativo (falta ligar + indicador de "novo")
 - Fuso horário diverge entre telas (feirante mostra UTC, organizador mostra horário local)
 - Arquivo órfão src/app/feiras/[id]/client.tsx (código morto) pode ser removido
+
+### 🔴 Decisões conscientes de escopo
+- Excluir/cancelar feira: decisão de não implementar por ora
 
 ### 🔴 Pendente — Validação de campo (bloqueia tudo à frente)
 - 5 conversas com organizadores em Porto Velho
