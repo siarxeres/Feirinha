@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server"
+import { createClient, createAdminClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import { Megaphone } from "lucide-react"
 import { BottomNav } from "../_components/BottomNav"
@@ -20,10 +20,29 @@ export default async function AvisosFeirantePage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/auth/login")
 
-  const { data: comunicados } = await supabase
-    .from("comunicados")
-    .select("id, conteudo, created_at, feira_id, feiras(nome)")
-    .order("created_at", { ascending: false })
+  // Só comunicados das feiras em que o feirante tem inscrição — sem esse
+  // filtro, trocar pra admin client abaixo mostraria comunicados de feiras
+  // de outros organizadores, sem relação nenhuma com o feirante.
+  const { data: minhasInscricoes } = await supabase
+    .from("inscricoes")
+    .select("feira_id")
+    .eq("feirante_id", user.id)
+
+  const feiraIds = Array.from(
+    new Set((minhasInscricoes ?? []).map((i: any) => i.feira_id).filter(Boolean))
+  ) as string[]
+
+  // Admin client bypassa RLS — a policy de "feiras" só libera SELECT pra
+  // não-dono quando status = "publicada", então o embed feiras(nome) vinha
+  // null pra feiras encerradas. Autorização garantida pelo filtro acima.
+  const admin = createAdminClient()
+  const { data: comunicados } = feiraIds.length
+    ? await admin
+        .from("comunicados")
+        .select("id, conteudo, created_at, feira_id, feiras(nome)")
+        .in("feira_id", feiraIds)
+        .order("created_at", { ascending: false })
+    : { data: [] }
 
   const lista = (comunicados ?? []) as any[]
 

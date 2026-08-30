@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { SideNav } from "../_components/SideNav";
 
@@ -18,11 +18,16 @@ export default async function AdminInscricoesPage() {
   const { data: profile } = await supabase.from("profiles").select("roles").eq("id", user.id).returns<ProfileRoles[]>().single();
   if (!profile?.roles?.includes("admin")) redirect("/dashboard");
 
-  const { data: inscricoes } = await supabase
+  // Admin client bypassa RLS — a policy de "feiras" só libera SELECT pra
+  // não-dono quando status = "publicada", então o embed feiras(nome) vinha
+  // null pra feiras encerradas. Autorização já garantida pela checagem de
+  // role admin acima.
+  const admin = createAdminClient();
+  const { data: inscricoesData } = await admin
     .from("inscricoes")
     .select("id, status, created_at, feiras(nome), profiles(nome, email)")
-    .order("created_at", { ascending: false })
-    .returns<Inscricao[]>();
+    .order("created_at", { ascending: false });
+  const inscricoes = inscricoesData as Inscricao[] | null;
 
   const statusColor: Record<string, string> = {
     aprovada: "bg-green-50 text-green-600",

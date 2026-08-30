@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server"
+import { createClient, createAdminClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import { MapPin } from "lucide-react"
 import { BottomNav } from "../_components/BottomNav"
@@ -9,7 +9,12 @@ export default async function MapaFeirantePage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/auth/login")
 
-  const { data: inscricoes } = await supabase
+  // Admin client bypassa RLS — a policy de "feiras" só libera SELECT pra
+  // não-dono quando status = "publicada", então o embed vinha null (e a
+  // feira sumia da lista) pra inscrições aprovadas em feiras já encerradas.
+  // Autorização garantida por .eq("feirante_id", ...).
+  const admin = createAdminClient()
+  const { data: inscricoes } = await admin
     .from("inscricoes")
     .select("id, status, feiras(id, nome, cidade, estado, endereco, latitude, longitude)")
     .eq("feirante_id", user.id)

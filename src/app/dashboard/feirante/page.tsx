@@ -33,7 +33,10 @@ export default async function FeirantePage() {
       .eq("id", user.id)
       .maybeSingle(),
 
-    supabase
+    // Admin client bypassa RLS — a policy de "feiras" só libera SELECT pra
+    // não-dono quando status = "publicada", então o embed vinha null pra
+    // feiras encerradas. Autorização garantida por .eq("feirante_id", ...).
+    admin
       .from("inscricoes")
       .select("id, status, created_at, feira_id, feiras(id, nome, cidade, estado, data_inicio, data_fim)")
       .eq("feirante_id", user.id)
