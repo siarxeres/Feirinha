@@ -15,6 +15,19 @@ function formatDate(value: string | null | undefined) {
   })
 }
 
+const SETE_DIAS_MS = 7 * 24 * 60 * 60 * 1000
+
+/**
+ * Filtro só de exibição — não apaga nem altera nada no banco. Some da lista
+ * quando já passou mais de 1 semana do fim da feira (data_fim); feiras ainda
+ * ativas ou sem data_fim continuam aparecendo normalmente.
+ */
+function dentroDoPrazoDeExibicao(dataFim: string | null | undefined): boolean {
+  if (!dataFim) return true
+  const fimDoUltimoDia = new Date(`${dataFim}T23:59:59`).getTime()
+  return Date.now() - fimDoUltimoDia < SETE_DIAS_MS
+}
+
 export default async function AvisosFeirantePage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -39,12 +52,15 @@ export default async function AvisosFeirantePage() {
   const { data: comunicados } = feiraIds.length
     ? await admin
         .from("comunicados")
-        .select("id, conteudo, created_at, feira_id, feiras(nome)")
+        .select("id, conteudo, created_at, feira_id, feiras(nome, data_fim)")
         .in("feira_id", feiraIds)
         .order("created_at", { ascending: false })
     : { data: [] }
 
-  const lista = (comunicados ?? []) as any[]
+  const lista = ((comunicados ?? []) as any[]).filter((comunicado) => {
+    const feiraData = Array.isArray(comunicado.feiras) ? comunicado.feiras[0] : comunicado.feiras
+    return dentroDoPrazoDeExibicao(feiraData?.data_fim)
+  })
 
   return (
     <div className="min-h-screen bg-gray-50">
