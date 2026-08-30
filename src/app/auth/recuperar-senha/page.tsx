@@ -55,7 +55,7 @@ export default function RecuperarSenhaPage() {
                   required
                 />
               </div>
-              <Button type="submit" className="w-full bg-[#E8560A] hover:bg-[#C4450A]" disabled={loading}>
+              <Button type="submit" className="w-full bg-primary hover:bg-primary/80" disabled={loading}>
                 {loading ? "Enviando..." : "Enviar link de recuperação"}
               </Button>
               <p className="text-center text-sm">

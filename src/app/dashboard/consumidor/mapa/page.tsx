@@ -37,7 +37,7 @@ export default async function MapaConsumidorPage() {
             <span className="text-lg font-bold tracking-tight text-gray-900">Feirinha</span>
           </div>
           <div className="flex items-center gap-2">
-            <Map size={22} style={{ color: "#E8560A" }} />
+            <Map size={22} className="text-primary" />
             <h1 className="text-2xl font-bold text-gray-900">Mapa de Feiras</h1>
           </div>
           <p className="text-sm text-gray-500 mt-1">

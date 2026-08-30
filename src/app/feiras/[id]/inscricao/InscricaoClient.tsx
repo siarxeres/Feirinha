@@ -6,6 +6,8 @@ import { CheckCircle2, Loader2, ClipboardList, AlertCircle, Receipt } from 'luci
 import Link from 'next/link'
 import { inscreverFeirante } from './actions'
 import { EmptyState } from '@/components/EmptyState'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import { Card } from '@/components/ui/card'
 
 type Despesa = {
   id: string
@@ -66,13 +68,11 @@ export function InscricaoClient({
 
   if (sucesso) {
     inscricaoContent = (
-      <div
-        className="rounded-2xl bg-white shadow-sm p-6 text-center"
-        style={{ border: '2px solid #bbf7d0' }}
+      <Card
+        className="p-6 text-center border-2 border-green-200"
       >
         <div
-          className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"
-          style={{ backgroundColor: '#f0fdf4' }}
+          className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 bg-green-50"
         >
           <CheckCircle2 size={28} className="text-green-500" />
         </div>
@@ -82,26 +82,23 @@ export function InscricaoClient({
         </p>
         <Link
           href="/dashboard/feirante/inscricoes"
-          className="inline-block text-sm font-semibold px-6 py-3 rounded-xl text-white"
-          style={{ backgroundColor: '#E8560A' }}
+          className="inline-block text-sm font-semibold px-6 py-3 rounded-xl text-white bg-primary"
         >
           Ver minhas inscrições
         </Link>
-      </div>
+      </Card>
     )
   } else if (jaInscrito && statusAtual) {
     const badge = statusBadge(statusAtual)
     inscricaoContent = (
-      <div
-        className="rounded-2xl bg-white shadow-sm p-5"
-        style={{ border: '2px solid #e5e7eb' }}
+      <Card
+        className="p-5 border-2 border-gray-200"
       >
         <div className="flex items-center gap-3 mb-4">
           <div
-            className="w-12 h-12 rounded-full flex items-center justify-center shrink-0"
-            style={{ backgroundColor: '#fff7ed' }}
+            className="w-12 h-12 rounded-full flex items-center justify-center shrink-0 bg-primary/10"
           >
-            <ClipboardList size={22} style={{ color: '#E8560A' }} />
+            <ClipboardList size={22} className="text-primary" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-bold text-gray-900">Você já está inscrito</p>
@@ -113,18 +110,16 @@ export function InscricaoClient({
         </div>
         <Link
           href="/dashboard/feirante/inscricoes"
-          className="block text-center text-sm font-semibold py-3 rounded-xl text-white"
-          style={{ backgroundColor: '#E8560A' }}
+          className="block text-center text-sm font-semibold py-3 rounded-xl text-white bg-primary"
         >
           Ver minhas inscrições
         </Link>
-      </div>
+      </Card>
     )
   } else {
     inscricaoContent = (
-      <div
-        className="rounded-2xl bg-white shadow-sm p-5"
-        style={{ border: '2px solid #e5e7eb' }}
+      <Card
+        className="p-5 border-2 border-gray-200"
       >
         <p className="text-sm font-semibold text-gray-900 mb-1">Confirmar inscrição?</p>
         <p className="text-xs text-gray-500 mb-4">
@@ -154,8 +149,7 @@ export function InscricaoClient({
               }
             })
           }}
-          className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-bold text-white transition-opacity disabled:opacity-60"
-          style={{ backgroundColor: '#E8560A' }}
+          className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-bold text-white transition-opacity disabled:opacity-60 bg-primary"
         >
           {isPending ? (
             <>
@@ -166,40 +160,35 @@ export function InscricaoClient({
             'Confirmar inscrição'
           )}
         </button>
-      </div>
+      </Card>
     )
   }
 
+  const tabs: { key: Tab; label: string }[] = [
+    { key: 'inscricao', label: 'Inscrição' },
+    { key: 'rateio', label: 'Rateio' },
+  ]
+
   return (
-    <div>
-      <div
-        className="flex bg-white rounded-xl overflow-hidden mb-4"
-        style={{ border: '2px solid #e5e7eb' }}
-      >
-        {([
-          { key: 'inscricao', label: 'Inscrição' },
-          { key: 'rateio', label: 'Rateio' },
-        ] as { key: Tab; label: string }[]).map(t => (
-          <button
+    <Tabs value={tab} onValueChange={(v) => setTab(v as Tab)} className="gap-0">
+      <TabsList variant="line" className="h-auto w-full justify-start rounded-xl bg-white p-0 mb-4 border-2 border-gray-200 overflow-hidden">
+        {tabs.map(t => (
+          <TabsTrigger
             key={t.key}
-            onClick={() => setTab(t.key)}
-            className="flex-1 py-3 text-xs font-semibold transition-colors border-b-2"
-            style={{
-              color: tab === t.key ? '#E8560A' : '#6B7280',
-              borderColor: tab === t.key ? '#E8560A' : 'transparent',
-            }}
+            value={t.key}
+            className="flex-1 rounded-none border-0 py-3 text-xs font-semibold text-gray-500 after:bg-primary data-active:bg-transparent data-active:text-primary"
           >
             {t.label}
-          </button>
+          </TabsTrigger>
         ))}
-      </div>
+      </TabsList>
 
-      {tab === 'inscricao' && inscricaoContent}
+      <TabsContent value="inscricao">{inscricaoContent}</TabsContent>
 
-      {tab === 'rateio' && (
+      <TabsContent value="rateio">
         <div className="space-y-4">
           <div className="grid grid-cols-3 gap-2">
-            <div className="rounded-xl p-2.5 text-center" style={{ border: '2px solid #fed7aa', backgroundColor: '#fff7ed' }}>
+            <div className="rounded-xl p-2.5 text-center border-2 border-primary/20 bg-primary/10">
               <p className="text-[10px] font-semibold text-gray-600 leading-tight mb-1">Total</p>
               <p className="text-sm font-bold text-gray-900">{formatBRL(totalDespesas)}</p>
             </div>
@@ -228,7 +217,7 @@ export function InscricaoClient({
                   <p className="text-xs font-semibold text-gray-500 uppercase mb-1.5">
                     {CATEGORIA_LABELS[cat] ?? cat}
                   </p>
-                  <div className="divide-y divide-gray-100 rounded-xl bg-white" style={{ border: '2px solid #e5e7eb' }}>
+                  <Card className="divide-y divide-gray-100 gap-0 py-0 rounded-xl">
                     {items.map(d => (
                       <div key={d.id} className="flex items-center justify-between px-3 py-2.5 gap-2">
                         <p className="text-sm text-gray-700 truncate min-w-0">
@@ -237,7 +226,7 @@ export function InscricaoClient({
                         <span className="text-sm font-semibold text-gray-900 shrink-0">{formatBRL(Number(d.valor))}</span>
                       </div>
                     ))}
-                  </div>
+                  </Card>
                 </div>
               ))}
             </div>
@@ -250,7 +239,7 @@ export function InscricaoClient({
             </p>
           </div>
         </div>
-      )}
-    </div>
+      </TabsContent>
+    </Tabs>
   )
 }

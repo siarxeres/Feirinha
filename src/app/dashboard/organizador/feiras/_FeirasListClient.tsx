@@ -65,12 +65,11 @@ export function FeirasListClient({ lista }: { lista: Feira[] }) {
             key={f}
             type="button"
             onClick={() => setFiltro(f)}
-            className="px-3 py-1.5 rounded-full text-sm font-medium transition-colors"
-            style={
+            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
               filtro === f
-                ? { backgroundColor: "#E8560A", color: "#fff" }
-                : { backgroundColor: "#f3f4f6", color: "#4b5563" }
-            }
+                ? "bg-primary text-primary-foreground"
+                : "bg-gray-100 text-gray-600"
+            }`}
           >
             {f}
           </button>
@@ -105,8 +104,7 @@ export function FeirasListClient({ lista }: { lista: Feira[] }) {
               <Link
                 key={feira.id}
                 href={`/feiras/${feira.id}`}
-                className="rounded-2xl bg-white shadow-sm p-4 flex items-center justify-between gap-3 active:bg-gray-50 transition-colors"
-                style={{ border: "2px solid #e5e7eb" }}
+                className="rounded-2xl bg-white shadow-sm p-4 flex items-center justify-between gap-3 active:bg-gray-50 transition-colors border-2 border-gray-200"
               >
                 <div className="min-w-0">
                   <p className="text-sm font-bold text-gray-900 truncate">{feira.nome}</p>
@@ -119,8 +117,7 @@ export function FeirasListClient({ lista }: { lista: Feira[] }) {
                       {categorias.map((cat) => (
                         <span
                           key={cat}
-                          className="text-xs px-2 py-0.5 rounded-full capitalize"
-                          style={{ backgroundColor: "#fff7ed", color: "#c2410c", border: "1px solid #fed7aa" }}
+                          className="text-xs px-2 py-0.5 rounded-full capitalize bg-primary/10 text-primary border border-primary/20"
                         >
                           {cat}
                         </span>

@@ -8,6 +8,8 @@ import { ChevronDown, Pencil, Trash2, ClipboardList, Megaphone, Store, Receipt }
 import { EmptyState } from '@/components/EmptyState'
 import { BarracaGrid } from '../BarracaGrid'
 import { BottomNav } from '@/app/dashboard/organizador/_components/BottomNav'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import { Card } from '@/components/ui/card'
 import {
   aprovarInscricaoAction,
   rejeitarInscricaoAction,
@@ -326,8 +328,8 @@ export function FeiraDetalheClient({
     })
   }
 
-  const metricCards: { label: string; value: string | number; style: CSSProperties }[] = [
-    { label: 'Inscrições', value: totalInscricoes, style: { border: '2px solid #fed7aa', backgroundColor: '#fff7ed' } },
+  const metricCards: { label: string; value: string | number; className?: string; style?: CSSProperties }[] = [
+    { label: 'Inscrições', value: totalInscricoes, className: 'border-2 border-primary/20 bg-primary/10' },
     { label: 'Aprovadas',  value: aprovadas,       style: { border: '2px solid #bbf7d0', backgroundColor: '#f0fdf4' } },
     { label: 'Pendentes',  value: pendentes,        style: { border: '2px solid #fef08a', backgroundColor: '#fefce8' } },
     { label: 'Receita',    value: 'R$0',            style: { border: '2px solid #bfdbfe', backgroundColor: '#eff6ff' } },
@@ -361,8 +363,7 @@ export function FeiraDetalheClient({
               <Link
                 href={`/feiras/${feiraId}/editar`}
                 aria-label="Editar feira"
-                className="flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full shrink-0 transition-colors"
-                style={{ color: '#E8560A', backgroundColor: '#fff7ed' }}
+                className="flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full shrink-0 transition-colors text-primary bg-primary/10"
               >
                 <Pencil size={12} />
                 Editar
@@ -394,47 +395,45 @@ export function FeiraDetalheClient({
         {/* Metric cards */}
         <div className="px-4 py-3 grid grid-cols-4 gap-2 bg-white">
           {metricCards.map(m => (
-            <div key={m.label} className="rounded-xl p-2.5 text-center" style={m.style}>
+            <div key={m.label} className={`rounded-xl p-2.5 text-center ${m.className ?? ''}`} style={m.style}>
               <p className="text-[10px] font-semibold text-gray-600 leading-tight mb-1">{m.label}</p>
               <p className="text-2xl font-bold text-gray-900">{m.value}</p>
             </div>
           ))}
         </div>
 
-        {/* Tab bar */}
-        <div className="flex bg-white">
-          {tabs.map(t => (
-            <button
-              key={t.key}
-              onClick={() => setTab(t.key)}
-              className="flex-1 py-3 text-xs font-semibold transition-colors border-b-2"
-              style={{
-                color: tab === t.key ? '#E8560A' : '#6B7280',
-                borderColor: tab === t.key ? '#E8560A' : 'transparent',
-              }}
-            >
-              {t.label}
-            </button>
-          ))}
-        </div>
+        <Tabs
+          value={tab}
+          onValueChange={(v) => setTab(v as Tab)}
+          className="flex-1 min-h-0 gap-0 bg-white"
+        >
+          {/* Tab bar */}
+          <TabsList variant="line" className="h-auto w-full justify-start rounded-none bg-white p-0">
+            {tabs.map(t => (
+              <TabsTrigger
+                key={t.key}
+                value={t.key}
+                className="flex-1 rounded-none border-0 py-3 text-xs font-semibold text-gray-500 after:bg-primary data-active:bg-transparent data-active:text-primary"
+              >
+                {t.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
 
         {/* Tab content */}
         <div className="flex-1 overflow-y-auto px-4 pb-28">
 
           {/* Inscrições */}
-          {tab === 'inscricoes' && (
+          <TabsContent value="inscricoes">
             <div>
               <div className="flex gap-2 py-3">
                 {(['Todas', 'Pendentes', 'Aprovadas'] as Filtro[]).map(f => (
                   <button
                     key={f}
                     onClick={() => setFiltro(f)}
-                    className="px-3 py-1.5 rounded-full text-sm font-medium transition-colors"
-                    style={
-                      filtro === f
-                        ? { backgroundColor: '#E8560A', color: '#fff' }
-                        : { backgroundColor: '#f3f4f6', color: '#4b5563' }
-                    }
+                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                      filtro === f ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600'
+                    }`}
                   >
                     {f}
                   </button>
@@ -517,10 +516,10 @@ export function FeiraDetalheClient({
                 </div>
               )}
             </div>
-          )}
+          </TabsContent>
 
           {/* Mapa */}
-          {tab === 'mapa' && (
+          <TabsContent value="mapa">
             <div className="py-3">
               {barracas.length === 0 ? (
                 <EmptyState
@@ -551,10 +550,10 @@ export function FeiraDetalheClient({
                 </>
               )}
             </div>
-          )}
+          </TabsContent>
 
           {/* Comunicados */}
-          {tab === 'comunicados' && (
+          <TabsContent value="comunicados">
             <div className="space-y-4 py-3">
               <textarea
                 value={mensagem}
@@ -570,12 +569,9 @@ export function FeiraDetalheClient({
                     <button
                       key={d}
                       onClick={() => setDestinatario(d)}
-                      className="px-3 py-1.5 rounded-full text-sm font-medium transition-colors"
-                      style={
-                        destinatario === d
-                          ? { backgroundColor: '#E8560A', color: '#fff' }
-                          : { backgroundColor: '#f3f4f6', color: '#4b5563' }
-                      }
+                      className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                        destinatario === d ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600'
+                      }`}
                     >
                       {d}
                     </button>
@@ -598,8 +594,7 @@ export function FeiraDetalheClient({
               <button
                 onClick={handleEnviar}
                 disabled={sending || !mensagem.trim()}
-                className="w-full py-3 rounded-xl text-sm font-semibold transition-colors disabled:opacity-50"
-                style={{ backgroundColor: '#E8560A', color: '#fff' }}
+                className="w-full py-3 rounded-xl text-sm font-semibold transition-colors disabled:opacity-50 bg-primary text-white"
               >
                 {sending ? 'Enviando…' : 'Enviar comunicado'}
               </button>
@@ -613,14 +608,13 @@ export function FeiraDetalheClient({
                     description="Os avisos que você mandar pros feirantes aparecem aqui."
                   />
                 ) : (
-                  <div className="divide-y divide-gray-100 rounded-xl bg-white" style={{ border: '2px solid #e5e7eb' }}>
+                  <Card className="divide-y divide-gray-100 gap-0 py-0 rounded-xl">
                     {comunicados.map(c => (
                       <div key={c.id} className="px-3 py-2.5">
                         <p className="text-sm text-gray-700">{c.conteudo}</p>
                         <div className="flex items-center gap-2 mt-1.5">
                           <span
-                            className="text-xs px-2 py-0.5 rounded-full font-medium"
-                            style={{ backgroundColor: '#fff7ed', color: '#E8560A' }}
+                            className="text-xs px-2 py-0.5 rounded-full font-medium bg-primary/10 text-primary"
                           >
                             {c.destinatarios ?? 'Todos'}
                           </span>
@@ -628,14 +622,14 @@ export function FeiraDetalheClient({
                         </div>
                       </div>
                     ))}
-                  </div>
+                  </Card>
                 )}
               </div>
             </div>
-          )}
+          </TabsContent>
 
           {/* Receita */}
-          {tab === 'receita' && (
+          <TabsContent value="receita">
             <div className="space-y-4 py-3">
               <div className="rounded-xl p-4" style={{ border: '2px solid #bfdbfe', backgroundColor: '#eff6ff' }}>
                 <p className="text-sm font-semibold text-gray-700 mb-1">Potencial arrecadado</p>
@@ -651,13 +645,13 @@ export function FeiraDetalheClient({
                 <p className="text-sm text-gray-400 text-center py-8">Nenhuma transação registrada</p>
               </div>
             </div>
-          )}
+          </TabsContent>
 
           {/* Rateio */}
-          {tab === 'rateio' && (
+          <TabsContent value="rateio">
             <div className="space-y-4 py-3">
               <div className="grid grid-cols-3 gap-2">
-                <div className="rounded-xl p-2.5 text-center" style={{ border: '2px solid #fed7aa', backgroundColor: '#fff7ed' }}>
+                <div className="rounded-xl p-2.5 text-center border-2 border-primary/20 bg-primary/10">
                   <p className="text-[10px] font-semibold text-gray-600 leading-tight mb-1">Total</p>
                   <p className="text-sm font-bold text-gray-900">{formatBRL(totalDespesas)}</p>
                 </div>
@@ -676,15 +670,14 @@ export function FeiraDetalheClient({
               {!showDespesaForm && (
                 <button
                   onClick={handleNovaDespesa}
-                  className="w-full py-2.5 rounded-xl text-sm font-semibold transition-colors"
-                  style={{ backgroundColor: '#E8560A', color: '#fff' }}
+                  className="w-full py-2.5 rounded-xl text-sm font-semibold transition-colors bg-primary text-white"
                 >
                   + Lançar despesa
                 </button>
               )}
 
               {showDespesaForm && (
-                <div className="rounded-xl p-4 space-y-3" style={{ border: '2px solid #e5e7eb' }}>
+                <Card className="p-4 space-y-3 rounded-xl">
                   <div>
                     <label className="text-xs font-semibold text-gray-600 block mb-1">Categoria</label>
                     <select
@@ -724,8 +717,7 @@ export function FeiraDetalheClient({
                     <button
                       disabled={isPending}
                       onClick={handleSalvarDespesa}
-                      className="flex-1 py-2 rounded-xl text-sm font-semibold text-white disabled:opacity-50"
-                      style={{ backgroundColor: '#E8560A' }}
+                      className="flex-1 py-2 rounded-xl text-sm font-semibold text-white disabled:opacity-50 bg-primary"
                     >
                       {editingDespesaId ? 'Salvar alterações' : 'Adicionar'}
                     </button>
@@ -736,7 +728,7 @@ export function FeiraDetalheClient({
                       Cancelar
                     </button>
                   </div>
-                </div>
+                </Card>
               )}
 
               {despesas.length === 0 ? (
@@ -753,7 +745,7 @@ export function FeiraDetalheClient({
                       <p className="text-xs font-semibold text-gray-500 uppercase mb-1.5">
                         {CATEGORIA_LABELS[cat] ?? cat}
                       </p>
-                      <div className="divide-y divide-gray-100 rounded-xl bg-white" style={{ border: '2px solid #e5e7eb' }}>
+                      <Card className="divide-y divide-gray-100 gap-0 py-0 rounded-xl">
                         {items.map(d => (
                           <div key={d.id} className="flex items-center justify-between px-3 py-2.5 gap-2">
                             <p className="text-sm text-gray-700 truncate min-w-0">
@@ -779,15 +771,16 @@ export function FeiraDetalheClient({
                             </div>
                           </div>
                         ))}
-                      </div>
+                      </Card>
                     </div>
                   ))}
                 </div>
               )}
             </div>
-          )}
+          </TabsContent>
 
         </div>
+        </Tabs>
 
         {aprovando && (
           <>
@@ -827,14 +820,13 @@ export function FeiraDetalheClient({
                           type="button"
                           disabled={ocupada}
                           onClick={() => setBarracaEscolhidaId(b.id)}
-                          className="rounded-lg py-2.5 text-center text-xs font-bold transition-colors disabled:cursor-not-allowed"
-                          style={
+                          className={`rounded-lg py-2.5 text-center text-xs font-bold transition-colors disabled:cursor-not-allowed border-2 ${
                             ocupada
-                              ? { backgroundColor: '#f3f4f6', color: '#9ca3af' }
+                              ? 'bg-gray-100 text-gray-400 border-transparent'
                               : selecionada
-                                ? { backgroundColor: '#E8560A', color: '#fff', border: '2px solid #E8560A' }
-                                : { backgroundColor: '#fff', color: '#374151', border: '2px solid #e5e7eb' }
-                          }
+                                ? 'bg-primary text-white border-primary'
+                                : 'bg-white text-gray-700 border-gray-200'
+                          }`}
                         >
                           #{b.codigo ?? b.numero}
                         </button>
@@ -853,7 +845,7 @@ export function FeiraDetalheClient({
                     <span className="w-3 h-3 rounded-full bg-gray-300 inline-block" />Ocupada
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <span className="w-3 h-3 rounded-full inline-block" style={{ backgroundColor: '#E8560A' }} />Selecionada
+                    <span className="w-3 h-3 rounded-full inline-block bg-primary" />Selecionada
                   </span>
                 </div>
 
@@ -866,8 +858,7 @@ export function FeiraDetalheClient({
                 <button
                   onClick={handleConfirmarAprovacao}
                   disabled={!barracaEscolhidaId || isPending}
-                  className="w-full py-3 rounded-xl text-sm font-semibold text-white transition-colors disabled:opacity-50"
-                  style={{ backgroundColor: '#E8560A' }}
+                  className="w-full py-3 rounded-xl text-sm font-semibold text-white transition-colors disabled:opacity-50 bg-primary"
                 >
                   {isPending ? 'Aprovando…' : 'Confirmar aprovação'}
                 </button>

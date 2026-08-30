@@ -170,7 +170,7 @@ export function FeiraFormWizard({
           <p className="text-gray-600">Passo {step} de 5</p>
           <div className="w-full bg-gray-200 rounded-full h-2 mt-4">
             <div
-              className="bg-[#E8560A] h-2 rounded-full transition-all duration-300"
+              className="bg-primary h-2 rounded-full transition-all duration-300"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
@@ -199,7 +199,7 @@ export function FeiraFormWizard({
                     value={dados.descricao}
                     onChange={(e) => handleInputChange("descricao", e.target.value)}
                     placeholder="Descreva sua feira"
-                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-[#E8560A]"
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
                     rows={4}
                     required
                   />
@@ -216,7 +216,7 @@ export function FeiraFormWizard({
                           type="checkbox"
                           checked={dados.categorias.includes(cat)}
                           onChange={() => toggleCategoria(cat)}
-                          className="w-4 h-4 accent-[#E8560A]"
+                          className="w-4 h-4 accent-primary"
                         />
                         <span className="text-sm">{cat}</span>
                       </label>
@@ -312,7 +312,7 @@ export function FeiraFormWizard({
                       id="estado"
                       value={dados.estado}
                       onChange={(e) => handleInputChange("estado", e.target.value)}
-                      className="mt-1 flex h-8 w-full items-center rounded-lg border border-input bg-transparent px-2.5 py-1 text-base outline-none focus:ring-2 focus:ring-[#E8560A] md:text-sm"
+                      className="mt-1 flex h-8 w-full items-center rounded-lg border border-input bg-transparent px-2.5 py-1 text-base outline-none focus:ring-2 focus:ring-primary md:text-sm"
                       required
                     >
                       {UFS.map((uf) => (
@@ -340,7 +340,7 @@ export function FeiraFormWizard({
             {/* PASSO 4 */}
             {step === 4 && (
               <div className="space-y-6">
-                <p className="text-xs text-[#E8560A]">
+                <p className="text-xs text-primary">
                   Monte o mapa de barracas da feira. Linhas × Colunas = total de vagas (ex: 5 × 5 = 25 barracas).
                 </p>
                 {gridBloqueado && (
@@ -505,7 +505,7 @@ export function FeiraFormWizard({
           {step < 5 ? (
             <Button
               onClick={handleProximo}
-              className="bg-[#E8560A] hover:bg-[#C4450A] gap-2"
+              className="bg-primary hover:bg-primary/80 gap-2"
             >
               Próximo
               <ChevronRight size={18} />
@@ -514,7 +514,7 @@ export function FeiraFormWizard({
             <Button
               onClick={handleConfirmar}
               disabled={loading}
-              className="bg-[#E8560A] hover:bg-[#C4450A] gap-2"
+              className="bg-primary hover:bg-primary/80 gap-2"
             >
               {loading
                 ? modo === "editar" ? "Salvando..." : "Criando..."

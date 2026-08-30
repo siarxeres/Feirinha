@@ -82,7 +82,7 @@ export default function CadastroPage() {
                 <option value="consumidor">Consumidor</option>
               </select>
             </div>
-            <Button type="submit" className="w-full bg-[#E8560A] hover:bg-[#C4450A]" disabled={loading}>
+            <Button type="submit" className="w-full bg-primary hover:bg-primary/80" disabled={loading}>
               {loading ? "Cadastrando..." : "Cadastrar"}
             </Button>
           </form>

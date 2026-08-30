@@ -75,12 +75,9 @@ export function InscricoesListClient({ lista }: { lista: any[] }) {
             key={f}
             type="button"
             onClick={() => setFiltro(f)}
-            className="px-3 py-1.5 rounded-full text-sm font-medium transition-colors"
-            style={
-              filtro === f
-                ? { backgroundColor: "#E8560A", color: "#fff" }
-                : { backgroundColor: "#f3f4f6", color: "#4b5563" }
-            }
+            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+              filtro === f ? "bg-primary text-white" : "bg-gray-100 text-gray-600"
+            }`}
           >
             {f}
           </button>
@@ -108,8 +105,7 @@ export function InscricoesListClient({ lista }: { lista: any[] }) {
             return (
               <div
                 key={insc.id}
-                className="rounded-2xl bg-white shadow-sm overflow-hidden"
-                style={{ border: "2px solid #e5e7eb" }}
+                className="rounded-2xl bg-white shadow-sm overflow-hidden border-2 border-gray-200"
               >
                 <div className="flex items-center gap-3 p-4">
                   <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0 ${avatarBg(nomeFeira, insc.id)}`}>
@@ -136,7 +132,7 @@ export function InscricoesListClient({ lista }: { lista: any[] }) {
                         </span>
                       )}
                       {insc.status === "aprovada" && codigoBarraca && (
-                        <span className="flex items-center gap-1 text-xs font-semibold" style={{ color: "#E8560A" }}>
+                        <span className="flex items-center gap-1 text-xs font-semibold text-primary">
                           <Store size={11} />
                           Barraca #{codigoBarraca}
                         </span>

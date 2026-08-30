@@ -17,15 +17,15 @@ export function SideNav() {
   return (
     <aside className="w-64 min-h-screen bg-white border-r border-gray-200 flex flex-col">
       <div className="p-6 border-b border-gray-100">
-        <span className="text-xl font-bold text-[#E8560A]">Feirinha</span>
-        <span className="ml-2 text-xs bg-orange-100 text-[#E8560A] px-2 py-0.5 rounded-full font-medium">Admin</span>
+        <span className="text-xl font-bold text-primary">Feirinha</span>
+        <span className="ml-2 text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">Admin</span>
       </div>
       <nav className="flex-1 p-4 space-y-1">
         {items.map(({ icon: Icon, label, href }) => {
           const active = pathname === href;
           return (
             <Link key={href} href={href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${active ? "bg-orange-50 text-[#E8560A]" : "text-gray-600 hover:bg-gray-50"}`}>
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${active ? "bg-primary/10 text-primary" : "text-gray-600 hover:bg-gray-50"}`}>
               <Icon size={18} strokeWidth={active ? 2.5 : 1.75} />
               {label}
             </Link>

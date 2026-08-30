@@ -53,8 +53,7 @@ export function NotificationBell({ notificacoes }: { notificacoes: Notificacao[]
         <Bell size={21} className="text-gray-700" />
         {temNaoLida && (
           <span
-            className="absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full border-2 border-white"
-            style={{ backgroundColor: "#E8560A" }}
+            className="absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full border-2 border-white bg-primary"
           />
         )}
       </button>

@@ -35,8 +35,7 @@ export default async function PerfilOrganizadorPage() {
           {/* Avatar */}
           <div className="flex flex-col items-center py-6">
             <div
-              className="w-20 h-20 rounded-full flex items-center justify-center text-white text-2xl font-bold mb-3"
-              style={{ backgroundColor: "#E8560A" }}
+              className="w-20 h-20 rounded-full flex items-center justify-center text-primary-foreground text-2xl font-bold mb-3 bg-primary"
             >
               {initials}
             </div>

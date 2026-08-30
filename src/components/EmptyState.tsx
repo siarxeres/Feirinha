@@ -29,8 +29,7 @@ export function EmptyState({ icon: Icon, title, description, action, card = fals
         action.href ? (
           <Link
             href={action.href}
-            className="mt-1 flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-bold text-white shadow-md transition-all active:scale-[0.98]"
-            style={{ backgroundColor: "#E8560A" }}
+            className="mt-1 flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-bold text-primary-foreground shadow-md transition-all active:scale-[0.98] bg-primary hover:bg-primary/80"
           >
             {action.label}
           </Link>
@@ -38,8 +37,7 @@ export function EmptyState({ icon: Icon, title, description, action, card = fals
           <button
             type="button"
             onClick={action.onClick}
-            className="mt-1 flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-bold text-white shadow-md transition-all active:scale-[0.98]"
-            style={{ backgroundColor: "#E8560A" }}
+            className="mt-1 flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-bold text-primary-foreground shadow-md transition-all active:scale-[0.98] bg-primary hover:bg-primary/80"
           >
             {action.label}
           </button>

@@ -118,7 +118,7 @@ export default function FeiraDetalheClient({ feira, barracas, inscricoes }: Prop
   const pendentes  = barracas.filter((b) => b.status === "pendente").length
 
   const metrics = [
-    { label: "Total de Barracas", value: totalBarracas, color: "text-[#E8560A]" },
+    { label: "Total de Barracas", value: totalBarracas, color: "text-primary" },
     { label: "Ocupadas",          value: ocupadas,       color: "text-[#1D9E75]" },
     { label: "Livres",            value: livres,         color: "text-slate-700"  },
     { label: "Pendentes",         value: pendentes,      color: "text-[#EF9F27]" },
@@ -174,7 +174,7 @@ export default function FeiraDetalheClient({ feira, barracas, inscricoes }: Prop
         {/* Back button */}
         <Link
           href="/dashboard/organizador"
-          className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 transition-colors hover:text-[#E8560A]"
+          className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 transition-colors hover:text-primary"
         >
           <ArrowLeft size={16} />
           Dashboard
@@ -192,11 +192,11 @@ export default function FeiraDetalheClient({ feira, barracas, inscricoes }: Prop
               </div>
               <div className="flex flex-wrap items-center gap-4 text-sm text-slate-600">
                 <span className="flex items-center gap-1.5">
-                  <MapPin size={14} className="text-[#E8560A]" />
+                  <MapPin size={14} className="text-primary" />
                   {feira.cidade}{feira.estado ? `, ${feira.estado}` : ""}
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <CalendarDays size={14} className="text-[#E8560A]" />
+                  <CalendarDays size={14} className="text-primary" />
                   {formatDate(feira.data_inicio)} – {formatDate(feira.data_fim)}
                 </span>
               </div>

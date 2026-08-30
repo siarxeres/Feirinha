@@ -89,12 +89,11 @@ export default async function AvisosFeirantePage() {
               return (
                 <div
                   key={comunicado.id}
-                  className="rounded-2xl bg-white shadow-sm p-4"
-                  style={{ border: "2px solid #e5e7eb" }}
+                  className="rounded-2xl bg-white shadow-sm p-4 border-2 border-gray-200"
                 >
                   <div className="flex items-center gap-2 mb-2">
-                    <Megaphone size={14} style={{ color: "#E8560A" }} />
-                    <p className="text-xs font-bold uppercase tracking-wide" style={{ color: "#E8560A" }}>
+                    <Megaphone size={14} className="text-primary" />
+                    <p className="text-xs font-bold uppercase tracking-wide text-primary">
                       {nomeFeira}
                     </p>
                   </div>

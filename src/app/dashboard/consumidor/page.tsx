@@ -1,3 +1,4 @@
+import type { ReactNode, CSSProperties } from "react"
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import { Store, CalendarDays, Clock, Tag, MapPin } from "lucide-react"
@@ -57,12 +58,18 @@ export default async function ConsumidorPage() {
   const categoriasUnicas = new Set(feiras.flatMap(f => Array.isArray(f.categorias) ? f.categorias : []))
   const destaques = emBreve.slice(0, 6)
 
-  const metrics = [
+  const metrics: {
+    label: string
+    value: number
+    icon: ReactNode
+    className?: string
+    style?: CSSProperties
+  }[] = [
     {
       label: "Feiras",
       value: feiras.length,
       icon: <Store size={18} className="text-orange-500" />,
-      style: { border: "2px solid #fed7aa", backgroundColor: "#fff7ed" },
+      className: "border-2 border-primary/20 bg-primary/10",
     },
     {
       label: "Em breve",
@@ -111,7 +118,7 @@ export default async function ConsumidorPage() {
           {/* Metrics 2×2 */}
           <section className="grid grid-cols-2 gap-3">
             {metrics.map(m => (
-              <div key={m.label} className="rounded-xl p-4 shadow-sm" style={m.style}>
+              <div key={m.label} className={`rounded-xl p-4 shadow-sm ${m.className ?? ""}`} style={m.style}>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-semibold text-gray-600">{m.label}</span>
                   {m.icon}
@@ -140,8 +147,7 @@ export default async function ConsumidorPage() {
                     return (
                       <div
                         key={feira.id}
-                        className="snap-start shrink-0 w-56 rounded-2xl bg-white shadow-sm overflow-hidden flex flex-col"
-                        style={{ border: "2px solid #e5e7eb" }}
+                        className="snap-start shrink-0 w-56 rounded-2xl bg-white shadow-sm overflow-hidden flex flex-col border-2 border-gray-200"
                       >
                         <div className="relative">
                           {feira.foto_capa_url ? (
@@ -154,14 +160,13 @@ export default async function ConsumidorPage() {
                             </div>
                           ) : (
                             <div
-                              className="h-24 flex items-center justify-center"
-                              style={{ background: "linear-gradient(135deg, #E8560A 0%, #f97316 100%)" }}
+                              className="h-24 flex items-center justify-center bg-gradient-to-br from-primary to-orange-400"
                             >
                               <Store size={26} className="text-white opacity-80" />
                             </div>
                           )}
                           {dias !== null && dias >= 0 && (
-                            <span className="absolute top-2 right-2 bg-[#E8560A] text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                            <span className="absolute top-2 right-2 bg-primary text-white text-xs font-bold px-2 py-0.5 rounded-full">
                               {dias === 0 ? "Hoje!" : `Em ${dias}d`}
                             </span>
                           )}
@@ -181,16 +186,14 @@ export default async function ConsumidorPage() {
                           </p>
                           {categorias.length > 0 && (
                             <span
-                              className="self-start text-xs px-1.5 py-0.5 rounded-full capitalize mt-0.5"
-                              style={{ backgroundColor: "#fff7ed", color: "#c2410c", border: "1px solid #fed7aa" }}
+                              className="self-start text-xs px-1.5 py-0.5 rounded-full capitalize mt-0.5 bg-primary/10 text-primary border border-primary/20"
                             >
                               {categorias[0]}
                             </span>
                           )}
                           <Link
                             href={`/feiras/${feira.id}`}
-                            className="mt-auto block text-center py-1.5 rounded-lg text-xs font-semibold text-white"
-                            style={{ backgroundColor: "#E8560A" }}
+                            className="mt-auto block text-center py-1.5 rounded-lg text-xs font-semibold text-primary-foreground bg-primary"
                           >
                             Ver detalhes
                           </Link>

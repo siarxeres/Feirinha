@@ -68,9 +68,9 @@ export default async function PerfilConsumidorPage() {
           </div>
 
           {/* Info card */}
-          <div className="bg-white rounded-2xl shadow-sm divide-y divide-gray-100" style={{ border: "2px solid #e5e7eb" }}>
+          <div className="bg-white rounded-2xl shadow-sm divide-y divide-gray-100 border-2 border-gray-200">
             <div className="px-5 py-4 flex items-start gap-3">
-              <User size={18} className="text-[#E8560A] mt-0.5 shrink-0" />
+              <User size={18} className="text-primary mt-0.5 shrink-0" />
               <div className="flex-1 min-w-0">
                 <EditProfileForm nome={nome} />
               </div>
@@ -85,7 +85,7 @@ export default async function PerfilConsumidorPage() {
           </div>
 
           {/* Settings card */}
-          <div className="bg-white rounded-2xl shadow-sm overflow-hidden" style={{ border: "2px solid #e5e7eb" }}>
+          <div className="bg-white rounded-2xl shadow-sm overflow-hidden border-2 border-gray-200">
             <LogoutButton variant="full" />
           </div>
 

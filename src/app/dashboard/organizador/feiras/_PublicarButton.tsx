@@ -28,8 +28,7 @@ export function PublicarButton({ feiraId }: { feiraId: string }) {
         type="button"
         onClick={handlePublicar}
         disabled={isPending}
-        className="px-4 py-2 rounded-full text-xs font-bold text-white shadow-sm transition-all active:scale-[0.97] disabled:opacity-60"
-        style={{ backgroundColor: '#E8560A' }}
+        className="px-4 py-2 rounded-full text-xs font-bold text-primary-foreground shadow-sm transition-all active:scale-[0.97] disabled:opacity-60 bg-primary hover:bg-primary/80"
       >
         {isPending ? 'Publicando...' : 'Publicar'}
       </button>
