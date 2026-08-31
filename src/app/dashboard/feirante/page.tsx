@@ -1,3 +1,4 @@
+import type { ReactNode, CSSProperties } from "react"
 import { createClient, createAdminClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import Link from "next/link"
@@ -83,12 +84,18 @@ export default async function FeirantePage() {
   const pendentes = lista.filter((i: any) => i.status === "pendente").length
   const inscritasIds = new Set(lista.map((i: any) => i.feira_id).filter(Boolean))
 
-  const metrics = [
+  const metrics: {
+    label: string
+    value: number
+    icon: ReactNode
+    className?: string
+    style?: CSSProperties
+  }[] = [
     {
       label: "Inscrições",
       value: totalInscricoes,
       icon: <ClipboardList size={18} className="text-orange-500" />,
-      style: { border: "2px solid #fed7aa", backgroundColor: "#fff7ed" },
+      className: "border-2 border-primary/20 bg-primary/10",
     },
     {
       label: "Aprovadas",
@@ -137,7 +144,7 @@ export default async function FeirantePage() {
           {/* Metrics 2×2 */}
           <section className="grid grid-cols-2 gap-3">
             {metrics.map(m => (
-              <div key={m.label} className="rounded-xl p-4 shadow-sm" style={m.style}>
+              <div key={m.label} className={`rounded-xl p-4 shadow-sm ${m.className ?? ""}`} style={m.style}>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-semibold text-gray-600">{m.label}</span>
                   {m.icon}
@@ -167,12 +174,10 @@ export default async function FeirantePage() {
                   return (
                     <div
                       key={feira.id}
-                      className="rounded-2xl bg-white shadow-sm overflow-hidden"
-                      style={{ border: "2px solid #e5e7eb" }}
+                      className="rounded-2xl bg-white shadow-sm overflow-hidden border-2 border-gray-200"
                     >
                       <div
-                        className="h-16 flex items-center justify-center"
-                        style={{ background: "linear-gradient(135deg, #E8560A 0%, #f97316 100%)" }}
+                        className="h-16 flex items-center justify-center bg-gradient-to-br from-primary to-orange-400"
                       >
                         <Store size={28} className="text-white opacity-80" />
                       </div>
@@ -187,8 +192,7 @@ export default async function FeirantePage() {
                           ) : (
                             <Link
                               href={`/feiras/${feira.id}/inscricao`}
-                              className="text-xs px-3 py-1.5 rounded-full font-semibold text-white shrink-0 transition-colors"
-                              style={{ backgroundColor: "#E8560A" }}
+                              className="text-xs px-3 py-1.5 rounded-full font-semibold text-primary-foreground shrink-0 transition-colors bg-primary hover:bg-primary/80"
                             >
                               Me inscrever
                             </Link>
@@ -217,8 +221,7 @@ export default async function FeirantePage() {
                             {categorias.map((cat: string) => (
                               <span
                                 key={cat}
-                                className="text-xs px-2 py-0.5 rounded-full capitalize"
-                                style={{ backgroundColor: "#fff7ed", color: "#c2410c", border: "1px solid #fed7aa" }}
+                                className="text-xs px-2 py-0.5 rounded-full capitalize bg-primary/10 text-primary border border-primary/20"
                               >
                                 {cat}
                               </span>

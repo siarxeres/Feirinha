@@ -61,7 +61,7 @@ export default async function AdminUsuariosPage() {
                     <td className="px-6 py-4 text-gray-600">{u.email}</td>
                     <td className="px-6 py-4">
                       {u.roles?.map((r: string) => (
-                        <span key={r} className="inline-block bg-orange-50 text-[#E8560A] text-xs px-2 py-0.5 rounded-full font-medium mr-1">{r}</span>
+                        <span key={r} className="inline-block bg-primary/10 text-primary text-xs px-2 py-0.5 rounded-full font-medium mr-1">{r}</span>
                       ))}
                     </td>
                     <td className="px-6 py-4">

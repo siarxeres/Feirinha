@@ -49,8 +49,7 @@ export default async function LandingPage() {
             {painelHref ? (
               <Link
                 href={painelHref}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-white"
-                style={{ backgroundColor: "#E8560A" }}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-primary-foreground bg-primary hover:bg-primary/80"
               >
                 Ir ao painel
                 <ArrowRight size={14} />
@@ -65,8 +64,7 @@ export default async function LandingPage() {
                 </Link>
                 <Link
                   href="/auth/cadastro"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-white"
-                  style={{ backgroundColor: "#E8560A" }}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-primary-foreground bg-primary hover:bg-primary/80"
                 >
                   Criar conta
                 </Link>
@@ -79,12 +77,12 @@ export default async function LandingPage() {
       <main className="flex-1">
 
         {/* ── Hero ── */}
-        <section className="pt-20 pb-6 px-5 text-center" style={{ background: "linear-gradient(180deg, #fff7ed 0%, #ffffff 100%)" }}>
+        <section className="pt-20 pb-6 px-5 text-center bg-gradient-to-b from-primary/10 to-white">
           <div className="max-w-2xl mx-auto">
             <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight mb-5">
               Chega de controlar a feira no{" "}
-              <span style={{ color: "#E8560A" }}>caderno</span> e no{" "}
-              <span style={{ color: "#E8560A" }}>WhatsApp</span>.
+              <span className="text-primary">caderno</span> e no{" "}
+              <span className="text-primary">WhatsApp</span>.
             </h1>
             <p className="text-lg text-gray-500 leading-relaxed">
               Organize inscrições, presença e o rateio de despesas — automático e
@@ -100,8 +98,8 @@ export default async function LandingPage() {
             <p className="text-center text-gray-500 mb-10">Três perfis, uma plataforma integrada.</p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
 
-              <div className="rounded-3xl p-6 flex flex-col gap-4" style={{ backgroundColor: "#fff7ed", border: "2px solid #fed7aa" }}>
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ backgroundColor: "#E8560A" }}>
+              <div className="rounded-3xl p-6 flex flex-col gap-4 bg-primary/10 border-2 border-primary/20">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-primary">
                   <ClipboardList size={22} className="text-white" />
                 </div>
                 <div>
@@ -113,7 +111,7 @@ export default async function LandingPage() {
                 <ul className="space-y-2 mt-auto">
                   {["Criar e publicar feiras", "Aprovar feirantes", "Gestão de inscrições"].map(item => (
                     <li key={item} className="flex items-center gap-2 text-sm text-gray-700">
-                      <CheckCircle2 size={14} style={{ color: "#E8560A" }} />
+                      <CheckCircle2 size={14} className="text-primary" />
                       {item}
                     </li>
                   ))}
@@ -171,7 +169,7 @@ export default async function LandingPage() {
             <p className="text-center text-gray-500 mb-10">Da criação ao evento em quatro etapas simples.</p>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-5">
               {[
-                { icon: Users, step: "1", title: "Crie sua conta", desc: "Escolha seu perfil: organizador, feirante ou consumidor.", color: "#E8560A" },
+                { icon: Users, step: "1", title: "Crie sua conta", desc: "Escolha seu perfil: organizador, feirante ou consumidor.", color: "var(--primary)" },
                 { icon: ClipboardList, step: "2", title: "Complete o perfil", desc: "Preencha seus dados e aguarde aprovação (feirantes).", color: "#1D9E75" },
                 { icon: MapPin, step: "3", title: "Explore as feiras", desc: "Veja feiras por localização, categoria e data.", color: "#3b82f6" },
                 { icon: CalendarDays, step: "4", title: "Conecte-se", desc: "Inscreva-se, aprove e gerencie — tudo em um lugar.", color: "#8b5cf6" },
@@ -205,8 +203,7 @@ export default async function LandingPage() {
             </p>
             <Link
               href="/auth/cadastro"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-base font-bold text-white shadow-lg transition-all hover:scale-105 active:scale-100"
-              style={{ backgroundColor: "#E8560A" }}
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-base font-bold text-primary-foreground shadow-lg transition-all hover:scale-105 active:scale-100 bg-primary hover:bg-primary/80"
             >
               Começar agora
               <ArrowRight size={16} />

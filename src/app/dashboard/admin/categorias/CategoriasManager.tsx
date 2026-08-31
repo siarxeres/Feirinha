@@ -12,6 +12,7 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from "@/components/ui/dialog"
 import { EmptyState } from "@/components/EmptyState"
+import { Skeleton } from "@/components/ui/skeleton"
 import { criarCategoria, editarCategoria, excluirCategoria } from "./actions"
 
 type Categoria = {
@@ -115,8 +116,7 @@ export function CategoriasManager() {
         <h1 className="text-2xl font-bold text-gray-900">Categorias</h1>
         <button
           onClick={abrirNovo}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-colors hover:opacity-90"
-          style={{ backgroundColor: "#E8560A" }}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-primary-foreground transition-colors hover:opacity-90 bg-primary"
         >
           <Plus size={16} />
           Nova Categoria
@@ -125,7 +125,17 @@ export function CategoriasManager() {
       <p className="text-gray-500 mb-8">Categorias disponíveis para classificar feiras e produtos</p>
 
       {loading ? (
-        <p className="text-sm text-gray-400">Carregando...</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col gap-3">
+              <div className="flex items-center gap-3">
+                <Skeleton className="w-10 h-10 rounded-xl shrink-0" />
+                <Skeleton className="h-4 w-2/3" />
+              </div>
+              <Skeleton className="h-3 w-1/2" />
+            </div>
+          ))}
+        </div>
       ) : lista.length === 0 ? (
         <EmptyState
           icon={Tag}
@@ -251,8 +261,7 @@ export function CategoriasManager() {
             <button
               onClick={salvar}
               disabled={saving || !form.nome.trim()}
-              className="px-4 py-2 rounded-lg text-sm font-semibold text-white disabled:opacity-50 transition-colors hover:opacity-90"
-              style={{ backgroundColor: "#E8560A" }}
+              className="px-4 py-2 rounded-lg text-sm font-semibold text-primary-foreground disabled:opacity-50 transition-colors hover:opacity-90 bg-primary"
             >
               {saving ? "Salvando..." : editando ? "Salvar" : "Criar"}
             </button>

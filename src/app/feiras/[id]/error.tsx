@@ -27,7 +27,7 @@ export default function FeiraDetalheError({
       <div className="flex gap-3">
         <button
           onClick={reset}
-          className="rounded-xl bg-[#E8560A] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#d04d09] transition-colors"
+          className="rounded-xl bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/80 transition-colors"
         >
           Tentar novamente
         </button>

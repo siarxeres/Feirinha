@@ -41,7 +41,7 @@ function FeiraCard({ feira }: { feira: Feira }) {
         </div>
       ) : (
         <div className="h-36 bg-gradient-to-br from-orange-100 to-orange-50 flex items-center justify-center">
-          <Store size={40} className="text-[#E8560A] opacity-40" />
+          <Store size={40} className="text-primary opacity-40" />
         </div>
       )}
 
@@ -78,7 +78,7 @@ function FeiraCard({ feira }: { feira: Feira }) {
 
         <Link
           href={`/feiras/${feira.id}`}
-          className="mt-auto block text-center py-2 rounded-xl text-sm font-semibold bg-[#E8560A] text-white hover:bg-[#C4450A] transition-colors"
+          className="mt-auto block text-center py-2 rounded-xl text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/80 transition-colors"
         >
           Ver detalhes
         </Link>
@@ -114,7 +114,7 @@ export function BuscaFeiras({ feiras }: { feiras: Feira[] }) {
           value={query}
           onChange={e => setQuery(e.target.value)}
           placeholder="Buscar por nome ou cidade..."
-          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#E8560A]/30 focus:border-[#E8560A] transition"
+          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition"
         />
         {query && (
           <button

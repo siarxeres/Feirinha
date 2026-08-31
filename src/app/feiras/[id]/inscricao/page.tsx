@@ -81,12 +81,10 @@ export default async function InscricaoPage({
 
           {/* Feira card */}
           <div
-            className="rounded-2xl bg-white shadow-sm overflow-hidden"
-            style={{ border: '2px solid #e5e7eb' }}
+            className="rounded-2xl bg-white shadow-sm overflow-hidden border-2 border-gray-200"
           >
             <div
-              className="h-16 flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg, #E8560A 0%, #f97316 100%)' }}
+              className="h-16 flex items-center justify-center bg-gradient-to-br from-primary to-orange-400"
             >
               <Store size={28} className="text-white opacity-80" />
             </div>
@@ -111,8 +109,7 @@ export default async function InscricaoPage({
                   {categorias.map((cat: string) => (
                     <span
                       key={cat}
-                      className="text-xs px-2 py-0.5 rounded-full capitalize"
-                      style={{ backgroundColor: '#fff7ed', color: '#c2410c', border: '1px solid #fed7aa' }}
+                      className="text-xs px-2 py-0.5 rounded-full capitalize bg-primary/10 text-primary border border-primary/20"
                     >
                       {cat}
                     </span>

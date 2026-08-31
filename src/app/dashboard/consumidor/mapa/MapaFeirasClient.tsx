@@ -62,7 +62,7 @@ export function MapaFeirasClient({ feiras }: { feiras: Feira[] }) {
             value={query}
             onChange={e => setQuery(e.target.value)}
             placeholder="Buscar por nome ou cidade..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#E8560A]/30 focus:border-[#E8560A] transition"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition"
           />
           {query && (
             <button
@@ -85,12 +85,9 @@ export function MapaFeirasClient({ feiras }: { feiras: Feira[] }) {
           >
             <button
               onClick={() => setCidadeSelecionada(null)}
-              className="shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors"
-              style={
-                !cidadeSelecionada
-                  ? { backgroundColor: "#E8560A", color: "white" }
-                  : { backgroundColor: "#f3f4f6", color: "#374151" }
-              }
+              className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                !cidadeSelecionada ? "bg-primary text-white" : "bg-gray-100 text-gray-700"
+              }`}
             >
               Todas
             </button>
@@ -98,12 +95,9 @@ export function MapaFeirasClient({ feiras }: { feiras: Feira[] }) {
               <button
                 key={cidade}
                 onClick={() => setCidadeSelecionada(c => (c === cidade ? null : cidade))}
-                className="shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors"
-                style={
-                  cidadeSelecionada === cidade
-                    ? { backgroundColor: "#E8560A", color: "white" }
-                    : { backgroundColor: "#f3f4f6", color: "#374151" }
-                }
+                className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                  cidadeSelecionada === cidade ? "bg-primary text-white" : "bg-gray-100 text-gray-700"
+                }`}
               >
                 {cidade}
               </button>
@@ -147,8 +141,7 @@ export function MapaFeirasClient({ feiras }: { feiras: Feira[] }) {
             return (
               <div
                 key={feira.id}
-                className="rounded-2xl bg-white shadow-sm overflow-hidden"
-                style={{ border: "2px solid #e5e7eb" }}
+                className="rounded-2xl bg-white shadow-sm overflow-hidden border-2 border-gray-200"
               >
                 {feira.foto_capa_url ? (
                   <div className="h-20 overflow-hidden">
@@ -160,10 +153,9 @@ export function MapaFeirasClient({ feiras }: { feiras: Feira[] }) {
                   </div>
                 ) : (
                   <div
-                    className="h-14 flex items-center justify-center"
-                    style={{ background: "linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%)" }}
+                    className="h-14 flex items-center justify-center bg-gradient-to-br from-primary/10 to-primary/20"
                   >
-                    <Store size={20} className="text-[#E8560A] opacity-60" />
+                    <Store size={20} className="text-primary opacity-60" />
                   </div>
                 )}
 
@@ -180,8 +172,7 @@ export function MapaFeirasClient({ feiras }: { feiras: Feira[] }) {
                       href={mapsUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="shrink-0 flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl text-white transition-opacity hover:opacity-90"
-                      style={{ backgroundColor: "#E8560A" }}
+                      className="shrink-0 flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl text-white transition-opacity hover:opacity-90 bg-primary"
                     >
                       <Navigation size={11} />
                       Ver no Mapa
@@ -198,12 +189,7 @@ export function MapaFeirasClient({ feiras }: { feiras: Feira[] }) {
                       {categorias.slice(0, 3).map(cat => (
                         <span
                           key={cat}
-                          className="text-xs px-2 py-0.5 rounded-full capitalize"
-                          style={{
-                            backgroundColor: "#fff7ed",
-                            color: "#c2410c",
-                            border: "1px solid #fed7aa",
-                          }}
+                          className="text-xs px-2 py-0.5 rounded-full capitalize bg-primary/10 text-primary border border-primary/20"
                         >
                           {cat}
                         </span>

@@ -23,11 +23,16 @@ export function BottomNav() {
             <Link
               key={href}
               href={href}
-              className="flex-1 flex flex-col items-center gap-0.5 py-3 text-xs font-medium transition-colors"
-              style={{ color: active ? '#E8560A' : '#6B7280' }}
+              className="flex-1 flex flex-col items-center py-3 text-xs font-medium text-gray-500"
             >
-              <Icon size={22} strokeWidth={active ? 2.5 : 1.75} />
-              <span>{label}</span>
+              <span
+                className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-full transition-all duration-200 ${
+                  active ? 'bg-primary/10 text-primary' : ''
+                }`}
+              >
+                <Icon size={22} strokeWidth={active ? 2.5 : 1.75} />
+                <span>{label}</span>
+              </span>
             </Link>
           )
         })}

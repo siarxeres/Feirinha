@@ -53,7 +53,7 @@ function LoginForm() {
               </div>
               <Input id="senha" type="password" value={senha} onChange={e => setSenha(e.target.value)} placeholder="••••••••" required />
             </div>
-            <Button type="submit" className="w-full bg-[#E8560A] hover:bg-[#C4450A]" disabled={loading}>
+            <Button type="submit" className="w-full bg-primary hover:bg-primary/80" disabled={loading}>
               {loading ? "Entrando..." : "Entrar"}
             </Button>
           </form>

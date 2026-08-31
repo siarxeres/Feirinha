@@ -200,8 +200,7 @@ export default async function OrganizadorPage() {
 
           <Link
             href="/dashboard/organizador/feiras"
-            className="flex items-center justify-center gap-2 py-3 rounded-2xl text-sm font-bold transition-all active:scale-[0.98]"
-            style={{ border: '2px solid #E8560A', color: '#E8560A' }}
+            className="flex items-center justify-center gap-2 py-3 rounded-2xl text-sm font-bold transition-all active:scale-[0.98] border-2 border-primary text-primary"
           >
             <Store size={18} />
             Ver minhas feiras

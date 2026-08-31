@@ -53,16 +53,14 @@ export default async function MapaFeirantePage() {
               return (
                 <div
                   key={feira.id}
-                  className="rounded-2xl bg-white shadow-sm p-4"
-                  style={{ border: "2px solid #e5e7eb" }}
+                  className="rounded-2xl bg-white shadow-sm p-4 border-2 border-gray-200"
                 >
                   <p className="text-sm font-bold text-gray-900 mb-1">{feira.nome}</p>
                   <a
                     href={googleMapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-xs hover:underline"
-                    style={{ color: "#E8560A" }}
+                    className="flex items-center gap-1.5 text-xs hover:underline text-primary"
                   >
                     <MapPin size={12} />
                     {enderecoCompleto}

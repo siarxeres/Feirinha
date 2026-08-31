@@ -89,11 +89,10 @@ export default async function PerfilFeirantePage() {
           {/* Assinatura */}
           <Link
             href="/dashboard/feirante/assinatura"
-            className="block bg-white rounded-2xl shadow-sm"
-            style={{ border: "2px solid #e5e7eb" }}
+            className="block bg-white rounded-2xl shadow-sm border-2 border-gray-200"
           >
             <div className="px-5 py-4 flex items-center gap-3">
-              <CreditCard size={18} style={{ color: "#E8560A" }} className="shrink-0" />
+              <CreditCard size={18} className="shrink-0 text-primary" />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-gray-800">Assinatura</p>
                 <div className={`inline-flex items-center gap-1.5 mt-1 text-xs font-medium px-2 py-0.5 rounded-full ${statusInfo.cls}`}>
