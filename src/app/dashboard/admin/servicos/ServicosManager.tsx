@@ -127,7 +127,7 @@ export function ServicosManager() {
         <h1 className="text-2xl font-bold text-gray-900">Serviços de Suporte</h1>
         <button
           onClick={abrirNovo}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-primary-foreground transition-colors hover:opacity-90 bg-primary"
+          className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-primary-foreground transition-all active:scale-95 hover:opacity-90 bg-primary"
         >
           <Plus size={16} />
           Novo Serviço
@@ -186,13 +186,13 @@ export function ServicosManager() {
                 <div className="flex gap-2 pt-1 border-t border-gray-100">
                   <button
                     onClick={() => abrirEditar(s)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-blue-600 hover:bg-blue-50 transition-colors"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-blue-600 hover:bg-blue-50 transition-all active:scale-95"
                   >
                     <Pencil size={13} /> Editar
                   </button>
                   <button
                     onClick={() => pedirExclusao(s.id)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-red-500 hover:bg-red-50 transition-colors"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-red-500 hover:bg-red-50 transition-all active:scale-95"
                   >
                     <Trash2 size={13} /> Excluir
                   </button>
@@ -251,7 +251,7 @@ export function ServicosManager() {
               <button
                 type="button"
                 onClick={() => setForm(f => ({ ...f, ativo: !f.ativo }))}
-                className={`relative w-11 h-6 rounded-full transition-colors ${form.ativo ? "bg-green-500" : "bg-gray-300"}`}
+                className={`relative w-11 h-6 rounded-full transition-all active:scale-95 ${form.ativo ? "bg-green-500" : "bg-gray-300"}`}
               >
                 <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${form.ativo ? "translate-x-5" : ""}`} />
               </button>
@@ -263,14 +263,14 @@ export function ServicosManager() {
           <DialogFooter>
             <button
               onClick={() => setModalOpen(false)}
-              className="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors border border-gray-200"
+              className="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 transition-all active:scale-95 border border-gray-200"
             >
               Cancelar
             </button>
             <button
               onClick={salvar}
               disabled={saving || !form.nome.trim()}
-              className="px-4 py-2 rounded-lg text-sm font-semibold text-primary-foreground disabled:opacity-50 transition-colors hover:opacity-90 bg-primary"
+              className="px-4 py-2 rounded-lg text-sm font-semibold text-primary-foreground disabled:opacity-50 transition-all active:scale-95 hover:opacity-90 bg-primary"
             >
               {saving ? "Salvando..." : editando ? "Salvar" : "Criar"}
             </button>
@@ -290,13 +290,13 @@ export function ServicosManager() {
           <DialogFooter>
             <button
               onClick={() => setConfirmOpen(false)}
-              className="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors border border-gray-200"
+              className="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 transition-all active:scale-95 border border-gray-200"
             >
               Cancelar
             </button>
             <button
               onClick={confirmarExclusao}
-              className="px-4 py-2 rounded-lg text-sm font-semibold text-white bg-red-500 hover:bg-red-600 transition-colors"
+              className="px-4 py-2 rounded-lg text-sm font-semibold text-white bg-red-500 hover:bg-red-600 transition-all active:scale-95"
             >
               Excluir
             </button>

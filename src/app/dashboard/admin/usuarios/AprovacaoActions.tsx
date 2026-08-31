@@ -47,7 +47,7 @@ export function AprovacaoActions({ feiranteId, aprovacaoStatus }: Props) {
         onClick={handleAprovar}
         disabled={isPending}
         title="Aprovar feirante"
-        className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-white transition-opacity hover:opacity-80 disabled:opacity-50"
+        className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-white transition-all active:scale-95 hover:opacity-80 disabled:opacity-50"
         style={{ backgroundColor: "var(--success)" }}
       >
         <CheckCircle2 size={13} />
@@ -57,7 +57,7 @@ export function AprovacaoActions({ feiranteId, aprovacaoStatus }: Props) {
         onClick={handleRejeitar}
         disabled={isPending}
         title="Rejeitar feirante"
-        className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-white transition-opacity hover:opacity-80 disabled:opacity-50 bg-red-500"
+        className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-white transition-all active:scale-95 hover:opacity-80 disabled:opacity-50 bg-red-500"
       >
         <XCircle size={13} />
         Rejeitar

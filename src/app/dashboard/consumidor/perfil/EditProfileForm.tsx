@@ -55,7 +55,7 @@ export function EditProfileForm({ nome: initialNome }: Props) {
           <button
             onClick={handleSave}
             disabled={isPending}
-            className="p-2 rounded-xl text-white transition-opacity hover:opacity-90 disabled:opacity-50 bg-primary"
+            className="p-2 rounded-xl text-white transition-all active:scale-95 hover:opacity-90 disabled:opacity-50 bg-primary"
             aria-label="Salvar"
           >
             <Check size={16} />
@@ -63,7 +63,7 @@ export function EditProfileForm({ nome: initialNome }: Props) {
           <button
             onClick={handleCancel}
             disabled={isPending}
-            className="p-2 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors disabled:opacity-50"
+            className="p-2 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all active:scale-95 disabled:opacity-50"
             aria-label="Cancelar"
           >
             <X size={16} />
@@ -74,7 +74,7 @@ export function EditProfileForm({ nome: initialNome }: Props) {
           <p className="text-base font-medium text-gray-900">{value || "—"}</p>
           <button
             onClick={() => setEditing(true)}
-            className="p-1.5 rounded-lg text-gray-400 hover:text-primary hover:bg-orange-50 transition-colors"
+            className="p-1.5 rounded-lg text-gray-400 hover:text-primary hover:bg-orange-50 transition-all active:scale-95"
             aria-label="Editar nome"
           >
             <Pencil size={15} />

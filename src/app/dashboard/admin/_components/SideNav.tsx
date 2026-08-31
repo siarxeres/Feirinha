@@ -25,7 +25,7 @@ export function SideNav() {
           const active = pathname === href;
           return (
             <Link key={href} href={href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${active ? "bg-primary/10 text-primary" : "text-gray-600 hover:bg-gray-50"}`}>
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all active:scale-95 ${active ? "bg-primary/10 text-primary" : "text-gray-600 hover:bg-gray-50"}`}>
               <Icon size={18} strokeWidth={active ? 2.5 : 1.75} />
               {label}
             </Link>
@@ -34,7 +34,7 @@ export function SideNav() {
       </nav>
       <div className="p-4 border-t border-gray-100">
         <form action="/auth/logout" method="post">
-          <button type="submit" className="flex items-center gap-3 px-3 py-2.5 w-full rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50">
+          <button type="submit" className="flex items-center gap-3 px-3 py-2.5 w-full rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 transition-all active:scale-95">
             <LogOut size={18} />
             Sair
           </button>
