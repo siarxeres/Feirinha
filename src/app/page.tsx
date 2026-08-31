@@ -118,7 +118,7 @@ export default async function LandingPage() {
                 </ul>
               </div>
 
-              <div className="rounded-3xl p-6 flex flex-col gap-4" style={{ backgroundColor: "#f0fdf4", border: "2px solid #bbf7d0" }}>
+              <div className="rounded-3xl p-6 flex flex-col gap-4 bg-green-50 border-2 border-green-200">
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ backgroundColor: "var(--success)" }}>
                   <Store size={22} className="text-white" />
                 </div>
@@ -138,7 +138,7 @@ export default async function LandingPage() {
                 </ul>
               </div>
 
-              <div className="rounded-3xl p-6 flex flex-col gap-4" style={{ backgroundColor: "#eff6ff", border: "2px solid #bfdbfe" }}>
+              <div className="rounded-3xl p-6 flex flex-col gap-4 bg-blue-50 border-2 border-blue-200">
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ backgroundColor: "#3b82f6" }}>
                   <ShoppingBag size={22} className="text-white" />
                 </div>

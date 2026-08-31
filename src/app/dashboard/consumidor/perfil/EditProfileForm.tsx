@@ -49,8 +49,7 @@ export function EditProfileForm({ nome: initialNome }: Props) {
               if (e.key === "Enter") handleSave()
               if (e.key === "Escape") handleCancel()
             }}
-            className="flex-1 px-3 py-2 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition"
-            style={{ borderColor: error ? "#ef4444" : "#e5e7eb" }}
+            className={`flex-1 px-3 py-2 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition ${error ? "border-red-500" : "border-border"}`}
             disabled={isPending}
           />
           <button

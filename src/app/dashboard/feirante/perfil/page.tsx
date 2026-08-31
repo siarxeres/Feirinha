@@ -73,8 +73,7 @@ export default async function PerfilFeirantePage() {
 
           {/* Dados do perfil */}
           <div
-            className="bg-white rounded-2xl shadow-sm divide-y divide-gray-100"
-            style={{ border: "2px solid #e5e7eb" }}
+            className="bg-white rounded-2xl shadow-sm divide-y divide-gray-100 border-2 border-border"
           >
             <div className="px-5 py-4">
               <label className="text-xs text-gray-500 font-medium uppercase tracking-wide">Nome</label>
@@ -109,8 +108,7 @@ export default async function PerfilFeirantePage() {
 
           {/* Sair */}
           <div
-            className="bg-white rounded-2xl shadow-sm overflow-hidden"
-            style={{ border: "2px solid #e5e7eb" }}
+            className="bg-white rounded-2xl shadow-sm overflow-hidden border-2 border-border"
           >
             <LogoutButton variant="full" />
           </div>

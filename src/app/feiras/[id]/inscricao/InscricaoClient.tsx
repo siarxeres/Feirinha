@@ -192,11 +192,11 @@ export function InscricaoClient({
               <p className="text-[10px] font-semibold text-gray-600 leading-tight mb-1">Total</p>
               <p className="text-sm font-bold text-gray-900">{formatBRL(totalDespesas)}</p>
             </div>
-            <div className="rounded-xl p-2.5 text-center" style={{ border: '2px solid #bfdbfe', backgroundColor: '#eff6ff' }}>
+            <div className="rounded-xl p-2.5 text-center border-2 border-blue-200 bg-blue-50">
               <p className="text-[10px] font-semibold text-gray-600 leading-tight mb-1">Inscritos</p>
               <p className="text-sm font-bold text-gray-900">{inscritosCount}</p>
             </div>
-            <div className="rounded-xl p-2.5 text-center" style={{ border: '2px solid #bbf7d0', backgroundColor: '#f0fdf4' }}>
+            <div className="rounded-xl p-2.5 text-center border-2 border-green-200 bg-green-50">
               <p className="text-[10px] font-semibold text-gray-600 leading-tight mb-1">Sua parte</p>
               <p className="text-xs font-bold text-gray-900 leading-tight">
                 {valorPorFeirante !== null ? formatBRL(valorPorFeirante) : 'Aguardando inscritos'}
