@@ -119,7 +119,7 @@ export default function FeiraDetalheClient({ feira, barracas, inscricoes }: Prop
 
   const metrics = [
     { label: "Total de Barracas", value: totalBarracas, color: "text-primary" },
-    { label: "Ocupadas",          value: ocupadas,       color: "text-[#1D9E75]" },
+    { label: "Ocupadas",          value: ocupadas,       color: "text-success" },
     { label: "Livres",            value: livres,         color: "text-slate-700"  },
     { label: "Pendentes",         value: pendentes,      color: "text-[#EF9F27]" },
   ]
@@ -330,7 +330,7 @@ export default function FeiraDetalheClient({ feira, barracas, inscricoes }: Prop
                 <Button
                   onClick={onAprovar}
                   disabled={isPending}
-                  className="flex-1 bg-[#1D9E75] text-white hover:bg-[#178a65] disabled:opacity-60"
+                  className="flex-1 bg-success text-white hover:bg-[#178a65] disabled:opacity-60"
                 >
                   Aprovar
                 </Button>

@@ -107,7 +107,7 @@ export default async function ConsumidorPage() {
               <LogoutButton />
             </div>
           </div>
-          <h1 className="text-3xl font-bold" style={{ color: "#1A1A1A" }}>
+          <h1 className="text-3xl font-bold text-foreground">
             Olá, {nome}!
           </h1>
         </header>

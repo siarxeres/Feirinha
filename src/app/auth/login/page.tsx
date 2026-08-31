@@ -49,7 +49,7 @@ function LoginForm() {
             <div className="space-y-1">
               <div className="flex items-center justify-between">
                 <Label htmlFor="senha">Senha</Label>
-                <Link href="/auth/recuperar-senha" className="text-xs text-[#1D9E75] hover:underline">Esqueci minha senha</Link>
+                <Link href="/auth/recuperar-senha" className="text-xs text-success hover:underline">Esqueci minha senha</Link>
               </div>
               <Input id="senha" type="password" value={senha} onChange={e => setSenha(e.target.value)} placeholder="••••••••" required />
             </div>
@@ -59,7 +59,7 @@ function LoginForm() {
           </form>
           <p className="text-center text-sm text-muted-foreground">
             Não tem conta?{" "}
-            <Link href="/auth/cadastro" className="text-[#1D9E75] font-medium hover:underline">Cadastre-se</Link>
+            <Link href="/auth/cadastro" className="text-success font-medium hover:underline">Cadastre-se</Link>
           </p>
         </CardContent>
       </Card>

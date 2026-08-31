@@ -38,7 +38,7 @@ export default function RecuperarSenhaPage() {
               <p className="text-center text-sm text-muted-foreground">
                 Link enviado! Verifique sua caixa de entrada e siga as instruções para redefinir sua senha.
               </p>
-              <Link href="/auth/login" className="block text-center text-sm text-[#1D9E75] hover:underline">
+              <Link href="/auth/login" className="block text-center text-sm text-success hover:underline">
                 Voltar ao login
               </Link>
             </div>
@@ -59,7 +59,7 @@ export default function RecuperarSenhaPage() {
                 {loading ? "Enviando..." : "Enviar link de recuperação"}
               </Button>
               <p className="text-center text-sm">
-                <Link href="/auth/login" className="text-[#1D9E75] hover:underline">Voltar ao login</Link>
+                <Link href="/auth/login" className="text-success hover:underline">Voltar ao login</Link>
               </p>
             </form>
           )}

@@ -48,7 +48,7 @@ export function AprovacaoActions({ feiranteId, aprovacaoStatus }: Props) {
         disabled={isPending}
         title="Aprovar feirante"
         className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-white transition-opacity hover:opacity-80 disabled:opacity-50"
-        style={{ backgroundColor: "#1D9E75" }}
+        style={{ backgroundColor: "var(--success)" }}
       >
         <CheckCircle2 size={13} />
         Aprovar
