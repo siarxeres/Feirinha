@@ -71,7 +71,7 @@ export default async function AvisosFeirantePage() {
             <img src="/feirinha-logo.svg" alt="Feirinha" width={36} height={36} />
             <span className="text-lg font-bold tracking-tight text-gray-900">Feirinha</span>
           </div>
-          <h1 className="text-3xl font-bold" style={{ color: "#1A1A1A" }}>Avisos</h1>
+          <h1 className="text-3xl font-bold text-foreground">Avisos</h1>
         </header>
 
         <div className="flex-1 px-5 pb-28 space-y-3">

@@ -180,7 +180,7 @@ export default async function OrganizadorPage() {
               </form>
             </div>
           </div>
-          <h1 className="text-3xl font-bold" style={{ color: '#1A1A1A' }}>
+          <h1 className="text-3xl font-bold text-foreground">
             {greeting}, {userName}
           </h1>
         </header>

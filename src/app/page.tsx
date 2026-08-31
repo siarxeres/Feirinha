@@ -119,7 +119,7 @@ export default async function LandingPage() {
               </div>
 
               <div className="rounded-3xl p-6 flex flex-col gap-4" style={{ backgroundColor: "#f0fdf4", border: "2px solid #bbf7d0" }}>
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ backgroundColor: "#1D9E75" }}>
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ backgroundColor: "var(--success)" }}>
                   <Store size={22} className="text-white" />
                 </div>
                 <div>
@@ -131,7 +131,7 @@ export default async function LandingPage() {
                 <ul className="space-y-2 mt-auto">
                   {["Buscar feiras disponíveis", "Solicitar inscrição", "Acompanhar aprovações"].map(item => (
                     <li key={item} className="flex items-center gap-2 text-sm text-gray-700">
-                      <CheckCircle2 size={14} style={{ color: "#1D9E75" }} />
+                      <CheckCircle2 size={14} style={{ color: "var(--success)" }} />
                       {item}
                     </li>
                   ))}
@@ -170,7 +170,7 @@ export default async function LandingPage() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-5">
               {[
                 { icon: Users, step: "1", title: "Crie sua conta", desc: "Escolha seu perfil: organizador, feirante ou consumidor.", color: "var(--primary)" },
-                { icon: ClipboardList, step: "2", title: "Complete o perfil", desc: "Preencha seus dados e aguarde aprovação (feirantes).", color: "#1D9E75" },
+                { icon: ClipboardList, step: "2", title: "Complete o perfil", desc: "Preencha seus dados e aguarde aprovação (feirantes).", color: "var(--success)" },
                 { icon: MapPin, step: "3", title: "Explore as feiras", desc: "Veja feiras por localização, categoria e data.", color: "#3b82f6" },
                 { icon: CalendarDays, step: "4", title: "Conecte-se", desc: "Inscreva-se, aprove e gerencie — tudo em um lugar.", color: "#8b5cf6" },
               ].map(({ icon: Icon, step, title, desc, color }) => (

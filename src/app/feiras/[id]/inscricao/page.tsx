@@ -71,7 +71,7 @@ export default async function InscricaoPage({
             >
               ← Voltar
             </Link>
-            <h1 className="text-3xl font-bold" style={{ color: '#1A1A1A' }}>
+            <h1 className="text-3xl font-bold text-foreground">
               Inscrição
             </h1>
           </div>

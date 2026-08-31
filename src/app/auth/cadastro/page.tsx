@@ -75,7 +75,7 @@ export default function CadastroPage() {
                 id="papel"
                 value={papel}
                 onChange={e => setPapel(e.target.value)}
-                className="block w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1D9E75]"
+                className="block w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-success"
               >
                 <option value="organizador">Organizador</option>
                 <option value="feirante">Feirante</option>
@@ -88,7 +88,7 @@ export default function CadastroPage() {
           </form>
           <p className="text-center text-sm text-muted-foreground">
             Já tem conta?{" "}
-            <Link href="/auth/login" className="text-[#1D9E75] font-medium hover:underline">Entrar</Link>
+            <Link href="/auth/login" className="text-success font-medium hover:underline">Entrar</Link>
           </p>
         </CardContent>
       </Card>

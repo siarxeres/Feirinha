@@ -109,7 +109,7 @@ export function OnboardingClient({ initialNome, initialCpfCnpj, initialCobranca,
                     className="w-9 h-9 rounded-full flex items-center justify-center transition-all"
                     style={
                       done
-                        ? { backgroundColor: "#1D9E75", color: "white" }
+                        ? { backgroundColor: "var(--success)", color: "white" }
                         : active
                         ? { backgroundColor: "#E8560A", color: "white" }
                         : { backgroundColor: "#e5e7eb", color: "#9ca3af" }
@@ -117,7 +117,7 @@ export function OnboardingClient({ initialNome, initialCpfCnpj, initialCobranca,
                   >
                     {done ? <CheckCircle2 size={18} /> : <Icon size={16} />}
                   </div>
-                  <span className={`text-xs font-medium ${active ? "text-gray-900" : done ? "text-[#1D9E75]" : "text-gray-400"}`}>
+                  <span className={`text-xs font-medium ${active ? "text-gray-900" : done ? "text-success" : "text-gray-400"}`}>
                     {s.label}
                   </span>
                 </div>
@@ -225,7 +225,7 @@ export function OnboardingClient({ initialNome, initialCpfCnpj, initialCobranca,
               <ul className="space-y-3 mb-5">
                 {BENEFICIOS.map(b => (
                   <li key={b} className="flex items-center gap-2.5 text-sm text-gray-600">
-                    <CheckCircle2 size={15} className="text-[#1D9E75] shrink-0" />
+                    <CheckCircle2 size={15} className="text-success shrink-0" />
                     {b}
                   </li>
                 ))}
@@ -381,7 +381,7 @@ export function OnboardingClient({ initialNome, initialCpfCnpj, initialCobranca,
 
             <div className="bg-white rounded-2xl p-5 border border-gray-100 space-y-2">
               <div className="flex items-start gap-3">
-                <CheckCircle2 size={18} className="text-[#1D9E75] shrink-0 mt-0.5" />
+                <CheckCircle2 size={18} className="text-success shrink-0 mt-0.5" />
                 <p className="text-sm text-gray-700">
                   Após o pagamento, sua conta será revisada pela nossa equipe. Você receberá acesso em breve.
                 </p>
@@ -391,7 +391,7 @@ export function OnboardingClient({ initialNome, initialCpfCnpj, initialCobranca,
             <button
               onClick={() => router.push("/dashboard/feirante")}
               className="w-full py-3.5 rounded-xl text-sm font-bold text-white flex items-center justify-center gap-2 transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#1D9E75" }}
+              style={{ backgroundColor: "var(--success)" }}
             >
               Ir para o painel <ArrowRight size={16} />
             </button>
