@@ -46,7 +46,7 @@ export default async function PerfilOrganizadorPage() {
           </div>
 
           {/* Dados */}
-          <div className="rounded-2xl bg-white shadow-sm overflow-hidden" style={{ border: "2px solid #e5e7eb" }}>
+          <div className="rounded-2xl bg-white shadow-sm overflow-hidden border-2 border-border">
             <div className="px-4 pt-4 pb-1">
               <h2 className="text-sm font-bold text-gray-600 uppercase tracking-wide">Informações</h2>
             </div>

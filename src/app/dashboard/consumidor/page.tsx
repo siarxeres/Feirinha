@@ -75,19 +75,19 @@ export default async function ConsumidorPage() {
       label: "Em breve",
       value: emBreve.length,
       icon: <CalendarDays size={18} className="text-green-500" />,
-      style: { border: "2px solid #bbf7d0", backgroundColor: "#f0fdf4" },
+      className: "border-2 border-green-200 bg-green-50",
     },
     {
       label: "Esta semana",
       value: estaSemana.length,
       icon: <Clock size={18} className="text-blue-500" />,
-      style: { border: "2px solid #bfdbfe", backgroundColor: "#eff6ff" },
+      className: "border-2 border-blue-200 bg-blue-50",
     },
     {
       label: "Categorias",
       value: categoriasUnicas.size,
       icon: <Tag size={18} className="text-yellow-500" />,
-      style: { border: "2px solid #fef08a", backgroundColor: "#fefce8" },
+      className: "border-2 border-yellow-200 bg-yellow-50",
     },
   ]
 

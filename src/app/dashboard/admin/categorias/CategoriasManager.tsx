@@ -36,7 +36,7 @@ const ICON_MAP: Record<string, ComponentType<LucideProps>> = {
 
 function CategoriaIcon({ nome, cor }: { nome: string; cor?: string | null }) {
   const Icon = ICON_MAP[nome]
-  if (Icon) return <Icon size={20} color={cor ?? "#6b7280"} />
+  if (Icon) return <Icon size={20} color={cor ?? "var(--muted-foreground)"} />
   return <span>{nome}</span>
 }
 

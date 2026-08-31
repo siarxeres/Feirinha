@@ -101,19 +101,19 @@ export default async function FeirantePage() {
       label: "Aprovadas",
       value: aprovadas,
       icon: <CheckCircle2 size={18} className="text-green-500" />,
-      style: { border: "2px solid #bbf7d0", backgroundColor: "#f0fdf4" },
+      className: "border-2 border-green-200 bg-green-50",
     },
     {
       label: "Pendentes",
       value: pendentes,
       icon: <Clock size={18} className="text-yellow-500" />,
-      style: { border: "2px solid #fef08a", backgroundColor: "#fefce8" },
+      className: "border-2 border-yellow-200 bg-yellow-50",
     },
     {
       label: "Disponíveis",
       value: feiras.length,
       icon: <Store size={18} className="text-blue-500" />,
-      style: { border: "2px solid #bfdbfe", backgroundColor: "#eff6ff" },
+      className: "border-2 border-blue-200 bg-blue-50",
     },
   ]
 

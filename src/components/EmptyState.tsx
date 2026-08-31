@@ -49,7 +49,7 @@ export function EmptyState({ icon: Icon, title, description, action, card = fals
   if (!card) return conteudo
 
   return (
-    <div className="rounded-2xl bg-white shadow-sm" style={{ border: "2px solid #e5e7eb" }}>
+    <div className="rounded-2xl bg-white shadow-sm border-2 border-border">
       {conteudo}
     </div>
   )

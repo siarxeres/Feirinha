@@ -330,9 +330,9 @@ export function FeiraDetalheClient({
 
   const metricCards: { label: string; value: string | number; className?: string; style?: CSSProperties }[] = [
     { label: 'Inscrições', value: totalInscricoes, className: 'border-2 border-primary/20 bg-primary/10' },
-    { label: 'Aprovadas',  value: aprovadas,       style: { border: '2px solid #bbf7d0', backgroundColor: '#f0fdf4' } },
-    { label: 'Pendentes',  value: pendentes,        style: { border: '2px solid #fef08a', backgroundColor: '#fefce8' } },
-    { label: 'Receita',    value: 'R$0',            style: { border: '2px solid #bfdbfe', backgroundColor: '#eff6ff' } },
+    { label: 'Aprovadas',  value: aprovadas,       className: 'border-2 border-green-200 bg-green-50' },
+    { label: 'Pendentes',  value: pendentes,        className: 'border-2 border-yellow-200 bg-yellow-50' },
+    { label: 'Receita',    value: 'R$0',            className: 'border-2 border-blue-200 bg-blue-50' },
   ]
 
   const tabs: { key: Tab; label: string }[] = [
@@ -631,7 +631,7 @@ export function FeiraDetalheClient({
           {/* Receita */}
           <TabsContent value="receita">
             <div className="space-y-4 py-3">
-              <div className="rounded-xl p-4" style={{ border: '2px solid #bfdbfe', backgroundColor: '#eff6ff' }}>
+              <div className="rounded-xl p-4 border-2 border-blue-200 bg-blue-50">
                 <p className="text-sm font-semibold text-gray-700 mb-1">Potencial arrecadado</p>
                 <p className="text-3xl font-bold text-gray-900 mb-3">R$ 0,00</p>
                 <div className="w-full bg-blue-100 rounded-full h-2.5">
@@ -655,11 +655,11 @@ export function FeiraDetalheClient({
                   <p className="text-[10px] font-semibold text-gray-600 leading-tight mb-1">Total</p>
                   <p className="text-sm font-bold text-gray-900">{formatBRL(totalDespesas)}</p>
                 </div>
-                <div className="rounded-xl p-2.5 text-center" style={{ border: '2px solid #bfdbfe', backgroundColor: '#eff6ff' }}>
+                <div className="rounded-xl p-2.5 text-center border-2 border-blue-200 bg-blue-50">
                   <p className="text-[10px] font-semibold text-gray-600 leading-tight mb-1">Inscritos</p>
                   <p className="text-sm font-bold text-gray-900">{aprovadas}</p>
                 </div>
-                <div className="rounded-xl p-2.5 text-center" style={{ border: '2px solid #bbf7d0', backgroundColor: '#f0fdf4' }}>
+                <div className="rounded-xl p-2.5 text-center border-2 border-green-200 bg-green-50">
                   <p className="text-[10px] font-semibold text-gray-600 leading-tight mb-1">Por feirante</p>
                   <p className="text-xs font-bold text-gray-900 leading-tight">
                     {valorPorFeirante !== null ? formatBRL(valorPorFeirante) : 'Aguardando inscritos'}
