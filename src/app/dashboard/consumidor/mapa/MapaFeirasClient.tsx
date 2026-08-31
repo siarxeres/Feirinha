@@ -67,7 +67,7 @@ export function MapaFeirasClient({ feiras }: { feiras: Feira[] }) {
           {query && (
             <button
               onClick={() => setQuery("")}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg leading-none"
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg leading-none transition active:scale-95"
               aria-label="Limpar busca"
             >
               ✕
@@ -85,7 +85,7 @@ export function MapaFeirasClient({ feiras }: { feiras: Feira[] }) {
           >
             <button
               onClick={() => setCidadeSelecionada(null)}
-              className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+              className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all active:scale-95 ${
                 !cidadeSelecionada ? "bg-primary text-white" : "bg-gray-100 text-gray-700"
               }`}
             >
@@ -95,7 +95,7 @@ export function MapaFeirasClient({ feiras }: { feiras: Feira[] }) {
               <button
                 key={cidade}
                 onClick={() => setCidadeSelecionada(c => (c === cidade ? null : cidade))}
-                className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all active:scale-95 ${
                   cidadeSelecionada === cidade ? "bg-primary text-white" : "bg-gray-100 text-gray-700"
                 }`}
               >
@@ -172,7 +172,7 @@ export function MapaFeirasClient({ feiras }: { feiras: Feira[] }) {
                       href={mapsUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="shrink-0 flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl text-white transition-opacity hover:opacity-90 bg-primary"
+                      className="shrink-0 flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl text-white transition-all active:scale-95 hover:opacity-90 bg-primary"
                     >
                       <Navigation size={11} />
                       Ver no Mapa

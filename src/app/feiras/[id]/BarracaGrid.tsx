@@ -147,7 +147,7 @@ export function BarracaGrid({
             <button
               key={b.id}
               onClick={() => { setActionError(null); setSelected(b) }}
-              className={`rounded-lg p-3 text-left hover:opacity-80 transition ${gridColor[status] ?? 'bg-gray-100 border-2 border-gray-300'}`}
+              className={`rounded-lg p-3 text-left hover:opacity-80 transition active:scale-95 ${gridColor[status] ?? 'bg-gray-100 border-2 border-gray-300'}`}
             >
               <p className="font-bold text-sm">#{b.numero ?? b.codigo}</p>
               <p className="text-xs text-gray-500 truncate">{subtitulo}</p>
@@ -167,7 +167,7 @@ export function BarracaGrid({
               <button
                 onClick={fechar}
                 aria-label="Fechar"
-                className="p-1 rounded hover:bg-gray-100 transition text-gray-500 text-xl leading-none"
+                className="p-1 rounded hover:bg-gray-100 transition active:scale-95 text-gray-500 text-xl leading-none"
               >
                 ✕
               </button>
@@ -223,14 +223,14 @@ export function BarracaGrid({
                     <button
                       onClick={handleAprovar}
                       disabled={isPending}
-                      className="w-full py-2.5 rounded-lg bg-green-500 text-white font-semibold hover:bg-green-600 disabled:opacity-50 transition"
+                      className="w-full py-2.5 rounded-lg bg-green-500 text-white font-semibold hover:bg-green-600 disabled:opacity-50 transition active:scale-95"
                     >
                       {isPending ? 'Processando…' : 'Aprovar'}
                     </button>
                     <button
                       onClick={handleRejeitar}
                       disabled={isPending}
-                      className="w-full py-2.5 rounded-lg bg-red-500 text-white font-semibold hover:bg-red-600 disabled:opacity-50 transition"
+                      className="w-full py-2.5 rounded-lg bg-red-500 text-white font-semibold hover:bg-red-600 disabled:opacity-50 transition active:scale-95"
                     >
                       {isPending ? 'Processando…' : 'Rejeitar'}
                     </button>

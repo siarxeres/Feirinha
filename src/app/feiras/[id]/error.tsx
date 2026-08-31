@@ -27,13 +27,13 @@ export default function FeiraDetalheError({
       <div className="flex gap-3">
         <button
           onClick={reset}
-          className="rounded-xl bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/80 transition-colors"
+          className="rounded-xl bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/80 transition-all active:scale-95"
         >
           Tentar novamente
         </button>
         <Link
           href="/dashboard/organizador"
-          className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
+          className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-all active:scale-95"
         >
           <ArrowLeft size={15} />
           Voltar ao Dashboard

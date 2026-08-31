@@ -88,7 +88,7 @@ function NovaSenhaForm() {
                   <button
                     type="button"
                     onClick={() => setShowSenha(v => !v)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition active:scale-95"
                     tabIndex={-1}
                   >
                     {showSenha ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -111,7 +111,7 @@ function NovaSenhaForm() {
                   <button
                     type="button"
                     onClick={() => setShowConfirmar(v => !v)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition active:scale-95"
                     tabIndex={-1}
                   >
                     {showConfirmar ? <EyeOff size={16} /> : <Eye size={16} />}

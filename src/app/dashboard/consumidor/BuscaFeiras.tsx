@@ -78,7 +78,7 @@ function FeiraCard({ feira }: { feira: Feira }) {
 
         <Link
           href={`/feiras/${feira.id}`}
-          className="mt-auto block text-center py-2 rounded-xl text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/80 transition-colors"
+          className="mt-auto block text-center py-2 rounded-xl text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/80 transition-all active:scale-95"
         >
           Ver detalhes
         </Link>
@@ -119,7 +119,7 @@ export function BuscaFeiras({ feiras }: { feiras: Feira[] }) {
         {query && (
           <button
             onClick={() => setQuery('')}
-            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg leading-none"
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg leading-none transition active:scale-95"
             aria-label="Limpar busca"
           >
             ✕
