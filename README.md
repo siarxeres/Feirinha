@@ -95,11 +95,16 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - feiras.status nunca era gravado como "encerrada" (nenhum código escrevia isso, apesar do enum já suportar) — feiras vencidas ficavam "publicada" pra sempre no banco. Corrigido com ação manual (botão "Encerrar" em /feiras/[id]) + auto-heal ao carregar as telas do organizador; rodado também um UPDATE único para corrigir o estado acumulado
 - Aba "Todas" de inscrições em /feiras/[id] não atualizava sozinha após aprovar/rejeitar (ficava escondendo o item até F5) — o Set usado para sumir instantaneamente da aba Pendentes também escondia de Todas/Aprovadas; agora só afeta Pendentes
 
+### ✅ Corrigido — 09-10/set (incidente de segurança)
+- Alerta do Supabase em 09/09/2026: 3 tabelas do projeto Feirinhas (gmtfebfazptpmnnfiygh) estavam com RLS desabilitado — acessíveis publicamente (inclusive sem login) sem nenhuma restrição: `barracas`, `categorias` e `despesas_feira`
+- `barracas` e `categorias`: corrigidas manualmente pelo painel do Supabase no mesmo dia (09/09) — ambas já tinham políticas de RLS prontas, só estavam desligadas; políticas ainda não versionadas neste repo (seguem só no Supabase Studio, ver pendência abaixo)
+- `despesas_feira`: não tinha nenhuma política criada (só um `GRANT` amplo pra `anon`/`authenticated`/`service_role` desde a criação da tabela, em 20260729_despesas_feira.sql). Fechada em 10/09 com políticas versionadas em `supabase/migrations/20260910_despesas_feira_rls.sql`: SELECT liberado pra qualquer usuário autenticado (replica o preview de transparência que a tela `/feiras/[id]/inscricao` já mostrava antes mesmo da inscrição); INSERT/UPDATE/DELETE restritos ao organizador dono da feira (replica a checagem que já existia em `actions.ts`); `GRANT` de `anon` revogado. Validado ao vivo: criar/editar/apagar despesa como organizador (via UI) e leitura como feirante (via API) funcionando sem erro; teste negativo confirmou que um feirante não-organizador não consegue mais inserir despesa (RLS bloqueia com 403)
+
 ### ⏳ Pendente — Segurança de produção (pacote grande, pós-feira)
 - Staging (feirinha-staging Supabase separado) — plano pronto, não executado
-- RLS em todas as tabelas (hoje protegido só por server action)
+- RLS em todas as tabelas (hoje protegido só por server action) — `barracas`, `categorias` e `despesas_feira` já cobertas (ver acima); outras tabelas ainda não auditadas
 - Middleware por papel (hoje só por sessão)
-- Versionar policies RLS que vivem só no Supabase Studio
+- Versionar policies RLS que vivem só no Supabase Studio (pendente pra `barracas`/`categorias`; `despesas_feira` já versionada)
 - Contas admin/organizador separadas
 - Recriar via staging as migrations aplicadas manualmente em produção
 
